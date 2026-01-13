@@ -29,5 +29,13 @@
       "pnpm dlx ultracite fix"
     ]
   },
-  "packageManager": "pnpm@10.2.1"
+  "packageManager": "pnpm@10.2.1",
+  "pnpm": {
+    "overrides": {
+      "react": "^19.2.0",
+      "react-dom": "^19.2.0",
+      "@types/react": "^19.2.0",
+      "@types/react-dom": "^19.2.0"
+    }
+  }
 }
