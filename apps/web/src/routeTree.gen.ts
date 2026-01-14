@@ -9,19 +9,37 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
 import { Route as DocsIndexRouteImport } from './routes/docs/index'
+import { Route as landingIndexRouteImport } from './routes/(landing)/index'
+import { Route as DocsSplatRouteImport } from './routes/docs/$'
+import { Route as ApiSearchRouteImport } from './routes/api/search'
 import { Route as landingTermsOfServiceRouteImport } from './routes/(landing)/terms-of-service'
+import { Route as landingSecurityRouteImport } from './routes/(landing)/security'
 import { Route as landingPrivacyPolicyRouteImport } from './routes/(landing)/privacy-policy'
 import { Route as landingPricingRouteImport } from './routes/(landing)/pricing'
+import { Route as landingHowItWorksRouteImport } from './routes/(landing)/how-it-works'
 import { Route as landingHomeRouteImport } from './routes/(landing)/home'
+import { Route as landingFeaturesRouteImport } from './routes/(landing)/features'
 import { Route as landingContactRouteImport } from './routes/(landing)/contact'
 import { Route as landingAboutRouteImport } from './routes/(landing)/about'
+import { Route as dashboardTransactionsRouteImport } from './routes/(dashboard)/transactions'
+import { Route as dashboardSupportRouteImport } from './routes/(dashboard)/support'
+import { Route as dashboardSettingsRouteImport } from './routes/(dashboard)/settings'
+import { Route as dashboardReportsRouteImport } from './routes/(dashboard)/reports'
+import { Route as dashboardOverviewRouteImport } from './routes/(dashboard)/overview'
+import { Route as dashboardDashboardRouteImport } from './routes/(dashboard)/dashboard'
+import { Route as dashboardCardsRouteImport } from './routes/(dashboard)/cards'
+import { Route as dashboardAccountsRouteImport } from './routes/(dashboard)/accounts'
 import { Route as authUnauthorizedRouteImport } from './routes/(auth)/unauthorized'
 import { Route as authSignupRouteImport } from './routes/(auth)/signup'
 import { Route as authSigninRouteImport } from './routes/(auth)/signin'
 import { Route as authResetPasswordRouteImport } from './routes/(auth)/reset-password'
 import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
+import { Route as dashboardSuperadminIndexRouteImport } from './routes/(dashboard)/superadmin/index'
+import { Route as dashboardOwnerIndexRouteImport } from './routes/(dashboard)/owner/index'
+import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
+import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
+import { Route as DemoApiNamesRouteImport } from './routes/demo/api.names'
 import { Route as dashboardSupportSupportRouteImport } from './routes/(dashboard)/support/support'
 import { Route as dashboardSupportStatementsRouteImport } from './routes/(dashboard)/support/statements'
 import { Route as dashboardSupportSettingsRouteImport } from './routes/(dashboard)/support/settings'
@@ -29,6 +47,7 @@ import { Route as dashboardSupportPaymentsRouteImport } from './routes/(dashboar
 import { Route as dashboardSupportOverviewRouteImport } from './routes/(dashboard)/support/overview'
 import { Route as dashboardSuperadminSettingsRouteImport } from './routes/(dashboard)/superadmin/settings'
 import { Route as dashboardSuperadminReportsRouteImport } from './routes/(dashboard)/superadmin/reports'
+import { Route as dashboardSuperadminOverviewRouteImport } from './routes/(dashboard)/superadmin/overview'
 import { Route as dashboardSuperadminEmployeesRouteImport } from './routes/(dashboard)/superadmin/employees'
 import { Route as dashboardSuperadminBranchesRouteImport } from './routes/(dashboard)/superadmin/branches'
 import { Route as dashboardStaffSupportRouteImport } from './routes/(dashboard)/staff/support'
@@ -39,6 +58,7 @@ import { Route as dashboardStaffOverviewRouteImport } from './routes/(dashboard)
 import { Route as dashboardOwnerStaffPerformanceRouteImport } from './routes/(dashboard)/owner/staff-performance'
 import { Route as dashboardOwnerSettingsRouteImport } from './routes/(dashboard)/owner/settings'
 import { Route as dashboardOwnerReportsRouteImport } from './routes/(dashboard)/owner/reports'
+import { Route as dashboardOwnerOverviewRouteImport } from './routes/(dashboard)/owner/overview'
 import { Route as dashboardOwnerBranchesRouteImport } from './routes/(dashboard)/owner/branches'
 import { Route as dashboardManagerSupportRouteImport } from './routes/(dashboard)/manager/support'
 import { Route as dashboardManagerStatementsRouteImport } from './routes/(dashboard)/manager/statements'
@@ -61,20 +81,39 @@ import { Route as dashboardAdminSupportRouteImport } from './routes/(dashboard)/
 import { Route as dashboardAdminFlaggedRouteImport } from './routes/(dashboard)/admin/flagged'
 import { Route as dashboardAdminComplianceRouteImport } from './routes/(dashboard)/admin/compliance'
 import { Route as dashboardAdminAuditTrailsRouteImport } from './routes/(dashboard)/admin/audit-trails'
+import { Route as DemoStartSsrIndexRouteImport } from './routes/demo/start.ssr.index'
+import { Route as DemoStartSsrSpaModeRouteImport } from './routes/demo/start.ssr.spa-mode'
+import { Route as DemoStartSsrFullSsrRouteImport } from './routes/demo/start.ssr.full-ssr'
+import { Route as DemoStartSsrDataOnlyRouteImport } from './routes/demo/start.ssr.data-only'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DocsIndexRoute = DocsIndexRouteImport.update({
   id: '/docs/',
   path: '/docs/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const landingIndexRoute = landingIndexRouteImport.update({
+  id: '/(landing)/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsSplatRoute = DocsSplatRouteImport.update({
+  id: '/docs/$',
+  path: '/docs/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSearchRoute = ApiSearchRouteImport.update({
+  id: '/api/search',
+  path: '/api/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const landingTermsOfServiceRoute = landingTermsOfServiceRouteImport.update({
   id: '/(landing)/terms-of-service',
   path: '/terms-of-service',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const landingSecurityRoute = landingSecurityRouteImport.update({
+  id: '/(landing)/security',
+  path: '/security',
   getParentRoute: () => rootRouteImport,
 } as any)
 const landingPrivacyPolicyRoute = landingPrivacyPolicyRouteImport.update({
@@ -87,9 +126,19 @@ const landingPricingRoute = landingPricingRouteImport.update({
   path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const landingHowItWorksRoute = landingHowItWorksRouteImport.update({
+  id: '/(landing)/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const landingHomeRoute = landingHomeRouteImport.update({
   id: '/(landing)/home',
   path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const landingFeaturesRoute = landingFeaturesRouteImport.update({
+  id: '/(landing)/features',
+  path: '/features',
   getParentRoute: () => rootRouteImport,
 } as any)
 const landingContactRoute = landingContactRouteImport.update({
@@ -100,6 +149,46 @@ const landingContactRoute = landingContactRouteImport.update({
 const landingAboutRoute = landingAboutRouteImport.update({
   id: '/(landing)/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardTransactionsRoute = dashboardTransactionsRouteImport.update({
+  id: '/(dashboard)/transactions',
+  path: '/transactions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardSupportRoute = dashboardSupportRouteImport.update({
+  id: '/(dashboard)/support',
+  path: '/support',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardSettingsRoute = dashboardSettingsRouteImport.update({
+  id: '/(dashboard)/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardReportsRoute = dashboardReportsRouteImport.update({
+  id: '/(dashboard)/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardOverviewRoute = dashboardOverviewRouteImport.update({
+  id: '/(dashboard)/overview',
+  path: '/overview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardDashboardRoute = dashboardDashboardRouteImport.update({
+  id: '/(dashboard)/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardCardsRoute = dashboardCardsRouteImport.update({
+  id: '/(dashboard)/cards',
+  path: '/cards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardAccountsRoute = dashboardAccountsRouteImport.update({
+  id: '/(dashboard)/accounts',
+  path: '/accounts',
   getParentRoute: () => rootRouteImport,
 } as any)
 const authUnauthorizedRoute = authUnauthorizedRouteImport.update({
@@ -127,34 +216,60 @@ const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardSupportSupportRoute = dashboardSupportSupportRouteImport.update({
-  id: '/(dashboard)/support/support',
-  path: '/support/support',
+const dashboardSuperadminIndexRoute =
+  dashboardSuperadminIndexRouteImport.update({
+    id: '/(dashboard)/superadmin/',
+    path: '/superadmin/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardOwnerIndexRoute = dashboardOwnerIndexRouteImport.update({
+  id: '/(dashboard)/owner/',
+  path: '/owner/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
+  id: '/demo/start/server-funcs',
+  path: '/demo/start/server-funcs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoStartApiRequestRoute = DemoStartApiRequestRouteImport.update({
+  id: '/demo/start/api-request',
+  path: '/demo/start/api-request',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoApiNamesRoute = DemoApiNamesRouteImport.update({
+  id: '/demo/api/names',
+  path: '/demo/api/names',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardSupportSupportRoute = dashboardSupportSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => dashboardSupportRoute,
 } as any)
 const dashboardSupportStatementsRoute =
   dashboardSupportStatementsRouteImport.update({
-    id: '/(dashboard)/support/statements',
-    path: '/support/statements',
-    getParentRoute: () => rootRouteImport,
+    id: '/statements',
+    path: '/statements',
+    getParentRoute: () => dashboardSupportRoute,
   } as any)
 const dashboardSupportSettingsRoute =
   dashboardSupportSettingsRouteImport.update({
-    id: '/(dashboard)/support/settings',
-    path: '/support/settings',
-    getParentRoute: () => rootRouteImport,
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => dashboardSupportRoute,
   } as any)
 const dashboardSupportPaymentsRoute =
   dashboardSupportPaymentsRouteImport.update({
-    id: '/(dashboard)/support/payments',
-    path: '/support/payments',
-    getParentRoute: () => rootRouteImport,
+    id: '/payments',
+    path: '/payments',
+    getParentRoute: () => dashboardSupportRoute,
   } as any)
 const dashboardSupportOverviewRoute =
   dashboardSupportOverviewRouteImport.update({
-    id: '/(dashboard)/support/overview',
-    path: '/support/overview',
-    getParentRoute: () => rootRouteImport,
+    id: '/overview',
+    path: '/overview',
+    getParentRoute: () => dashboardSupportRoute,
   } as any)
 const dashboardSuperadminSettingsRoute =
   dashboardSuperadminSettingsRouteImport.update({
@@ -166,6 +281,12 @@ const dashboardSuperadminReportsRoute =
   dashboardSuperadminReportsRouteImport.update({
     id: '/(dashboard)/superadmin/reports',
     path: '/superadmin/reports',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardSuperadminOverviewRoute =
+  dashboardSuperadminOverviewRouteImport.update({
+    id: '/(dashboard)/superadmin/overview',
+    path: '/superadmin/overview',
     getParentRoute: () => rootRouteImport,
   } as any)
 const dashboardSuperadminEmployeesRoute =
@@ -222,6 +343,11 @@ const dashboardOwnerReportsRoute = dashboardOwnerReportsRouteImport.update({
   path: '/owner/reports',
   getParentRoute: () => rootRouteImport,
 } as any)
+const dashboardOwnerOverviewRoute = dashboardOwnerOverviewRouteImport.update({
+  id: '/(dashboard)/owner/overview',
+  path: '/owner/overview',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const dashboardOwnerBranchesRoute = dashboardOwnerBranchesRouteImport.update({
   id: '/(dashboard)/owner/branches',
   path: '/owner/branches',
@@ -258,44 +384,44 @@ const dashboardManagerOverviewRoute =
   } as any)
 const dashboardDashboardTransactionsRoute =
   dashboardDashboardTransactionsRouteImport.update({
-    id: '/(dashboard)/dashboard/transactions',
-    path: '/dashboard/transactions',
-    getParentRoute: () => rootRouteImport,
+    id: '/transactions',
+    path: '/transactions',
+    getParentRoute: () => dashboardDashboardRoute,
   } as any)
 const dashboardDashboardSupportRoute =
   dashboardDashboardSupportRouteImport.update({
-    id: '/(dashboard)/dashboard/support',
-    path: '/dashboard/support',
-    getParentRoute: () => rootRouteImport,
+    id: '/support',
+    path: '/support',
+    getParentRoute: () => dashboardDashboardRoute,
   } as any)
 const dashboardDashboardStatementsRoute =
   dashboardDashboardStatementsRouteImport.update({
-    id: '/(dashboard)/dashboard/statements',
-    path: '/dashboard/statements',
-    getParentRoute: () => rootRouteImport,
+    id: '/statements',
+    path: '/statements',
+    getParentRoute: () => dashboardDashboardRoute,
   } as any)
 const dashboardDashboardSettingsRoute =
   dashboardDashboardSettingsRouteImport.update({
-    id: '/(dashboard)/dashboard/settings',
-    path: '/dashboard/settings',
-    getParentRoute: () => rootRouteImport,
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => dashboardDashboardRoute,
   } as any)
 const dashboardDashboardPaymentsRoute =
   dashboardDashboardPaymentsRouteImport.update({
-    id: '/(dashboard)/dashboard/payments',
-    path: '/dashboard/payments',
-    getParentRoute: () => rootRouteImport,
+    id: '/payments',
+    path: '/payments',
+    getParentRoute: () => dashboardDashboardRoute,
   } as any)
 const dashboardDashboardOverviewRoute =
   dashboardDashboardOverviewRouteImport.update({
-    id: '/(dashboard)/dashboard/overview',
-    path: '/dashboard/overview',
-    getParentRoute: () => rootRouteImport,
+    id: '/overview',
+    path: '/overview',
+    getParentRoute: () => dashboardDashboardRoute,
   } as any)
 const dashboardDashboardCardsRoute = dashboardDashboardCardsRouteImport.update({
-  id: '/(dashboard)/dashboard/cards',
-  path: '/dashboard/cards',
-  getParentRoute: () => rootRouteImport,
+  id: '/cards',
+  path: '/cards',
+  getParentRoute: () => dashboardDashboardRoute,
 } as any)
 const dashboardAuditSupportRoute = dashboardAuditSupportRouteImport.update({
   id: '/(dashboard)/audit/support',
@@ -345,20 +471,53 @@ const dashboardAdminAuditTrailsRoute =
     path: '/admin/audit-trails',
     getParentRoute: () => rootRouteImport,
   } as any)
+const DemoStartSsrIndexRoute = DemoStartSsrIndexRouteImport.update({
+  id: '/demo/start/ssr/',
+  path: '/demo/start/ssr/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoStartSsrSpaModeRoute = DemoStartSsrSpaModeRouteImport.update({
+  id: '/demo/start/ssr/spa-mode',
+  path: '/demo/start/ssr/spa-mode',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoStartSsrFullSsrRoute = DemoStartSsrFullSsrRouteImport.update({
+  id: '/demo/start/ssr/full-ssr',
+  path: '/demo/start/ssr/full-ssr',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
+  id: '/demo/start/ssr/data-only',
+  path: '/demo/start/ssr/data-only',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '/forgot-password': typeof authForgotPasswordRoute
   '/reset-password': typeof authResetPasswordRoute
   '/signin': typeof authSigninRoute
   '/signup': typeof authSignupRoute
   '/unauthorized': typeof authUnauthorizedRoute
+  '/accounts': typeof dashboardAccountsRoute
+  '/cards': typeof dashboardCardsRoute
+  '/dashboard': typeof dashboardDashboardRouteWithChildren
+  '/overview': typeof dashboardOverviewRoute
+  '/reports': typeof dashboardReportsRoute
+  '/settings': typeof dashboardSettingsRoute
+  '/support': typeof dashboardSupportRouteWithChildren
+  '/transactions': typeof dashboardTransactionsRoute
   '/about': typeof landingAboutRoute
   '/contact': typeof landingContactRoute
+  '/features': typeof landingFeaturesRoute
   '/home': typeof landingHomeRoute
+  '/how-it-works': typeof landingHowItWorksRoute
   '/pricing': typeof landingPricingRoute
   '/privacy-policy': typeof landingPrivacyPolicyRoute
+  '/security': typeof landingSecurityRoute
   '/terms-of-service': typeof landingTermsOfServiceRoute
+  '/api/search': typeof ApiSearchRoute
+  '/docs/$': typeof DocsSplatRoute
+  '/': typeof landingIndexRoute
   '/docs': typeof DocsIndexRoute
   '/admin/audit-trails': typeof dashboardAdminAuditTrailsRoute
   '/admin/compliance': typeof dashboardAdminComplianceRoute
@@ -382,6 +541,7 @@ export interface FileRoutesByFullPath {
   '/manager/statements': typeof dashboardManagerStatementsRoute
   '/manager/support': typeof dashboardManagerSupportRoute
   '/owner/branches': typeof dashboardOwnerBranchesRoute
+  '/owner/overview': typeof dashboardOwnerOverviewRoute
   '/owner/reports': typeof dashboardOwnerReportsRoute
   '/owner/settings': typeof dashboardOwnerSettingsRoute
   '/owner/staff-performance': typeof dashboardOwnerStaffPerformanceRoute
@@ -392,6 +552,7 @@ export interface FileRoutesByFullPath {
   '/staff/support': typeof dashboardStaffSupportRoute
   '/superadmin/branches': typeof dashboardSuperadminBranchesRoute
   '/superadmin/employees': typeof dashboardSuperadminEmployeesRoute
+  '/superadmin/overview': typeof dashboardSuperadminOverviewRoute
   '/superadmin/reports': typeof dashboardSuperadminReportsRoute
   '/superadmin/settings': typeof dashboardSuperadminSettingsRoute
   '/support/overview': typeof dashboardSupportOverviewRoute
@@ -399,20 +560,42 @@ export interface FileRoutesByFullPath {
   '/support/settings': typeof dashboardSupportSettingsRoute
   '/support/statements': typeof dashboardSupportStatementsRoute
   '/support/support': typeof dashboardSupportSupportRoute
+  '/demo/api/names': typeof DemoApiNamesRoute
+  '/demo/start/api-request': typeof DemoStartApiRequestRoute
+  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
+  '/owner': typeof dashboardOwnerIndexRoute
+  '/superadmin': typeof dashboardSuperadminIndexRoute
+  '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
+  '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
+  '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
+  '/demo/start/ssr': typeof DemoStartSsrIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/forgot-password': typeof authForgotPasswordRoute
   '/reset-password': typeof authResetPasswordRoute
   '/signin': typeof authSigninRoute
   '/signup': typeof authSignupRoute
   '/unauthorized': typeof authUnauthorizedRoute
+  '/accounts': typeof dashboardAccountsRoute
+  '/cards': typeof dashboardCardsRoute
+  '/dashboard': typeof dashboardDashboardRouteWithChildren
+  '/overview': typeof dashboardOverviewRoute
+  '/reports': typeof dashboardReportsRoute
+  '/settings': typeof dashboardSettingsRoute
+  '/support': typeof dashboardSupportRouteWithChildren
+  '/transactions': typeof dashboardTransactionsRoute
   '/about': typeof landingAboutRoute
   '/contact': typeof landingContactRoute
+  '/features': typeof landingFeaturesRoute
   '/home': typeof landingHomeRoute
+  '/how-it-works': typeof landingHowItWorksRoute
   '/pricing': typeof landingPricingRoute
   '/privacy-policy': typeof landingPrivacyPolicyRoute
+  '/security': typeof landingSecurityRoute
   '/terms-of-service': typeof landingTermsOfServiceRoute
+  '/api/search': typeof ApiSearchRoute
+  '/docs/$': typeof DocsSplatRoute
+  '/': typeof landingIndexRoute
   '/docs': typeof DocsIndexRoute
   '/admin/audit-trails': typeof dashboardAdminAuditTrailsRoute
   '/admin/compliance': typeof dashboardAdminComplianceRoute
@@ -436,6 +619,7 @@ export interface FileRoutesByTo {
   '/manager/statements': typeof dashboardManagerStatementsRoute
   '/manager/support': typeof dashboardManagerSupportRoute
   '/owner/branches': typeof dashboardOwnerBranchesRoute
+  '/owner/overview': typeof dashboardOwnerOverviewRoute
   '/owner/reports': typeof dashboardOwnerReportsRoute
   '/owner/settings': typeof dashboardOwnerSettingsRoute
   '/owner/staff-performance': typeof dashboardOwnerStaffPerformanceRoute
@@ -446,6 +630,7 @@ export interface FileRoutesByTo {
   '/staff/support': typeof dashboardStaffSupportRoute
   '/superadmin/branches': typeof dashboardSuperadminBranchesRoute
   '/superadmin/employees': typeof dashboardSuperadminEmployeesRoute
+  '/superadmin/overview': typeof dashboardSuperadminOverviewRoute
   '/superadmin/reports': typeof dashboardSuperadminReportsRoute
   '/superadmin/settings': typeof dashboardSuperadminSettingsRoute
   '/support/overview': typeof dashboardSupportOverviewRoute
@@ -453,21 +638,43 @@ export interface FileRoutesByTo {
   '/support/settings': typeof dashboardSupportSettingsRoute
   '/support/statements': typeof dashboardSupportStatementsRoute
   '/support/support': typeof dashboardSupportSupportRoute
+  '/demo/api/names': typeof DemoApiNamesRoute
+  '/demo/start/api-request': typeof DemoStartApiRequestRoute
+  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
+  '/owner': typeof dashboardOwnerIndexRoute
+  '/superadmin': typeof dashboardSuperadminIndexRoute
+  '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
+  '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
+  '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
+  '/demo/start/ssr': typeof DemoStartSsrIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/(auth)/forgot-password': typeof authForgotPasswordRoute
   '/(auth)/reset-password': typeof authResetPasswordRoute
   '/(auth)/signin': typeof authSigninRoute
   '/(auth)/signup': typeof authSignupRoute
   '/(auth)/unauthorized': typeof authUnauthorizedRoute
+  '/(dashboard)/accounts': typeof dashboardAccountsRoute
+  '/(dashboard)/cards': typeof dashboardCardsRoute
+  '/(dashboard)/dashboard': typeof dashboardDashboardRouteWithChildren
+  '/(dashboard)/overview': typeof dashboardOverviewRoute
+  '/(dashboard)/reports': typeof dashboardReportsRoute
+  '/(dashboard)/settings': typeof dashboardSettingsRoute
+  '/(dashboard)/support': typeof dashboardSupportRouteWithChildren
+  '/(dashboard)/transactions': typeof dashboardTransactionsRoute
   '/(landing)/about': typeof landingAboutRoute
   '/(landing)/contact': typeof landingContactRoute
+  '/(landing)/features': typeof landingFeaturesRoute
   '/(landing)/home': typeof landingHomeRoute
+  '/(landing)/how-it-works': typeof landingHowItWorksRoute
   '/(landing)/pricing': typeof landingPricingRoute
   '/(landing)/privacy-policy': typeof landingPrivacyPolicyRoute
+  '/(landing)/security': typeof landingSecurityRoute
   '/(landing)/terms-of-service': typeof landingTermsOfServiceRoute
+  '/api/search': typeof ApiSearchRoute
+  '/docs/$': typeof DocsSplatRoute
+  '/(landing)/': typeof landingIndexRoute
   '/docs/': typeof DocsIndexRoute
   '/(dashboard)/admin/audit-trails': typeof dashboardAdminAuditTrailsRoute
   '/(dashboard)/admin/compliance': typeof dashboardAdminComplianceRoute
@@ -491,6 +698,7 @@ export interface FileRoutesById {
   '/(dashboard)/manager/statements': typeof dashboardManagerStatementsRoute
   '/(dashboard)/manager/support': typeof dashboardManagerSupportRoute
   '/(dashboard)/owner/branches': typeof dashboardOwnerBranchesRoute
+  '/(dashboard)/owner/overview': typeof dashboardOwnerOverviewRoute
   '/(dashboard)/owner/reports': typeof dashboardOwnerReportsRoute
   '/(dashboard)/owner/settings': typeof dashboardOwnerSettingsRoute
   '/(dashboard)/owner/staff-performance': typeof dashboardOwnerStaffPerformanceRoute
@@ -501,6 +709,7 @@ export interface FileRoutesById {
   '/(dashboard)/staff/support': typeof dashboardStaffSupportRoute
   '/(dashboard)/superadmin/branches': typeof dashboardSuperadminBranchesRoute
   '/(dashboard)/superadmin/employees': typeof dashboardSuperadminEmployeesRoute
+  '/(dashboard)/superadmin/overview': typeof dashboardSuperadminOverviewRoute
   '/(dashboard)/superadmin/reports': typeof dashboardSuperadminReportsRoute
   '/(dashboard)/superadmin/settings': typeof dashboardSuperadminSettingsRoute
   '/(dashboard)/support/overview': typeof dashboardSupportOverviewRoute
@@ -508,22 +717,44 @@ export interface FileRoutesById {
   '/(dashboard)/support/settings': typeof dashboardSupportSettingsRoute
   '/(dashboard)/support/statements': typeof dashboardSupportStatementsRoute
   '/(dashboard)/support/support': typeof dashboardSupportSupportRoute
+  '/demo/api/names': typeof DemoApiNamesRoute
+  '/demo/start/api-request': typeof DemoStartApiRequestRoute
+  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
+  '/(dashboard)/owner/': typeof dashboardOwnerIndexRoute
+  '/(dashboard)/superadmin/': typeof dashboardSuperadminIndexRoute
+  '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
+  '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
+  '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
+  '/demo/start/ssr/': typeof DemoStartSsrIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/forgot-password'
     | '/reset-password'
     | '/signin'
     | '/signup'
     | '/unauthorized'
+    | '/accounts'
+    | '/cards'
+    | '/dashboard'
+    | '/overview'
+    | '/reports'
+    | '/settings'
+    | '/support'
+    | '/transactions'
     | '/about'
     | '/contact'
+    | '/features'
     | '/home'
+    | '/how-it-works'
     | '/pricing'
     | '/privacy-policy'
+    | '/security'
     | '/terms-of-service'
+    | '/api/search'
+    | '/docs/$'
+    | '/'
     | '/docs'
     | '/admin/audit-trails'
     | '/admin/compliance'
@@ -547,6 +778,7 @@ export interface FileRouteTypes {
     | '/manager/statements'
     | '/manager/support'
     | '/owner/branches'
+    | '/owner/overview'
     | '/owner/reports'
     | '/owner/settings'
     | '/owner/staff-performance'
@@ -557,6 +789,7 @@ export interface FileRouteTypes {
     | '/staff/support'
     | '/superadmin/branches'
     | '/superadmin/employees'
+    | '/superadmin/overview'
     | '/superadmin/reports'
     | '/superadmin/settings'
     | '/support/overview'
@@ -564,20 +797,42 @@ export interface FileRouteTypes {
     | '/support/settings'
     | '/support/statements'
     | '/support/support'
+    | '/demo/api/names'
+    | '/demo/start/api-request'
+    | '/demo/start/server-funcs'
+    | '/owner'
+    | '/superadmin'
+    | '/demo/start/ssr/data-only'
+    | '/demo/start/ssr/full-ssr'
+    | '/demo/start/ssr/spa-mode'
+    | '/demo/start/ssr'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/forgot-password'
     | '/reset-password'
     | '/signin'
     | '/signup'
     | '/unauthorized'
+    | '/accounts'
+    | '/cards'
+    | '/dashboard'
+    | '/overview'
+    | '/reports'
+    | '/settings'
+    | '/support'
+    | '/transactions'
     | '/about'
     | '/contact'
+    | '/features'
     | '/home'
+    | '/how-it-works'
     | '/pricing'
     | '/privacy-policy'
+    | '/security'
     | '/terms-of-service'
+    | '/api/search'
+    | '/docs/$'
+    | '/'
     | '/docs'
     | '/admin/audit-trails'
     | '/admin/compliance'
@@ -601,6 +856,7 @@ export interface FileRouteTypes {
     | '/manager/statements'
     | '/manager/support'
     | '/owner/branches'
+    | '/owner/overview'
     | '/owner/reports'
     | '/owner/settings'
     | '/owner/staff-performance'
@@ -611,6 +867,7 @@ export interface FileRouteTypes {
     | '/staff/support'
     | '/superadmin/branches'
     | '/superadmin/employees'
+    | '/superadmin/overview'
     | '/superadmin/reports'
     | '/superadmin/settings'
     | '/support/overview'
@@ -618,20 +875,42 @@ export interface FileRouteTypes {
     | '/support/settings'
     | '/support/statements'
     | '/support/support'
+    | '/demo/api/names'
+    | '/demo/start/api-request'
+    | '/demo/start/server-funcs'
+    | '/owner'
+    | '/superadmin'
+    | '/demo/start/ssr/data-only'
+    | '/demo/start/ssr/full-ssr'
+    | '/demo/start/ssr/spa-mode'
+    | '/demo/start/ssr'
   id:
     | '__root__'
-    | '/'
     | '/(auth)/forgot-password'
     | '/(auth)/reset-password'
     | '/(auth)/signin'
     | '/(auth)/signup'
     | '/(auth)/unauthorized'
+    | '/(dashboard)/accounts'
+    | '/(dashboard)/cards'
+    | '/(dashboard)/dashboard'
+    | '/(dashboard)/overview'
+    | '/(dashboard)/reports'
+    | '/(dashboard)/settings'
+    | '/(dashboard)/support'
+    | '/(dashboard)/transactions'
     | '/(landing)/about'
     | '/(landing)/contact'
+    | '/(landing)/features'
     | '/(landing)/home'
+    | '/(landing)/how-it-works'
     | '/(landing)/pricing'
     | '/(landing)/privacy-policy'
+    | '/(landing)/security'
     | '/(landing)/terms-of-service'
+    | '/api/search'
+    | '/docs/$'
+    | '/(landing)/'
     | '/docs/'
     | '/(dashboard)/admin/audit-trails'
     | '/(dashboard)/admin/compliance'
@@ -655,6 +934,7 @@ export interface FileRouteTypes {
     | '/(dashboard)/manager/statements'
     | '/(dashboard)/manager/support'
     | '/(dashboard)/owner/branches'
+    | '/(dashboard)/owner/overview'
     | '/(dashboard)/owner/reports'
     | '/(dashboard)/owner/settings'
     | '/(dashboard)/owner/staff-performance'
@@ -665,6 +945,7 @@ export interface FileRouteTypes {
     | '/(dashboard)/staff/support'
     | '/(dashboard)/superadmin/branches'
     | '/(dashboard)/superadmin/employees'
+    | '/(dashboard)/superadmin/overview'
     | '/(dashboard)/superadmin/reports'
     | '/(dashboard)/superadmin/settings'
     | '/(dashboard)/support/overview'
@@ -672,21 +953,43 @@ export interface FileRouteTypes {
     | '/(dashboard)/support/settings'
     | '/(dashboard)/support/statements'
     | '/(dashboard)/support/support'
+    | '/demo/api/names'
+    | '/demo/start/api-request'
+    | '/demo/start/server-funcs'
+    | '/(dashboard)/owner/'
+    | '/(dashboard)/superadmin/'
+    | '/demo/start/ssr/data-only'
+    | '/demo/start/ssr/full-ssr'
+    | '/demo/start/ssr/spa-mode'
+    | '/demo/start/ssr/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   authForgotPasswordRoute: typeof authForgotPasswordRoute
   authResetPasswordRoute: typeof authResetPasswordRoute
   authSigninRoute: typeof authSigninRoute
   authSignupRoute: typeof authSignupRoute
   authUnauthorizedRoute: typeof authUnauthorizedRoute
+  dashboardAccountsRoute: typeof dashboardAccountsRoute
+  dashboardCardsRoute: typeof dashboardCardsRoute
+  dashboardDashboardRoute: typeof dashboardDashboardRouteWithChildren
+  dashboardOverviewRoute: typeof dashboardOverviewRoute
+  dashboardReportsRoute: typeof dashboardReportsRoute
+  dashboardSettingsRoute: typeof dashboardSettingsRoute
+  dashboardSupportRoute: typeof dashboardSupportRouteWithChildren
+  dashboardTransactionsRoute: typeof dashboardTransactionsRoute
   landingAboutRoute: typeof landingAboutRoute
   landingContactRoute: typeof landingContactRoute
+  landingFeaturesRoute: typeof landingFeaturesRoute
   landingHomeRoute: typeof landingHomeRoute
+  landingHowItWorksRoute: typeof landingHowItWorksRoute
   landingPricingRoute: typeof landingPricingRoute
   landingPrivacyPolicyRoute: typeof landingPrivacyPolicyRoute
+  landingSecurityRoute: typeof landingSecurityRoute
   landingTermsOfServiceRoute: typeof landingTermsOfServiceRoute
+  ApiSearchRoute: typeof ApiSearchRoute
+  DocsSplatRoute: typeof DocsSplatRoute
+  landingIndexRoute: typeof landingIndexRoute
   DocsIndexRoute: typeof DocsIndexRoute
   dashboardAdminAuditTrailsRoute: typeof dashboardAdminAuditTrailsRoute
   dashboardAdminComplianceRoute: typeof dashboardAdminComplianceRoute
@@ -697,19 +1000,13 @@ export interface RootRouteChildren {
   dashboardAuditSettingsRoute: typeof dashboardAuditSettingsRoute
   dashboardAuditStatementsRoute: typeof dashboardAuditStatementsRoute
   dashboardAuditSupportRoute: typeof dashboardAuditSupportRoute
-  dashboardDashboardCardsRoute: typeof dashboardDashboardCardsRoute
-  dashboardDashboardOverviewRoute: typeof dashboardDashboardOverviewRoute
-  dashboardDashboardPaymentsRoute: typeof dashboardDashboardPaymentsRoute
-  dashboardDashboardSettingsRoute: typeof dashboardDashboardSettingsRoute
-  dashboardDashboardStatementsRoute: typeof dashboardDashboardStatementsRoute
-  dashboardDashboardSupportRoute: typeof dashboardDashboardSupportRoute
-  dashboardDashboardTransactionsRoute: typeof dashboardDashboardTransactionsRoute
   dashboardManagerOverviewRoute: typeof dashboardManagerOverviewRoute
   dashboardManagerPaymentsRoute: typeof dashboardManagerPaymentsRoute
   dashboardManagerSettingsRoute: typeof dashboardManagerSettingsRoute
   dashboardManagerStatementsRoute: typeof dashboardManagerStatementsRoute
   dashboardManagerSupportRoute: typeof dashboardManagerSupportRoute
   dashboardOwnerBranchesRoute: typeof dashboardOwnerBranchesRoute
+  dashboardOwnerOverviewRoute: typeof dashboardOwnerOverviewRoute
   dashboardOwnerReportsRoute: typeof dashboardOwnerReportsRoute
   dashboardOwnerSettingsRoute: typeof dashboardOwnerSettingsRoute
   dashboardOwnerStaffPerformanceRoute: typeof dashboardOwnerStaffPerformanceRoute
@@ -720,24 +1017,22 @@ export interface RootRouteChildren {
   dashboardStaffSupportRoute: typeof dashboardStaffSupportRoute
   dashboardSuperadminBranchesRoute: typeof dashboardSuperadminBranchesRoute
   dashboardSuperadminEmployeesRoute: typeof dashboardSuperadminEmployeesRoute
+  dashboardSuperadminOverviewRoute: typeof dashboardSuperadminOverviewRoute
   dashboardSuperadminReportsRoute: typeof dashboardSuperadminReportsRoute
   dashboardSuperadminSettingsRoute: typeof dashboardSuperadminSettingsRoute
-  dashboardSupportOverviewRoute: typeof dashboardSupportOverviewRoute
-  dashboardSupportPaymentsRoute: typeof dashboardSupportPaymentsRoute
-  dashboardSupportSettingsRoute: typeof dashboardSupportSettingsRoute
-  dashboardSupportStatementsRoute: typeof dashboardSupportStatementsRoute
-  dashboardSupportSupportRoute: typeof dashboardSupportSupportRoute
+  DemoApiNamesRoute: typeof DemoApiNamesRoute
+  DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
+  DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
+  dashboardOwnerIndexRoute: typeof dashboardOwnerIndexRoute
+  dashboardSuperadminIndexRoute: typeof dashboardSuperadminIndexRoute
+  DemoStartSsrDataOnlyRoute: typeof DemoStartSsrDataOnlyRoute
+  DemoStartSsrFullSsrRoute: typeof DemoStartSsrFullSsrRoute
+  DemoStartSsrSpaModeRoute: typeof DemoStartSsrSpaModeRoute
+  DemoStartSsrIndexRoute: typeof DemoStartSsrIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/docs/': {
       id: '/docs/'
       path: '/docs'
@@ -745,11 +1040,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(landing)/': {
+      id: '/(landing)/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof landingIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/$': {
+      id: '/docs/$'
+      path: '/docs/$'
+      fullPath: '/docs/$'
+      preLoaderRoute: typeof DocsSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/search': {
+      id: '/api/search'
+      path: '/api/search'
+      fullPath: '/api/search'
+      preLoaderRoute: typeof ApiSearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(landing)/terms-of-service': {
       id: '/(landing)/terms-of-service'
       path: '/terms-of-service'
       fullPath: '/terms-of-service'
       preLoaderRoute: typeof landingTermsOfServiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(landing)/security': {
+      id: '/(landing)/security'
+      path: '/security'
+      fullPath: '/security'
+      preLoaderRoute: typeof landingSecurityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(landing)/privacy-policy': {
@@ -766,11 +1089,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof landingPricingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(landing)/how-it-works': {
+      id: '/(landing)/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof landingHowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(landing)/home': {
       id: '/(landing)/home'
       path: '/home'
       fullPath: '/home'
       preLoaderRoute: typeof landingHomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(landing)/features': {
+      id: '/(landing)/features'
+      path: '/features'
+      fullPath: '/features'
+      preLoaderRoute: typeof landingFeaturesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(landing)/contact': {
@@ -785,6 +1122,62 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof landingAboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/transactions': {
+      id: '/(dashboard)/transactions'
+      path: '/transactions'
+      fullPath: '/transactions'
+      preLoaderRoute: typeof dashboardTransactionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/support': {
+      id: '/(dashboard)/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof dashboardSupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/settings': {
+      id: '/(dashboard)/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof dashboardSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/reports': {
+      id: '/(dashboard)/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof dashboardReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/overview': {
+      id: '/(dashboard)/overview'
+      path: '/overview'
+      fullPath: '/overview'
+      preLoaderRoute: typeof dashboardOverviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/dashboard': {
+      id: '/(dashboard)/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof dashboardDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/cards': {
+      id: '/(dashboard)/cards'
+      path: '/cards'
+      fullPath: '/cards'
+      preLoaderRoute: typeof dashboardCardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/accounts': {
+      id: '/(dashboard)/accounts'
+      path: '/accounts'
+      fullPath: '/accounts'
+      preLoaderRoute: typeof dashboardAccountsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(auth)/unauthorized': {
@@ -822,40 +1215,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(dashboard)/superadmin/': {
+      id: '/(dashboard)/superadmin/'
+      path: '/superadmin'
+      fullPath: '/superadmin'
+      preLoaderRoute: typeof dashboardSuperadminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/owner/': {
+      id: '/(dashboard)/owner/'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof dashboardOwnerIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/start/server-funcs': {
+      id: '/demo/start/server-funcs'
+      path: '/demo/start/server-funcs'
+      fullPath: '/demo/start/server-funcs'
+      preLoaderRoute: typeof DemoStartServerFuncsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/start/api-request': {
+      id: '/demo/start/api-request'
+      path: '/demo/start/api-request'
+      fullPath: '/demo/start/api-request'
+      preLoaderRoute: typeof DemoStartApiRequestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/api/names': {
+      id: '/demo/api/names'
+      path: '/demo/api/names'
+      fullPath: '/demo/api/names'
+      preLoaderRoute: typeof DemoApiNamesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(dashboard)/support/support': {
       id: '/(dashboard)/support/support'
-      path: '/support/support'
+      path: '/support'
       fullPath: '/support/support'
       preLoaderRoute: typeof dashboardSupportSupportRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof dashboardSupportRoute
     }
     '/(dashboard)/support/statements': {
       id: '/(dashboard)/support/statements'
-      path: '/support/statements'
+      path: '/statements'
       fullPath: '/support/statements'
       preLoaderRoute: typeof dashboardSupportStatementsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof dashboardSupportRoute
     }
     '/(dashboard)/support/settings': {
       id: '/(dashboard)/support/settings'
-      path: '/support/settings'
+      path: '/settings'
       fullPath: '/support/settings'
       preLoaderRoute: typeof dashboardSupportSettingsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof dashboardSupportRoute
     }
     '/(dashboard)/support/payments': {
       id: '/(dashboard)/support/payments'
-      path: '/support/payments'
+      path: '/payments'
       fullPath: '/support/payments'
       preLoaderRoute: typeof dashboardSupportPaymentsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof dashboardSupportRoute
     }
     '/(dashboard)/support/overview': {
       id: '/(dashboard)/support/overview'
-      path: '/support/overview'
+      path: '/overview'
       fullPath: '/support/overview'
       preLoaderRoute: typeof dashboardSupportOverviewRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof dashboardSupportRoute
     }
     '/(dashboard)/superadmin/settings': {
       id: '/(dashboard)/superadmin/settings'
@@ -869,6 +1297,13 @@ declare module '@tanstack/react-router' {
       path: '/superadmin/reports'
       fullPath: '/superadmin/reports'
       preLoaderRoute: typeof dashboardSuperadminReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/superadmin/overview': {
+      id: '/(dashboard)/superadmin/overview'
+      path: '/superadmin/overview'
+      fullPath: '/superadmin/overview'
+      preLoaderRoute: typeof dashboardSuperadminOverviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(dashboard)/superadmin/employees': {
@@ -941,6 +1376,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardOwnerReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(dashboard)/owner/overview': {
+      id: '/(dashboard)/owner/overview'
+      path: '/owner/overview'
+      fullPath: '/owner/overview'
+      preLoaderRoute: typeof dashboardOwnerOverviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(dashboard)/owner/branches': {
       id: '/(dashboard)/owner/branches'
       path: '/owner/branches'
@@ -985,52 +1427,52 @@ declare module '@tanstack/react-router' {
     }
     '/(dashboard)/dashboard/transactions': {
       id: '/(dashboard)/dashboard/transactions'
-      path: '/dashboard/transactions'
+      path: '/transactions'
       fullPath: '/dashboard/transactions'
       preLoaderRoute: typeof dashboardDashboardTransactionsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof dashboardDashboardRoute
     }
     '/(dashboard)/dashboard/support': {
       id: '/(dashboard)/dashboard/support'
-      path: '/dashboard/support'
+      path: '/support'
       fullPath: '/dashboard/support'
       preLoaderRoute: typeof dashboardDashboardSupportRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof dashboardDashboardRoute
     }
     '/(dashboard)/dashboard/statements': {
       id: '/(dashboard)/dashboard/statements'
-      path: '/dashboard/statements'
+      path: '/statements'
       fullPath: '/dashboard/statements'
       preLoaderRoute: typeof dashboardDashboardStatementsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof dashboardDashboardRoute
     }
     '/(dashboard)/dashboard/settings': {
       id: '/(dashboard)/dashboard/settings'
-      path: '/dashboard/settings'
+      path: '/settings'
       fullPath: '/dashboard/settings'
       preLoaderRoute: typeof dashboardDashboardSettingsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof dashboardDashboardRoute
     }
     '/(dashboard)/dashboard/payments': {
       id: '/(dashboard)/dashboard/payments'
-      path: '/dashboard/payments'
+      path: '/payments'
       fullPath: '/dashboard/payments'
       preLoaderRoute: typeof dashboardDashboardPaymentsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof dashboardDashboardRoute
     }
     '/(dashboard)/dashboard/overview': {
       id: '/(dashboard)/dashboard/overview'
-      path: '/dashboard/overview'
+      path: '/overview'
       fullPath: '/dashboard/overview'
       preLoaderRoute: typeof dashboardDashboardOverviewRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof dashboardDashboardRoute
     }
     '/(dashboard)/dashboard/cards': {
       id: '/(dashboard)/dashboard/cards'
-      path: '/dashboard/cards'
+      path: '/cards'
       fullPath: '/dashboard/cards'
       preLoaderRoute: typeof dashboardDashboardCardsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof dashboardDashboardRoute
     }
     '/(dashboard)/audit/support': {
       id: '/(dashboard)/audit/support'
@@ -1095,22 +1537,105 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardAdminAuditTrailsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/demo/start/ssr/': {
+      id: '/demo/start/ssr/'
+      path: '/demo/start/ssr'
+      fullPath: '/demo/start/ssr'
+      preLoaderRoute: typeof DemoStartSsrIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/start/ssr/spa-mode': {
+      id: '/demo/start/ssr/spa-mode'
+      path: '/demo/start/ssr/spa-mode'
+      fullPath: '/demo/start/ssr/spa-mode'
+      preLoaderRoute: typeof DemoStartSsrSpaModeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/start/ssr/full-ssr': {
+      id: '/demo/start/ssr/full-ssr'
+      path: '/demo/start/ssr/full-ssr'
+      fullPath: '/demo/start/ssr/full-ssr'
+      preLoaderRoute: typeof DemoStartSsrFullSsrRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/start/ssr/data-only': {
+      id: '/demo/start/ssr/data-only'
+      path: '/demo/start/ssr/data-only'
+      fullPath: '/demo/start/ssr/data-only'
+      preLoaderRoute: typeof DemoStartSsrDataOnlyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface dashboardDashboardRouteChildren {
+  dashboardDashboardCardsRoute: typeof dashboardDashboardCardsRoute
+  dashboardDashboardOverviewRoute: typeof dashboardDashboardOverviewRoute
+  dashboardDashboardPaymentsRoute: typeof dashboardDashboardPaymentsRoute
+  dashboardDashboardSettingsRoute: typeof dashboardDashboardSettingsRoute
+  dashboardDashboardStatementsRoute: typeof dashboardDashboardStatementsRoute
+  dashboardDashboardSupportRoute: typeof dashboardDashboardSupportRoute
+  dashboardDashboardTransactionsRoute: typeof dashboardDashboardTransactionsRoute
+}
+
+const dashboardDashboardRouteChildren: dashboardDashboardRouteChildren = {
+  dashboardDashboardCardsRoute: dashboardDashboardCardsRoute,
+  dashboardDashboardOverviewRoute: dashboardDashboardOverviewRoute,
+  dashboardDashboardPaymentsRoute: dashboardDashboardPaymentsRoute,
+  dashboardDashboardSettingsRoute: dashboardDashboardSettingsRoute,
+  dashboardDashboardStatementsRoute: dashboardDashboardStatementsRoute,
+  dashboardDashboardSupportRoute: dashboardDashboardSupportRoute,
+  dashboardDashboardTransactionsRoute: dashboardDashboardTransactionsRoute,
+}
+
+const dashboardDashboardRouteWithChildren =
+  dashboardDashboardRoute._addFileChildren(dashboardDashboardRouteChildren)
+
+interface dashboardSupportRouteChildren {
+  dashboardSupportOverviewRoute: typeof dashboardSupportOverviewRoute
+  dashboardSupportPaymentsRoute: typeof dashboardSupportPaymentsRoute
+  dashboardSupportSettingsRoute: typeof dashboardSupportSettingsRoute
+  dashboardSupportStatementsRoute: typeof dashboardSupportStatementsRoute
+  dashboardSupportSupportRoute: typeof dashboardSupportSupportRoute
+}
+
+const dashboardSupportRouteChildren: dashboardSupportRouteChildren = {
+  dashboardSupportOverviewRoute: dashboardSupportOverviewRoute,
+  dashboardSupportPaymentsRoute: dashboardSupportPaymentsRoute,
+  dashboardSupportSettingsRoute: dashboardSupportSettingsRoute,
+  dashboardSupportStatementsRoute: dashboardSupportStatementsRoute,
+  dashboardSupportSupportRoute: dashboardSupportSupportRoute,
+}
+
+const dashboardSupportRouteWithChildren =
+  dashboardSupportRoute._addFileChildren(dashboardSupportRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   authForgotPasswordRoute: authForgotPasswordRoute,
   authResetPasswordRoute: authResetPasswordRoute,
   authSigninRoute: authSigninRoute,
   authSignupRoute: authSignupRoute,
   authUnauthorizedRoute: authUnauthorizedRoute,
+  dashboardAccountsRoute: dashboardAccountsRoute,
+  dashboardCardsRoute: dashboardCardsRoute,
+  dashboardDashboardRoute: dashboardDashboardRouteWithChildren,
+  dashboardOverviewRoute: dashboardOverviewRoute,
+  dashboardReportsRoute: dashboardReportsRoute,
+  dashboardSettingsRoute: dashboardSettingsRoute,
+  dashboardSupportRoute: dashboardSupportRouteWithChildren,
+  dashboardTransactionsRoute: dashboardTransactionsRoute,
   landingAboutRoute: landingAboutRoute,
   landingContactRoute: landingContactRoute,
+  landingFeaturesRoute: landingFeaturesRoute,
   landingHomeRoute: landingHomeRoute,
+  landingHowItWorksRoute: landingHowItWorksRoute,
   landingPricingRoute: landingPricingRoute,
   landingPrivacyPolicyRoute: landingPrivacyPolicyRoute,
+  landingSecurityRoute: landingSecurityRoute,
   landingTermsOfServiceRoute: landingTermsOfServiceRoute,
+  ApiSearchRoute: ApiSearchRoute,
+  DocsSplatRoute: DocsSplatRoute,
+  landingIndexRoute: landingIndexRoute,
   DocsIndexRoute: DocsIndexRoute,
   dashboardAdminAuditTrailsRoute: dashboardAdminAuditTrailsRoute,
   dashboardAdminComplianceRoute: dashboardAdminComplianceRoute,
@@ -1121,19 +1646,13 @@ const rootRouteChildren: RootRouteChildren = {
   dashboardAuditSettingsRoute: dashboardAuditSettingsRoute,
   dashboardAuditStatementsRoute: dashboardAuditStatementsRoute,
   dashboardAuditSupportRoute: dashboardAuditSupportRoute,
-  dashboardDashboardCardsRoute: dashboardDashboardCardsRoute,
-  dashboardDashboardOverviewRoute: dashboardDashboardOverviewRoute,
-  dashboardDashboardPaymentsRoute: dashboardDashboardPaymentsRoute,
-  dashboardDashboardSettingsRoute: dashboardDashboardSettingsRoute,
-  dashboardDashboardStatementsRoute: dashboardDashboardStatementsRoute,
-  dashboardDashboardSupportRoute: dashboardDashboardSupportRoute,
-  dashboardDashboardTransactionsRoute: dashboardDashboardTransactionsRoute,
   dashboardManagerOverviewRoute: dashboardManagerOverviewRoute,
   dashboardManagerPaymentsRoute: dashboardManagerPaymentsRoute,
   dashboardManagerSettingsRoute: dashboardManagerSettingsRoute,
   dashboardManagerStatementsRoute: dashboardManagerStatementsRoute,
   dashboardManagerSupportRoute: dashboardManagerSupportRoute,
   dashboardOwnerBranchesRoute: dashboardOwnerBranchesRoute,
+  dashboardOwnerOverviewRoute: dashboardOwnerOverviewRoute,
   dashboardOwnerReportsRoute: dashboardOwnerReportsRoute,
   dashboardOwnerSettingsRoute: dashboardOwnerSettingsRoute,
   dashboardOwnerStaffPerformanceRoute: dashboardOwnerStaffPerformanceRoute,
@@ -1144,14 +1663,28 @@ const rootRouteChildren: RootRouteChildren = {
   dashboardStaffSupportRoute: dashboardStaffSupportRoute,
   dashboardSuperadminBranchesRoute: dashboardSuperadminBranchesRoute,
   dashboardSuperadminEmployeesRoute: dashboardSuperadminEmployeesRoute,
+  dashboardSuperadminOverviewRoute: dashboardSuperadminOverviewRoute,
   dashboardSuperadminReportsRoute: dashboardSuperadminReportsRoute,
   dashboardSuperadminSettingsRoute: dashboardSuperadminSettingsRoute,
-  dashboardSupportOverviewRoute: dashboardSupportOverviewRoute,
-  dashboardSupportPaymentsRoute: dashboardSupportPaymentsRoute,
-  dashboardSupportSettingsRoute: dashboardSupportSettingsRoute,
-  dashboardSupportStatementsRoute: dashboardSupportStatementsRoute,
-  dashboardSupportSupportRoute: dashboardSupportSupportRoute,
+  DemoApiNamesRoute: DemoApiNamesRoute,
+  DemoStartApiRequestRoute: DemoStartApiRequestRoute,
+  DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,
+  dashboardOwnerIndexRoute: dashboardOwnerIndexRoute,
+  dashboardSuperadminIndexRoute: dashboardSuperadminIndexRoute,
+  DemoStartSsrDataOnlyRoute: DemoStartSsrDataOnlyRoute,
+  DemoStartSsrFullSsrRoute: DemoStartSsrFullSsrRoute,
+  DemoStartSsrSpaModeRoute: DemoStartSsrSpaModeRoute,
+  DemoStartSsrIndexRoute: DemoStartSsrIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

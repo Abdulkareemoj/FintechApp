@@ -18,6 +18,7 @@ node_modules
 /.qwen/settings.json.bak
 /.vscode/mcp.json
 /.vscode/mcp.json.bak
+/.windsurf
 /AGENTS.md
 /AGENTS.md.bak
 /CLAUDE.md
