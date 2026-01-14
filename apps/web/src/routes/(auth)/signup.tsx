@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { type SignUpFormValues, signUpSchema } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
+import { LandingLayout } from "@/layout/LandingLayout";
 // import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/(auth)/signup")({
@@ -92,7 +93,7 @@ function SignUp() {
   //     setIsLoading(false);
   //   }
   // }
-  return (
+  return (<LandingLayout>
     <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
       <div className="w-full max-w-sm md:max-w-3xl">
         <div className={cn("flex flex-col gap-6")}>
@@ -265,6 +266,6 @@ function SignUp() {
           </div>
         </div>
       </div>
-    </div>
+    </div></LandingLayout>
   );
 }

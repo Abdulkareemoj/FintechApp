@@ -20,6 +20,7 @@ import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { type SignInFormValues, signInSchema } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
+import { LandingLayout } from "@/layout/LandingLayout";
 
 export const Route = createFileRoute("/(auth)/signin")({
   component: SignIn,
@@ -44,7 +45,7 @@ function SignIn() {
 
   // }
 
-  return (
+  return (<LandingLayout>
     <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
       <div className="w-full max-w-sm md:max-w-3xl">
         <div className={cn("flex flex-col gap-6")}>
@@ -80,14 +81,7 @@ function SignIn() {
                         )}
                       />
                     </div>
-                    <div className="flex items-center">
-                      <Link
-                        className="ml-auto text-sm underline-offset-2 hover:underline"
-                        to="/forgot-password"
-                      >
-                        Forgot your password?
-                      </Link>
-                    </div>
+                   
                     <div className="grid gap-3">
                       <FormField
                         control={form.control}
@@ -111,7 +105,14 @@ function SignIn() {
                           }}
                         />
                         <Label htmlFor="remember">Remember me</Label>
-                      </div>
+                      </div> <div className="flex items-center">
+                      <Link
+                        className="ml-auto text-sm underline-offset-2 hover:underline"
+                        to="/forgot-password"
+                      >
+                        Forgot your password?
+                      </Link>
+                    </div>
                     </div>
 
                     <Button
@@ -212,5 +213,5 @@ function SignIn() {
         </div>
       </div>
     </div>
-  );
+  </LandingLayout>);
 }

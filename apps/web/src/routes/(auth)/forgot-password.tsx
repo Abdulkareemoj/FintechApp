@@ -19,6 +19,7 @@ import {
   forgotPasswordSchema,
 } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
+import { LandingLayout } from "@/layout/LandingLayout";
 // import { axiosClient } from "@/utils/";
 
 export const Route = createFileRoute("/(auth)/forgot-password")({
@@ -50,7 +51,7 @@ function ForgotPassword({ className, ...props }: React.ComponentProps<"div">) {
   // };
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
+  <LandingLayout>  <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
       <div className="w-full max-w-sm md:max-w-3xl">
         <div className={cn("flex flex-col gap-6", className)} {...props}>
           <Card className="overflow-hidden p-0">
@@ -92,10 +93,10 @@ function ForgotPassword({ className, ...props }: React.ComponentProps<"div">) {
                       Send password reset email
                     </Button>
                     <div className="text-center text-sm">
-                      Remember your password?{" "}
+                      Remember your password?
                       <Link
                         className="underline underline-offset-4"
-                        to={"/signin" as any}
+                        to="/signin" 
                       >
                         Sign in
                       </Link>
@@ -112,13 +113,9 @@ function ForgotPassword({ className, ...props }: React.ComponentProps<"div">) {
               </div>
             </CardContent>
           </Card>
-          <div className="text-balance text-center text-muted-foreground text-xs *:[a]:underline *:[a]:underline-offset-4 *:[a]:hover:text-primary">
-            By clicking continue, you agree to our{" "}
-            <Link to="/terms-of-service">Terms of Service </Link> and{" "}
-            <Link to="/privacy-policy">Privacy Policy</Link>.
-          </div>
+       
         </div>
       </div>
     </div>
-  );
+</LandingLayout>  );
 }
