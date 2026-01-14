@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Shield, Lock, Eye, Server, CheckCircle, ArrowRight } from "lucide-react";
 import securityShield from "../../../public/security-shield.png";  
-export const Route = createFileRoute("/(landing)/pricing")({
+export const Route = createFileRoute("/(landing)/security")({
   component: PricingPage,
 });
 

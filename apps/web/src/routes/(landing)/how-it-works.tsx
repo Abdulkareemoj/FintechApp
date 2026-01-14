@@ -4,7 +4,7 @@ import { UserPlus, Link2, Target, BarChart3, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LandingLayout } from "@/layout/LandingLayout";
 
-export const Route = createFileRoute("/(landing)/home")({
+export const Route = createFileRoute("/(landing)/how-it-works")({
   component: LandingPage,
 });
 
