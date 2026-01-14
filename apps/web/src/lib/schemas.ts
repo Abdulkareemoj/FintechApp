@@ -52,7 +52,7 @@ export type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 //signin
 export const signInSchema = z.object({
-  email: z.email({
+  identifier: z.string({
     message: "Email or username is required.",
   }),
   password: z.string().min(1, {
