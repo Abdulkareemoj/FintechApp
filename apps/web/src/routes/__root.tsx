@@ -1,10 +1,11 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import Header from "@/components/ui/header";
 import { Toaster } from "@/components/ui/sonner";
-import { ThemeProvider } from "@/components/ui/theme-provider";
+import { ThemeProvider } from "@/components/theme-provider";
 import appCss from "../styles.css?url";
+import { RootProvider } from 'fumadocs-ui/provider/tanstack';
+import { NotFound } from "@/components/not-found";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -17,7 +18,7 @@ export const Route = createRootRoute({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "TanStack Start Starter",
+        title: "Fintech App",
       },
     ],
     links: [
@@ -29,24 +30,23 @@ export const Route = createRootRoute({
   }),
 
   shellComponent: RootDocument,
+  notFoundComponent: NotFound,
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en"suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
-        {" "}
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
           disableTransitionOnChange
           storageKey="vite-ui-theme"
         >
-          <Header />
-          {children}
+        {children}
           <TanStackDevtools
             config={{
               position: "bottom-right",
