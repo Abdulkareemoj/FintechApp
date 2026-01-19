@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
-
-import Header from "@/components/shared/Header";
 import Footer from "@/components/shared/Footer";
+import Header from "@/components/shared/Header";
 
 type LandingLayoutProps = {
   children: ReactNode;
@@ -9,8 +8,8 @@ type LandingLayoutProps = {
 
 export function LandingLayout({ children }: LandingLayoutProps) {
   return (
-    <div className="flex min-h-svh flex-col">     
-     {/* <div className="min-h-screen bg-background"> */}
+    <div className="mx-auto flex min-h-svh max-w-6xl flex-col">
+      {/* <div className="min-h-screen bg-background"> */}
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
