@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Activity, CreditCard, DollarSign, Users } from "lucide-react";
 import { motion } from "motion/react";
+
 import { AccountsList } from "@/components/user-dashboard/AccountsList";
 import { BalanceCard } from "@/components/user-dashboard/BalanceCard";
 import { KPICard } from "@/components/user-dashboard/KPICard";
@@ -8,6 +9,10 @@ import { QuickActions } from "@/components/user-dashboard/QuickActions";
 import { SpendingChart } from "@/components/user-dashboard/SpendingChart";
 import { TransactionsTable } from "@/components/user-dashboard/TransactionsTable";
 import DashboardLayout from "@/layout/DashboardLayout";
+
+export const Route = createFileRoute("/(dashboard)/dashboard/")({
+  component: DashboardPage,
+});
 
 const kpiData = [
   {
@@ -115,20 +120,18 @@ const accounts = [
     lastFour: "9012",
   },
 ];
-export const Route = createFileRoute("/(dashboard)/dashboard/overview")({
-  component: DashboardOverviewPage,
-});
-function DashboardOverviewPage() {
+
+function DashboardPage() {
   const totalBalance = accounts.reduce((sum, acc) => sum + acc.balance, 0);
 
   return (
     <DashboardLayout>
-      {" "}
       <div className="min-h-screen bg-background">
         {/* Main Content */}
         <main className="mx-auto space-y-6 px-6 py-8">
           <motion.div
             animate={{ opacity: 1, y: 0 }}
+            className="mb-8"
             initial={{ opacity: 0, y: 10 }}
           >
             <h1 className="font-bold text-3xl tracking-tight">
@@ -140,7 +143,7 @@ function DashboardOverviewPage() {
           </motion.div>
 
           {/* Balance and Quick Actions Row */}
-          <div className="grid gap-6 lg:grid-cols-5">
+          <div className="mb-6 grid gap-6 lg:grid-cols-5">
             <div className="lg:col-span-3">
               <BalanceCard totalBalance={totalBalance} />
             </div>
@@ -150,7 +153,7 @@ function DashboardOverviewPage() {
           </div>
 
           {/* KPI Cards */}
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mb-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {kpiData.map((kpi, index) => (
               <KPICard key={kpi.title} {...kpi} delay={0.1 + index * 0.05} />
             ))}
@@ -158,9 +161,12 @@ function DashboardOverviewPage() {
 
           {/* Main Grid */}
           <div className="grid gap-6 lg:grid-cols-7">
+            {/* Transactions Table */}
             <div className="lg:col-span-4">
               <TransactionsTable transactions={transactions} />
             </div>
+
+            {/* Right Column */}
             <div className="space-y-6 lg:col-span-3">
               <AccountsList accounts={accounts} />
               <SpendingChart />
