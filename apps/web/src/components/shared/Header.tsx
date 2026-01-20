@@ -73,7 +73,7 @@ export default function Header() {
           ))}
         </div>
 
-        <div className="hidden items-center gap-4">
+        <div className="hidden items-center gap-4 md:flex">
           <Button variant="outline">Sign In</Button>
           <Button>Get Started</Button>
         </div>

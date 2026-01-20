@@ -1,11 +1,11 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { Toaster } from "@/components/ui/sonner";
-import { ThemeProvider } from "@/components/theme-provider";
-import appCss from "../styles.css?url";
-import { RootProvider } from 'fumadocs-ui/provider/tanstack';
+import { RootProvider } from "fumadocs-ui/provider/tanstack";
 import { NotFound } from "@/components/not-found";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
+import appCss from "../styles.css?url";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -35,10 +35,8 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en"suppressHydrationWarning>
-      <head>
-        <HeadContent />
-      </head>
+    <html lang="en" suppressHydrationWarning>
+      <HeadContent />
       <body>
         <ThemeProvider
           attribute="class"
@@ -46,7 +44,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           disableTransitionOnChange
           storageKey="vite-ui-theme"
         >
-        {children}
+          {children}
           <TanStackDevtools
             config={{
               position: "bottom-right",
