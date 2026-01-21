@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { AppSidebar } from "@/components/admin-dashboard/app-sidebar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,12 +14,11 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/user-dashboard/app-sidebar";
 
-type DashboardLayoutProps = {
+type AdminLayoutProps = {
   children: ReactNode;
 };
-export default function DashboardLayout({ children }: DashboardLayoutProps) {
+export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
     <SidebarProvider>
       <AppSidebar />
