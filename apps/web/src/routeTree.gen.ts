@@ -22,63 +22,45 @@ import { Route as landingHomeRouteImport } from './routes/(landing)/home'
 import { Route as landingFeaturesRouteImport } from './routes/(landing)/features'
 import { Route as landingContactRouteImport } from './routes/(landing)/contact'
 import { Route as landingAboutRouteImport } from './routes/(landing)/about'
-import { Route as dashboardTransactionsRouteImport } from './routes/(dashboard)/transactions'
-import { Route as dashboardSupportRouteImport } from './routes/(dashboard)/support'
-import { Route as dashboardSettingsRouteImport } from './routes/(dashboard)/settings'
-import { Route as dashboardReportsRouteImport } from './routes/(dashboard)/reports'
-import { Route as dashboardOverviewRouteImport } from './routes/(dashboard)/overview'
-import { Route as dashboardDashboardRouteImport } from './routes/(dashboard)/dashboard'
-import { Route as dashboardCardsRouteImport } from './routes/(dashboard)/cards'
-import { Route as dashboardAccountsRouteImport } from './routes/(dashboard)/accounts'
 import { Route as authUnauthorizedRouteImport } from './routes/(auth)/unauthorized'
 import { Route as authSignupRouteImport } from './routes/(auth)/signup'
 import { Route as authSigninRouteImport } from './routes/(auth)/signin'
 import { Route as authResetPasswordRouteImport } from './routes/(auth)/reset-password'
 import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
-import { Route as dashboardSuperadminIndexRouteImport } from './routes/(dashboard)/superadmin/index'
-import { Route as dashboardOwnerIndexRouteImport } from './routes/(dashboard)/owner/index'
+import { Route as dashboardDashboardIndexRouteImport } from './routes/(dashboard)/dashboard/index'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
 import { Route as DemoApiNamesRouteImport } from './routes/demo/api.names'
+import { Route as dashboardSupportTicketsRouteImport } from './routes/(dashboard)/support/tickets'
 import { Route as dashboardSupportSupportRouteImport } from './routes/(dashboard)/support/support'
 import { Route as dashboardSupportStatementsRouteImport } from './routes/(dashboard)/support/statements'
 import { Route as dashboardSupportSettingsRouteImport } from './routes/(dashboard)/support/settings'
 import { Route as dashboardSupportPaymentsRouteImport } from './routes/(dashboard)/support/payments'
 import { Route as dashboardSupportOverviewRouteImport } from './routes/(dashboard)/support/overview'
-import { Route as dashboardSuperadminSettingsRouteImport } from './routes/(dashboard)/superadmin/settings'
-import { Route as dashboardSuperadminReportsRouteImport } from './routes/(dashboard)/superadmin/reports'
-import { Route as dashboardSuperadminOverviewRouteImport } from './routes/(dashboard)/superadmin/overview'
-import { Route as dashboardSuperadminEmployeesRouteImport } from './routes/(dashboard)/superadmin/employees'
-import { Route as dashboardSuperadminBranchesRouteImport } from './routes/(dashboard)/superadmin/branches'
-import { Route as dashboardStaffSupportRouteImport } from './routes/(dashboard)/staff/support'
-import { Route as dashboardStaffStatementsRouteImport } from './routes/(dashboard)/staff/statements'
-import { Route as dashboardStaffSettingsRouteImport } from './routes/(dashboard)/staff/settings'
-import { Route as dashboardStaffPaymentsRouteImport } from './routes/(dashboard)/staff/payments'
-import { Route as dashboardStaffOverviewRouteImport } from './routes/(dashboard)/staff/overview'
-import { Route as dashboardOwnerStaffPerformanceRouteImport } from './routes/(dashboard)/owner/staff-performance'
-import { Route as dashboardOwnerSettingsRouteImport } from './routes/(dashboard)/owner/settings'
-import { Route as dashboardOwnerReportsRouteImport } from './routes/(dashboard)/owner/reports'
-import { Route as dashboardOwnerOverviewRouteImport } from './routes/(dashboard)/owner/overview'
-import { Route as dashboardOwnerBranchesRouteImport } from './routes/(dashboard)/owner/branches'
-import { Route as dashboardManagerSupportRouteImport } from './routes/(dashboard)/manager/support'
-import { Route as dashboardManagerStatementsRouteImport } from './routes/(dashboard)/manager/statements'
-import { Route as dashboardManagerSettingsRouteImport } from './routes/(dashboard)/manager/settings'
-import { Route as dashboardManagerPaymentsRouteImport } from './routes/(dashboard)/manager/payments'
-import { Route as dashboardManagerOverviewRouteImport } from './routes/(dashboard)/manager/overview'
+import { Route as dashboardMerchantWebhooksRouteImport } from './routes/(dashboard)/merchant/webhooks'
+import { Route as dashboardMerchantSupportRouteImport } from './routes/(dashboard)/merchant/support'
+import { Route as dashboardMerchantSettlementsRouteImport } from './routes/(dashboard)/merchant/settlements'
+import { Route as dashboardMerchantSettingsRouteImport } from './routes/(dashboard)/merchant/settings'
+import { Route as dashboardMerchantPaymentsRouteImport } from './routes/(dashboard)/merchant/payments'
+import { Route as dashboardMerchantOverviewRouteImport } from './routes/(dashboard)/merchant/overview'
+import { Route as dashboardMerchantApiKeysRouteImport } from './routes/(dashboard)/merchant/api-keys'
+import { Route as dashboardMerchantAnalyticsRouteImport } from './routes/(dashboard)/merchant/analytics'
 import { Route as dashboardDashboardTransactionsRouteImport } from './routes/(dashboard)/dashboard/transactions'
 import { Route as dashboardDashboardSupportRouteImport } from './routes/(dashboard)/dashboard/support'
-import { Route as dashboardDashboardStatementsRouteImport } from './routes/(dashboard)/dashboard/statements'
 import { Route as dashboardDashboardSettingsRouteImport } from './routes/(dashboard)/dashboard/settings'
-import { Route as dashboardDashboardPaymentsRouteImport } from './routes/(dashboard)/dashboard/payments'
+import { Route as dashboardDashboardSendMoneyRouteImport } from './routes/(dashboard)/dashboard/send-money'
+import { Route as dashboardDashboardReportsRouteImport } from './routes/(dashboard)/dashboard/reports'
 import { Route as dashboardDashboardOverviewRouteImport } from './routes/(dashboard)/dashboard/overview'
 import { Route as dashboardDashboardCardsRouteImport } from './routes/(dashboard)/dashboard/cards'
-import { Route as dashboardAuditSupportRouteImport } from './routes/(dashboard)/audit/support'
-import { Route as dashboardAuditStatementsRouteImport } from './routes/(dashboard)/audit/statements'
-import { Route as dashboardAuditSettingsRouteImport } from './routes/(dashboard)/audit/settings'
-import { Route as dashboardAuditPaymentsRouteImport } from './routes/(dashboard)/audit/payments'
-import { Route as dashboardAuditOverviewRouteImport } from './routes/(dashboard)/audit/overview'
+import { Route as dashboardDashboardBillsRouteImport } from './routes/(dashboard)/dashboard/bills'
+import { Route as dashboardDashboardAnalyticsRouteImport } from './routes/(dashboard)/dashboard/analytics'
+import { Route as dashboardDashboardAccountsRouteImport } from './routes/(dashboard)/dashboard/accounts'
+import { Route as dashboardAdminUsersRouteImport } from './routes/(dashboard)/admin/users'
+import { Route as dashboardAdminTransactionsRouteImport } from './routes/(dashboard)/admin/transactions'
 import { Route as dashboardAdminSupportRouteImport } from './routes/(dashboard)/admin/support'
-import { Route as dashboardAdminFlaggedRouteImport } from './routes/(dashboard)/admin/flagged'
+import { Route as dashboardAdminSettingsRouteImport } from './routes/(dashboard)/admin/settings'
+import { Route as dashboardAdminReportsRouteImport } from './routes/(dashboard)/admin/reports'
+import { Route as dashboardAdminOverviewRouteImport } from './routes/(dashboard)/admin/overview'
 import { Route as dashboardAdminComplianceRouteImport } from './routes/(dashboard)/admin/compliance'
 import { Route as dashboardAdminAuditTrailsRouteImport } from './routes/(dashboard)/admin/audit-trails'
 import { Route as DemoStartSsrIndexRouteImport } from './routes/demo/start.ssr.index'
@@ -151,46 +133,6 @@ const landingAboutRoute = landingAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardTransactionsRoute = dashboardTransactionsRouteImport.update({
-  id: '/(dashboard)/transactions',
-  path: '/transactions',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardSupportRoute = dashboardSupportRouteImport.update({
-  id: '/(dashboard)/support',
-  path: '/support',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardSettingsRoute = dashboardSettingsRouteImport.update({
-  id: '/(dashboard)/settings',
-  path: '/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardReportsRoute = dashboardReportsRouteImport.update({
-  id: '/(dashboard)/reports',
-  path: '/reports',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardOverviewRoute = dashboardOverviewRouteImport.update({
-  id: '/(dashboard)/overview',
-  path: '/overview',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardDashboardRoute = dashboardDashboardRouteImport.update({
-  id: '/(dashboard)/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardCardsRoute = dashboardCardsRouteImport.update({
-  id: '/(dashboard)/cards',
-  path: '/cards',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardAccountsRoute = dashboardAccountsRouteImport.update({
-  id: '/(dashboard)/accounts',
-  path: '/accounts',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const authUnauthorizedRoute = authUnauthorizedRouteImport.update({
   id: '/(auth)/unauthorized',
   path: '/unauthorized',
@@ -216,15 +158,9 @@ const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardSuperadminIndexRoute =
-  dashboardSuperadminIndexRouteImport.update({
-    id: '/(dashboard)/superadmin/',
-    path: '/superadmin/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardOwnerIndexRoute = dashboardOwnerIndexRouteImport.update({
-  id: '/(dashboard)/owner/',
-  path: '/owner/',
+const dashboardDashboardIndexRoute = dashboardDashboardIndexRouteImport.update({
+  id: '/(dashboard)/dashboard/',
+  path: '/dashboard/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
@@ -242,221 +178,175 @@ const DemoApiNamesRoute = DemoApiNamesRouteImport.update({
   path: '/demo/api/names',
   getParentRoute: () => rootRouteImport,
 } as any)
+const dashboardSupportTicketsRoute = dashboardSupportTicketsRouteImport.update({
+  id: '/(dashboard)/support/tickets',
+  path: '/support/tickets',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const dashboardSupportSupportRoute = dashboardSupportSupportRouteImport.update({
-  id: '/support',
-  path: '/support',
-  getParentRoute: () => dashboardSupportRoute,
+  id: '/(dashboard)/support/support',
+  path: '/support/support',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const dashboardSupportStatementsRoute =
   dashboardSupportStatementsRouteImport.update({
-    id: '/statements',
-    path: '/statements',
-    getParentRoute: () => dashboardSupportRoute,
+    id: '/(dashboard)/support/statements',
+    path: '/support/statements',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const dashboardSupportSettingsRoute =
   dashboardSupportSettingsRouteImport.update({
-    id: '/settings',
-    path: '/settings',
-    getParentRoute: () => dashboardSupportRoute,
+    id: '/(dashboard)/support/settings',
+    path: '/support/settings',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const dashboardSupportPaymentsRoute =
   dashboardSupportPaymentsRouteImport.update({
-    id: '/payments',
-    path: '/payments',
-    getParentRoute: () => dashboardSupportRoute,
+    id: '/(dashboard)/support/payments',
+    path: '/support/payments',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const dashboardSupportOverviewRoute =
   dashboardSupportOverviewRouteImport.update({
-    id: '/overview',
-    path: '/overview',
-    getParentRoute: () => dashboardSupportRoute,
-  } as any)
-const dashboardSuperadminSettingsRoute =
-  dashboardSuperadminSettingsRouteImport.update({
-    id: '/(dashboard)/superadmin/settings',
-    path: '/superadmin/settings',
+    id: '/(dashboard)/support/overview',
+    path: '/support/overview',
     getParentRoute: () => rootRouteImport,
   } as any)
-const dashboardSuperadminReportsRoute =
-  dashboardSuperadminReportsRouteImport.update({
-    id: '/(dashboard)/superadmin/reports',
-    path: '/superadmin/reports',
+const dashboardMerchantWebhooksRoute =
+  dashboardMerchantWebhooksRouteImport.update({
+    id: '/(dashboard)/merchant/webhooks',
+    path: '/merchant/webhooks',
     getParentRoute: () => rootRouteImport,
   } as any)
-const dashboardSuperadminOverviewRoute =
-  dashboardSuperadminOverviewRouteImport.update({
-    id: '/(dashboard)/superadmin/overview',
-    path: '/superadmin/overview',
+const dashboardMerchantSupportRoute =
+  dashboardMerchantSupportRouteImport.update({
+    id: '/(dashboard)/merchant/support',
+    path: '/merchant/support',
     getParentRoute: () => rootRouteImport,
   } as any)
-const dashboardSuperadminEmployeesRoute =
-  dashboardSuperadminEmployeesRouteImport.update({
-    id: '/(dashboard)/superadmin/employees',
-    path: '/superadmin/employees',
+const dashboardMerchantSettlementsRoute =
+  dashboardMerchantSettlementsRouteImport.update({
+    id: '/(dashboard)/merchant/settlements',
+    path: '/merchant/settlements',
     getParentRoute: () => rootRouteImport,
   } as any)
-const dashboardSuperadminBranchesRoute =
-  dashboardSuperadminBranchesRouteImport.update({
-    id: '/(dashboard)/superadmin/branches',
-    path: '/superadmin/branches',
+const dashboardMerchantSettingsRoute =
+  dashboardMerchantSettingsRouteImport.update({
+    id: '/(dashboard)/merchant/settings',
+    path: '/merchant/settings',
     getParentRoute: () => rootRouteImport,
   } as any)
-const dashboardStaffSupportRoute = dashboardStaffSupportRouteImport.update({
-  id: '/(dashboard)/staff/support',
-  path: '/staff/support',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardStaffStatementsRoute =
-  dashboardStaffStatementsRouteImport.update({
-    id: '/(dashboard)/staff/statements',
-    path: '/staff/statements',
+const dashboardMerchantPaymentsRoute =
+  dashboardMerchantPaymentsRouteImport.update({
+    id: '/(dashboard)/merchant/payments',
+    path: '/merchant/payments',
     getParentRoute: () => rootRouteImport,
   } as any)
-const dashboardStaffSettingsRoute = dashboardStaffSettingsRouteImport.update({
-  id: '/(dashboard)/staff/settings',
-  path: '/staff/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardStaffPaymentsRoute = dashboardStaffPaymentsRouteImport.update({
-  id: '/(dashboard)/staff/payments',
-  path: '/staff/payments',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardStaffOverviewRoute = dashboardStaffOverviewRouteImport.update({
-  id: '/(dashboard)/staff/overview',
-  path: '/staff/overview',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardOwnerStaffPerformanceRoute =
-  dashboardOwnerStaffPerformanceRouteImport.update({
-    id: '/(dashboard)/owner/staff-performance',
-    path: '/owner/staff-performance',
+const dashboardMerchantOverviewRoute =
+  dashboardMerchantOverviewRouteImport.update({
+    id: '/(dashboard)/merchant/overview',
+    path: '/merchant/overview',
     getParentRoute: () => rootRouteImport,
   } as any)
-const dashboardOwnerSettingsRoute = dashboardOwnerSettingsRouteImport.update({
-  id: '/(dashboard)/owner/settings',
-  path: '/owner/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardOwnerReportsRoute = dashboardOwnerReportsRouteImport.update({
-  id: '/(dashboard)/owner/reports',
-  path: '/owner/reports',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardOwnerOverviewRoute = dashboardOwnerOverviewRouteImport.update({
-  id: '/(dashboard)/owner/overview',
-  path: '/owner/overview',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardOwnerBranchesRoute = dashboardOwnerBranchesRouteImport.update({
-  id: '/(dashboard)/owner/branches',
-  path: '/owner/branches',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardManagerSupportRoute = dashboardManagerSupportRouteImport.update({
-  id: '/(dashboard)/manager/support',
-  path: '/manager/support',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardManagerStatementsRoute =
-  dashboardManagerStatementsRouteImport.update({
-    id: '/(dashboard)/manager/statements',
-    path: '/manager/statements',
+const dashboardMerchantApiKeysRoute =
+  dashboardMerchantApiKeysRouteImport.update({
+    id: '/(dashboard)/merchant/api-keys',
+    path: '/merchant/api-keys',
     getParentRoute: () => rootRouteImport,
   } as any)
-const dashboardManagerSettingsRoute =
-  dashboardManagerSettingsRouteImport.update({
-    id: '/(dashboard)/manager/settings',
-    path: '/manager/settings',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardManagerPaymentsRoute =
-  dashboardManagerPaymentsRouteImport.update({
-    id: '/(dashboard)/manager/payments',
-    path: '/manager/payments',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardManagerOverviewRoute =
-  dashboardManagerOverviewRouteImport.update({
-    id: '/(dashboard)/manager/overview',
-    path: '/manager/overview',
+const dashboardMerchantAnalyticsRoute =
+  dashboardMerchantAnalyticsRouteImport.update({
+    id: '/(dashboard)/merchant/analytics',
+    path: '/merchant/analytics',
     getParentRoute: () => rootRouteImport,
   } as any)
 const dashboardDashboardTransactionsRoute =
   dashboardDashboardTransactionsRouteImport.update({
-    id: '/transactions',
-    path: '/transactions',
-    getParentRoute: () => dashboardDashboardRoute,
+    id: '/(dashboard)/dashboard/transactions',
+    path: '/dashboard/transactions',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const dashboardDashboardSupportRoute =
   dashboardDashboardSupportRouteImport.update({
-    id: '/support',
-    path: '/support',
-    getParentRoute: () => dashboardDashboardRoute,
-  } as any)
-const dashboardDashboardStatementsRoute =
-  dashboardDashboardStatementsRouteImport.update({
-    id: '/statements',
-    path: '/statements',
-    getParentRoute: () => dashboardDashboardRoute,
+    id: '/(dashboard)/dashboard/support',
+    path: '/dashboard/support',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const dashboardDashboardSettingsRoute =
   dashboardDashboardSettingsRouteImport.update({
-    id: '/settings',
-    path: '/settings',
-    getParentRoute: () => dashboardDashboardRoute,
+    id: '/(dashboard)/dashboard/settings',
+    path: '/dashboard/settings',
+    getParentRoute: () => rootRouteImport,
   } as any)
-const dashboardDashboardPaymentsRoute =
-  dashboardDashboardPaymentsRouteImport.update({
-    id: '/payments',
-    path: '/payments',
-    getParentRoute: () => dashboardDashboardRoute,
+const dashboardDashboardSendMoneyRoute =
+  dashboardDashboardSendMoneyRouteImport.update({
+    id: '/(dashboard)/dashboard/send-money',
+    path: '/dashboard/send-money',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardDashboardReportsRoute =
+  dashboardDashboardReportsRouteImport.update({
+    id: '/(dashboard)/dashboard/reports',
+    path: '/dashboard/reports',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const dashboardDashboardOverviewRoute =
   dashboardDashboardOverviewRouteImport.update({
-    id: '/overview',
-    path: '/overview',
-    getParentRoute: () => dashboardDashboardRoute,
-  } as any)
-const dashboardDashboardCardsRoute = dashboardDashboardCardsRouteImport.update({
-  id: '/cards',
-  path: '/cards',
-  getParentRoute: () => dashboardDashboardRoute,
-} as any)
-const dashboardAuditSupportRoute = dashboardAuditSupportRouteImport.update({
-  id: '/(dashboard)/audit/support',
-  path: '/audit/support',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardAuditStatementsRoute =
-  dashboardAuditStatementsRouteImport.update({
-    id: '/(dashboard)/audit/statements',
-    path: '/audit/statements',
+    id: '/(dashboard)/dashboard/overview',
+    path: '/dashboard/overview',
     getParentRoute: () => rootRouteImport,
   } as any)
-const dashboardAuditSettingsRoute = dashboardAuditSettingsRouteImport.update({
-  id: '/(dashboard)/audit/settings',
-  path: '/audit/settings',
+const dashboardDashboardCardsRoute = dashboardDashboardCardsRouteImport.update({
+  id: '/(dashboard)/dashboard/cards',
+  path: '/dashboard/cards',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardAuditPaymentsRoute = dashboardAuditPaymentsRouteImport.update({
-  id: '/(dashboard)/audit/payments',
-  path: '/audit/payments',
+const dashboardDashboardBillsRoute = dashboardDashboardBillsRouteImport.update({
+  id: '/(dashboard)/dashboard/bills',
+  path: '/dashboard/bills',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardAuditOverviewRoute = dashboardAuditOverviewRouteImport.update({
-  id: '/(dashboard)/audit/overview',
-  path: '/audit/overview',
+const dashboardDashboardAnalyticsRoute =
+  dashboardDashboardAnalyticsRouteImport.update({
+    id: '/(dashboard)/dashboard/analytics',
+    path: '/dashboard/analytics',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardDashboardAccountsRoute =
+  dashboardDashboardAccountsRouteImport.update({
+    id: '/(dashboard)/dashboard/accounts',
+    path: '/dashboard/accounts',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardAdminUsersRoute = dashboardAdminUsersRouteImport.update({
+  id: '/(dashboard)/admin/users',
+  path: '/admin/users',
   getParentRoute: () => rootRouteImport,
 } as any)
+const dashboardAdminTransactionsRoute =
+  dashboardAdminTransactionsRouteImport.update({
+    id: '/(dashboard)/admin/transactions',
+    path: '/admin/transactions',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const dashboardAdminSupportRoute = dashboardAdminSupportRouteImport.update({
   id: '/(dashboard)/admin/support',
   path: '/admin/support',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardAdminFlaggedRoute = dashboardAdminFlaggedRouteImport.update({
-  id: '/(dashboard)/admin/flagged',
-  path: '/admin/flagged',
+const dashboardAdminSettingsRoute = dashboardAdminSettingsRouteImport.update({
+  id: '/(dashboard)/admin/settings',
+  path: '/admin/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardAdminReportsRoute = dashboardAdminReportsRouteImport.update({
+  id: '/(dashboard)/admin/reports',
+  path: '/admin/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardAdminOverviewRoute = dashboardAdminOverviewRouteImport.update({
+  id: '/(dashboard)/admin/overview',
+  path: '/admin/overview',
   getParentRoute: () => rootRouteImport,
 } as any)
 const dashboardAdminComplianceRoute =
@@ -498,14 +388,6 @@ export interface FileRoutesByFullPath {
   '/signin': typeof authSigninRoute
   '/signup': typeof authSignupRoute
   '/unauthorized': typeof authUnauthorizedRoute
-  '/accounts': typeof dashboardAccountsRoute
-  '/cards': typeof dashboardCardsRoute
-  '/dashboard': typeof dashboardDashboardRouteWithChildren
-  '/overview': typeof dashboardOverviewRoute
-  '/reports': typeof dashboardReportsRoute
-  '/settings': typeof dashboardSettingsRoute
-  '/support': typeof dashboardSupportRouteWithChildren
-  '/transactions': typeof dashboardTransactionsRoute
   '/about': typeof landingAboutRoute
   '/contact': typeof landingContactRoute
   '/features': typeof landingFeaturesRoute
@@ -521,50 +403,40 @@ export interface FileRoutesByFullPath {
   '/docs': typeof DocsIndexRoute
   '/admin/audit-trails': typeof dashboardAdminAuditTrailsRoute
   '/admin/compliance': typeof dashboardAdminComplianceRoute
-  '/admin/flagged': typeof dashboardAdminFlaggedRoute
+  '/admin/overview': typeof dashboardAdminOverviewRoute
+  '/admin/reports': typeof dashboardAdminReportsRoute
+  '/admin/settings': typeof dashboardAdminSettingsRoute
   '/admin/support': typeof dashboardAdminSupportRoute
-  '/audit/overview': typeof dashboardAuditOverviewRoute
-  '/audit/payments': typeof dashboardAuditPaymentsRoute
-  '/audit/settings': typeof dashboardAuditSettingsRoute
-  '/audit/statements': typeof dashboardAuditStatementsRoute
-  '/audit/support': typeof dashboardAuditSupportRoute
+  '/admin/transactions': typeof dashboardAdminTransactionsRoute
+  '/admin/users': typeof dashboardAdminUsersRoute
+  '/dashboard/accounts': typeof dashboardDashboardAccountsRoute
+  '/dashboard/analytics': typeof dashboardDashboardAnalyticsRoute
+  '/dashboard/bills': typeof dashboardDashboardBillsRoute
   '/dashboard/cards': typeof dashboardDashboardCardsRoute
   '/dashboard/overview': typeof dashboardDashboardOverviewRoute
-  '/dashboard/payments': typeof dashboardDashboardPaymentsRoute
+  '/dashboard/reports': typeof dashboardDashboardReportsRoute
+  '/dashboard/send-money': typeof dashboardDashboardSendMoneyRoute
   '/dashboard/settings': typeof dashboardDashboardSettingsRoute
-  '/dashboard/statements': typeof dashboardDashboardStatementsRoute
   '/dashboard/support': typeof dashboardDashboardSupportRoute
   '/dashboard/transactions': typeof dashboardDashboardTransactionsRoute
-  '/manager/overview': typeof dashboardManagerOverviewRoute
-  '/manager/payments': typeof dashboardManagerPaymentsRoute
-  '/manager/settings': typeof dashboardManagerSettingsRoute
-  '/manager/statements': typeof dashboardManagerStatementsRoute
-  '/manager/support': typeof dashboardManagerSupportRoute
-  '/owner/branches': typeof dashboardOwnerBranchesRoute
-  '/owner/overview': typeof dashboardOwnerOverviewRoute
-  '/owner/reports': typeof dashboardOwnerReportsRoute
-  '/owner/settings': typeof dashboardOwnerSettingsRoute
-  '/owner/staff-performance': typeof dashboardOwnerStaffPerformanceRoute
-  '/staff/overview': typeof dashboardStaffOverviewRoute
-  '/staff/payments': typeof dashboardStaffPaymentsRoute
-  '/staff/settings': typeof dashboardStaffSettingsRoute
-  '/staff/statements': typeof dashboardStaffStatementsRoute
-  '/staff/support': typeof dashboardStaffSupportRoute
-  '/superadmin/branches': typeof dashboardSuperadminBranchesRoute
-  '/superadmin/employees': typeof dashboardSuperadminEmployeesRoute
-  '/superadmin/overview': typeof dashboardSuperadminOverviewRoute
-  '/superadmin/reports': typeof dashboardSuperadminReportsRoute
-  '/superadmin/settings': typeof dashboardSuperadminSettingsRoute
+  '/merchant/analytics': typeof dashboardMerchantAnalyticsRoute
+  '/merchant/api-keys': typeof dashboardMerchantApiKeysRoute
+  '/merchant/overview': typeof dashboardMerchantOverviewRoute
+  '/merchant/payments': typeof dashboardMerchantPaymentsRoute
+  '/merchant/settings': typeof dashboardMerchantSettingsRoute
+  '/merchant/settlements': typeof dashboardMerchantSettlementsRoute
+  '/merchant/support': typeof dashboardMerchantSupportRoute
+  '/merchant/webhooks': typeof dashboardMerchantWebhooksRoute
   '/support/overview': typeof dashboardSupportOverviewRoute
   '/support/payments': typeof dashboardSupportPaymentsRoute
   '/support/settings': typeof dashboardSupportSettingsRoute
   '/support/statements': typeof dashboardSupportStatementsRoute
   '/support/support': typeof dashboardSupportSupportRoute
+  '/support/tickets': typeof dashboardSupportTicketsRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
-  '/owner': typeof dashboardOwnerIndexRoute
-  '/superadmin': typeof dashboardSuperadminIndexRoute
+  '/dashboard': typeof dashboardDashboardIndexRoute
   '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
   '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
   '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
@@ -576,14 +448,6 @@ export interface FileRoutesByTo {
   '/signin': typeof authSigninRoute
   '/signup': typeof authSignupRoute
   '/unauthorized': typeof authUnauthorizedRoute
-  '/accounts': typeof dashboardAccountsRoute
-  '/cards': typeof dashboardCardsRoute
-  '/dashboard': typeof dashboardDashboardRouteWithChildren
-  '/overview': typeof dashboardOverviewRoute
-  '/reports': typeof dashboardReportsRoute
-  '/settings': typeof dashboardSettingsRoute
-  '/support': typeof dashboardSupportRouteWithChildren
-  '/transactions': typeof dashboardTransactionsRoute
   '/about': typeof landingAboutRoute
   '/contact': typeof landingContactRoute
   '/features': typeof landingFeaturesRoute
@@ -599,50 +463,40 @@ export interface FileRoutesByTo {
   '/docs': typeof DocsIndexRoute
   '/admin/audit-trails': typeof dashboardAdminAuditTrailsRoute
   '/admin/compliance': typeof dashboardAdminComplianceRoute
-  '/admin/flagged': typeof dashboardAdminFlaggedRoute
+  '/admin/overview': typeof dashboardAdminOverviewRoute
+  '/admin/reports': typeof dashboardAdminReportsRoute
+  '/admin/settings': typeof dashboardAdminSettingsRoute
   '/admin/support': typeof dashboardAdminSupportRoute
-  '/audit/overview': typeof dashboardAuditOverviewRoute
-  '/audit/payments': typeof dashboardAuditPaymentsRoute
-  '/audit/settings': typeof dashboardAuditSettingsRoute
-  '/audit/statements': typeof dashboardAuditStatementsRoute
-  '/audit/support': typeof dashboardAuditSupportRoute
+  '/admin/transactions': typeof dashboardAdminTransactionsRoute
+  '/admin/users': typeof dashboardAdminUsersRoute
+  '/dashboard/accounts': typeof dashboardDashboardAccountsRoute
+  '/dashboard/analytics': typeof dashboardDashboardAnalyticsRoute
+  '/dashboard/bills': typeof dashboardDashboardBillsRoute
   '/dashboard/cards': typeof dashboardDashboardCardsRoute
   '/dashboard/overview': typeof dashboardDashboardOverviewRoute
-  '/dashboard/payments': typeof dashboardDashboardPaymentsRoute
+  '/dashboard/reports': typeof dashboardDashboardReportsRoute
+  '/dashboard/send-money': typeof dashboardDashboardSendMoneyRoute
   '/dashboard/settings': typeof dashboardDashboardSettingsRoute
-  '/dashboard/statements': typeof dashboardDashboardStatementsRoute
   '/dashboard/support': typeof dashboardDashboardSupportRoute
   '/dashboard/transactions': typeof dashboardDashboardTransactionsRoute
-  '/manager/overview': typeof dashboardManagerOverviewRoute
-  '/manager/payments': typeof dashboardManagerPaymentsRoute
-  '/manager/settings': typeof dashboardManagerSettingsRoute
-  '/manager/statements': typeof dashboardManagerStatementsRoute
-  '/manager/support': typeof dashboardManagerSupportRoute
-  '/owner/branches': typeof dashboardOwnerBranchesRoute
-  '/owner/overview': typeof dashboardOwnerOverviewRoute
-  '/owner/reports': typeof dashboardOwnerReportsRoute
-  '/owner/settings': typeof dashboardOwnerSettingsRoute
-  '/owner/staff-performance': typeof dashboardOwnerStaffPerformanceRoute
-  '/staff/overview': typeof dashboardStaffOverviewRoute
-  '/staff/payments': typeof dashboardStaffPaymentsRoute
-  '/staff/settings': typeof dashboardStaffSettingsRoute
-  '/staff/statements': typeof dashboardStaffStatementsRoute
-  '/staff/support': typeof dashboardStaffSupportRoute
-  '/superadmin/branches': typeof dashboardSuperadminBranchesRoute
-  '/superadmin/employees': typeof dashboardSuperadminEmployeesRoute
-  '/superadmin/overview': typeof dashboardSuperadminOverviewRoute
-  '/superadmin/reports': typeof dashboardSuperadminReportsRoute
-  '/superadmin/settings': typeof dashboardSuperadminSettingsRoute
+  '/merchant/analytics': typeof dashboardMerchantAnalyticsRoute
+  '/merchant/api-keys': typeof dashboardMerchantApiKeysRoute
+  '/merchant/overview': typeof dashboardMerchantOverviewRoute
+  '/merchant/payments': typeof dashboardMerchantPaymentsRoute
+  '/merchant/settings': typeof dashboardMerchantSettingsRoute
+  '/merchant/settlements': typeof dashboardMerchantSettlementsRoute
+  '/merchant/support': typeof dashboardMerchantSupportRoute
+  '/merchant/webhooks': typeof dashboardMerchantWebhooksRoute
   '/support/overview': typeof dashboardSupportOverviewRoute
   '/support/payments': typeof dashboardSupportPaymentsRoute
   '/support/settings': typeof dashboardSupportSettingsRoute
   '/support/statements': typeof dashboardSupportStatementsRoute
   '/support/support': typeof dashboardSupportSupportRoute
+  '/support/tickets': typeof dashboardSupportTicketsRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
-  '/owner': typeof dashboardOwnerIndexRoute
-  '/superadmin': typeof dashboardSuperadminIndexRoute
+  '/dashboard': typeof dashboardDashboardIndexRoute
   '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
   '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
   '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
@@ -655,14 +509,6 @@ export interface FileRoutesById {
   '/(auth)/signin': typeof authSigninRoute
   '/(auth)/signup': typeof authSignupRoute
   '/(auth)/unauthorized': typeof authUnauthorizedRoute
-  '/(dashboard)/accounts': typeof dashboardAccountsRoute
-  '/(dashboard)/cards': typeof dashboardCardsRoute
-  '/(dashboard)/dashboard': typeof dashboardDashboardRouteWithChildren
-  '/(dashboard)/overview': typeof dashboardOverviewRoute
-  '/(dashboard)/reports': typeof dashboardReportsRoute
-  '/(dashboard)/settings': typeof dashboardSettingsRoute
-  '/(dashboard)/support': typeof dashboardSupportRouteWithChildren
-  '/(dashboard)/transactions': typeof dashboardTransactionsRoute
   '/(landing)/about': typeof landingAboutRoute
   '/(landing)/contact': typeof landingContactRoute
   '/(landing)/features': typeof landingFeaturesRoute
@@ -678,50 +524,40 @@ export interface FileRoutesById {
   '/docs/': typeof DocsIndexRoute
   '/(dashboard)/admin/audit-trails': typeof dashboardAdminAuditTrailsRoute
   '/(dashboard)/admin/compliance': typeof dashboardAdminComplianceRoute
-  '/(dashboard)/admin/flagged': typeof dashboardAdminFlaggedRoute
+  '/(dashboard)/admin/overview': typeof dashboardAdminOverviewRoute
+  '/(dashboard)/admin/reports': typeof dashboardAdminReportsRoute
+  '/(dashboard)/admin/settings': typeof dashboardAdminSettingsRoute
   '/(dashboard)/admin/support': typeof dashboardAdminSupportRoute
-  '/(dashboard)/audit/overview': typeof dashboardAuditOverviewRoute
-  '/(dashboard)/audit/payments': typeof dashboardAuditPaymentsRoute
-  '/(dashboard)/audit/settings': typeof dashboardAuditSettingsRoute
-  '/(dashboard)/audit/statements': typeof dashboardAuditStatementsRoute
-  '/(dashboard)/audit/support': typeof dashboardAuditSupportRoute
+  '/(dashboard)/admin/transactions': typeof dashboardAdminTransactionsRoute
+  '/(dashboard)/admin/users': typeof dashboardAdminUsersRoute
+  '/(dashboard)/dashboard/accounts': typeof dashboardDashboardAccountsRoute
+  '/(dashboard)/dashboard/analytics': typeof dashboardDashboardAnalyticsRoute
+  '/(dashboard)/dashboard/bills': typeof dashboardDashboardBillsRoute
   '/(dashboard)/dashboard/cards': typeof dashboardDashboardCardsRoute
   '/(dashboard)/dashboard/overview': typeof dashboardDashboardOverviewRoute
-  '/(dashboard)/dashboard/payments': typeof dashboardDashboardPaymentsRoute
+  '/(dashboard)/dashboard/reports': typeof dashboardDashboardReportsRoute
+  '/(dashboard)/dashboard/send-money': typeof dashboardDashboardSendMoneyRoute
   '/(dashboard)/dashboard/settings': typeof dashboardDashboardSettingsRoute
-  '/(dashboard)/dashboard/statements': typeof dashboardDashboardStatementsRoute
   '/(dashboard)/dashboard/support': typeof dashboardDashboardSupportRoute
   '/(dashboard)/dashboard/transactions': typeof dashboardDashboardTransactionsRoute
-  '/(dashboard)/manager/overview': typeof dashboardManagerOverviewRoute
-  '/(dashboard)/manager/payments': typeof dashboardManagerPaymentsRoute
-  '/(dashboard)/manager/settings': typeof dashboardManagerSettingsRoute
-  '/(dashboard)/manager/statements': typeof dashboardManagerStatementsRoute
-  '/(dashboard)/manager/support': typeof dashboardManagerSupportRoute
-  '/(dashboard)/owner/branches': typeof dashboardOwnerBranchesRoute
-  '/(dashboard)/owner/overview': typeof dashboardOwnerOverviewRoute
-  '/(dashboard)/owner/reports': typeof dashboardOwnerReportsRoute
-  '/(dashboard)/owner/settings': typeof dashboardOwnerSettingsRoute
-  '/(dashboard)/owner/staff-performance': typeof dashboardOwnerStaffPerformanceRoute
-  '/(dashboard)/staff/overview': typeof dashboardStaffOverviewRoute
-  '/(dashboard)/staff/payments': typeof dashboardStaffPaymentsRoute
-  '/(dashboard)/staff/settings': typeof dashboardStaffSettingsRoute
-  '/(dashboard)/staff/statements': typeof dashboardStaffStatementsRoute
-  '/(dashboard)/staff/support': typeof dashboardStaffSupportRoute
-  '/(dashboard)/superadmin/branches': typeof dashboardSuperadminBranchesRoute
-  '/(dashboard)/superadmin/employees': typeof dashboardSuperadminEmployeesRoute
-  '/(dashboard)/superadmin/overview': typeof dashboardSuperadminOverviewRoute
-  '/(dashboard)/superadmin/reports': typeof dashboardSuperadminReportsRoute
-  '/(dashboard)/superadmin/settings': typeof dashboardSuperadminSettingsRoute
+  '/(dashboard)/merchant/analytics': typeof dashboardMerchantAnalyticsRoute
+  '/(dashboard)/merchant/api-keys': typeof dashboardMerchantApiKeysRoute
+  '/(dashboard)/merchant/overview': typeof dashboardMerchantOverviewRoute
+  '/(dashboard)/merchant/payments': typeof dashboardMerchantPaymentsRoute
+  '/(dashboard)/merchant/settings': typeof dashboardMerchantSettingsRoute
+  '/(dashboard)/merchant/settlements': typeof dashboardMerchantSettlementsRoute
+  '/(dashboard)/merchant/support': typeof dashboardMerchantSupportRoute
+  '/(dashboard)/merchant/webhooks': typeof dashboardMerchantWebhooksRoute
   '/(dashboard)/support/overview': typeof dashboardSupportOverviewRoute
   '/(dashboard)/support/payments': typeof dashboardSupportPaymentsRoute
   '/(dashboard)/support/settings': typeof dashboardSupportSettingsRoute
   '/(dashboard)/support/statements': typeof dashboardSupportStatementsRoute
   '/(dashboard)/support/support': typeof dashboardSupportSupportRoute
+  '/(dashboard)/support/tickets': typeof dashboardSupportTicketsRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
-  '/(dashboard)/owner/': typeof dashboardOwnerIndexRoute
-  '/(dashboard)/superadmin/': typeof dashboardSuperadminIndexRoute
+  '/(dashboard)/dashboard/': typeof dashboardDashboardIndexRoute
   '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
   '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
   '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
@@ -735,14 +571,6 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/unauthorized'
-    | '/accounts'
-    | '/cards'
-    | '/dashboard'
-    | '/overview'
-    | '/reports'
-    | '/settings'
-    | '/support'
-    | '/transactions'
     | '/about'
     | '/contact'
     | '/features'
@@ -758,50 +586,40 @@ export interface FileRouteTypes {
     | '/docs'
     | '/admin/audit-trails'
     | '/admin/compliance'
-    | '/admin/flagged'
+    | '/admin/overview'
+    | '/admin/reports'
+    | '/admin/settings'
     | '/admin/support'
-    | '/audit/overview'
-    | '/audit/payments'
-    | '/audit/settings'
-    | '/audit/statements'
-    | '/audit/support'
+    | '/admin/transactions'
+    | '/admin/users'
+    | '/dashboard/accounts'
+    | '/dashboard/analytics'
+    | '/dashboard/bills'
     | '/dashboard/cards'
     | '/dashboard/overview'
-    | '/dashboard/payments'
+    | '/dashboard/reports'
+    | '/dashboard/send-money'
     | '/dashboard/settings'
-    | '/dashboard/statements'
     | '/dashboard/support'
     | '/dashboard/transactions'
-    | '/manager/overview'
-    | '/manager/payments'
-    | '/manager/settings'
-    | '/manager/statements'
-    | '/manager/support'
-    | '/owner/branches'
-    | '/owner/overview'
-    | '/owner/reports'
-    | '/owner/settings'
-    | '/owner/staff-performance'
-    | '/staff/overview'
-    | '/staff/payments'
-    | '/staff/settings'
-    | '/staff/statements'
-    | '/staff/support'
-    | '/superadmin/branches'
-    | '/superadmin/employees'
-    | '/superadmin/overview'
-    | '/superadmin/reports'
-    | '/superadmin/settings'
+    | '/merchant/analytics'
+    | '/merchant/api-keys'
+    | '/merchant/overview'
+    | '/merchant/payments'
+    | '/merchant/settings'
+    | '/merchant/settlements'
+    | '/merchant/support'
+    | '/merchant/webhooks'
     | '/support/overview'
     | '/support/payments'
     | '/support/settings'
     | '/support/statements'
     | '/support/support'
+    | '/support/tickets'
     | '/demo/api/names'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
-    | '/owner'
-    | '/superadmin'
+    | '/dashboard'
     | '/demo/start/ssr/data-only'
     | '/demo/start/ssr/full-ssr'
     | '/demo/start/ssr/spa-mode'
@@ -813,14 +631,6 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/unauthorized'
-    | '/accounts'
-    | '/cards'
-    | '/dashboard'
-    | '/overview'
-    | '/reports'
-    | '/settings'
-    | '/support'
-    | '/transactions'
     | '/about'
     | '/contact'
     | '/features'
@@ -836,50 +646,40 @@ export interface FileRouteTypes {
     | '/docs'
     | '/admin/audit-trails'
     | '/admin/compliance'
-    | '/admin/flagged'
+    | '/admin/overview'
+    | '/admin/reports'
+    | '/admin/settings'
     | '/admin/support'
-    | '/audit/overview'
-    | '/audit/payments'
-    | '/audit/settings'
-    | '/audit/statements'
-    | '/audit/support'
+    | '/admin/transactions'
+    | '/admin/users'
+    | '/dashboard/accounts'
+    | '/dashboard/analytics'
+    | '/dashboard/bills'
     | '/dashboard/cards'
     | '/dashboard/overview'
-    | '/dashboard/payments'
+    | '/dashboard/reports'
+    | '/dashboard/send-money'
     | '/dashboard/settings'
-    | '/dashboard/statements'
     | '/dashboard/support'
     | '/dashboard/transactions'
-    | '/manager/overview'
-    | '/manager/payments'
-    | '/manager/settings'
-    | '/manager/statements'
-    | '/manager/support'
-    | '/owner/branches'
-    | '/owner/overview'
-    | '/owner/reports'
-    | '/owner/settings'
-    | '/owner/staff-performance'
-    | '/staff/overview'
-    | '/staff/payments'
-    | '/staff/settings'
-    | '/staff/statements'
-    | '/staff/support'
-    | '/superadmin/branches'
-    | '/superadmin/employees'
-    | '/superadmin/overview'
-    | '/superadmin/reports'
-    | '/superadmin/settings'
+    | '/merchant/analytics'
+    | '/merchant/api-keys'
+    | '/merchant/overview'
+    | '/merchant/payments'
+    | '/merchant/settings'
+    | '/merchant/settlements'
+    | '/merchant/support'
+    | '/merchant/webhooks'
     | '/support/overview'
     | '/support/payments'
     | '/support/settings'
     | '/support/statements'
     | '/support/support'
+    | '/support/tickets'
     | '/demo/api/names'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
-    | '/owner'
-    | '/superadmin'
+    | '/dashboard'
     | '/demo/start/ssr/data-only'
     | '/demo/start/ssr/full-ssr'
     | '/demo/start/ssr/spa-mode'
@@ -891,14 +691,6 @@ export interface FileRouteTypes {
     | '/(auth)/signin'
     | '/(auth)/signup'
     | '/(auth)/unauthorized'
-    | '/(dashboard)/accounts'
-    | '/(dashboard)/cards'
-    | '/(dashboard)/dashboard'
-    | '/(dashboard)/overview'
-    | '/(dashboard)/reports'
-    | '/(dashboard)/settings'
-    | '/(dashboard)/support'
-    | '/(dashboard)/transactions'
     | '/(landing)/about'
     | '/(landing)/contact'
     | '/(landing)/features'
@@ -914,50 +706,40 @@ export interface FileRouteTypes {
     | '/docs/'
     | '/(dashboard)/admin/audit-trails'
     | '/(dashboard)/admin/compliance'
-    | '/(dashboard)/admin/flagged'
+    | '/(dashboard)/admin/overview'
+    | '/(dashboard)/admin/reports'
+    | '/(dashboard)/admin/settings'
     | '/(dashboard)/admin/support'
-    | '/(dashboard)/audit/overview'
-    | '/(dashboard)/audit/payments'
-    | '/(dashboard)/audit/settings'
-    | '/(dashboard)/audit/statements'
-    | '/(dashboard)/audit/support'
+    | '/(dashboard)/admin/transactions'
+    | '/(dashboard)/admin/users'
+    | '/(dashboard)/dashboard/accounts'
+    | '/(dashboard)/dashboard/analytics'
+    | '/(dashboard)/dashboard/bills'
     | '/(dashboard)/dashboard/cards'
     | '/(dashboard)/dashboard/overview'
-    | '/(dashboard)/dashboard/payments'
+    | '/(dashboard)/dashboard/reports'
+    | '/(dashboard)/dashboard/send-money'
     | '/(dashboard)/dashboard/settings'
-    | '/(dashboard)/dashboard/statements'
     | '/(dashboard)/dashboard/support'
     | '/(dashboard)/dashboard/transactions'
-    | '/(dashboard)/manager/overview'
-    | '/(dashboard)/manager/payments'
-    | '/(dashboard)/manager/settings'
-    | '/(dashboard)/manager/statements'
-    | '/(dashboard)/manager/support'
-    | '/(dashboard)/owner/branches'
-    | '/(dashboard)/owner/overview'
-    | '/(dashboard)/owner/reports'
-    | '/(dashboard)/owner/settings'
-    | '/(dashboard)/owner/staff-performance'
-    | '/(dashboard)/staff/overview'
-    | '/(dashboard)/staff/payments'
-    | '/(dashboard)/staff/settings'
-    | '/(dashboard)/staff/statements'
-    | '/(dashboard)/staff/support'
-    | '/(dashboard)/superadmin/branches'
-    | '/(dashboard)/superadmin/employees'
-    | '/(dashboard)/superadmin/overview'
-    | '/(dashboard)/superadmin/reports'
-    | '/(dashboard)/superadmin/settings'
+    | '/(dashboard)/merchant/analytics'
+    | '/(dashboard)/merchant/api-keys'
+    | '/(dashboard)/merchant/overview'
+    | '/(dashboard)/merchant/payments'
+    | '/(dashboard)/merchant/settings'
+    | '/(dashboard)/merchant/settlements'
+    | '/(dashboard)/merchant/support'
+    | '/(dashboard)/merchant/webhooks'
     | '/(dashboard)/support/overview'
     | '/(dashboard)/support/payments'
     | '/(dashboard)/support/settings'
     | '/(dashboard)/support/statements'
     | '/(dashboard)/support/support'
+    | '/(dashboard)/support/tickets'
     | '/demo/api/names'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
-    | '/(dashboard)/owner/'
-    | '/(dashboard)/superadmin/'
+    | '/(dashboard)/dashboard/'
     | '/demo/start/ssr/data-only'
     | '/demo/start/ssr/full-ssr'
     | '/demo/start/ssr/spa-mode'
@@ -970,14 +752,6 @@ export interface RootRouteChildren {
   authSigninRoute: typeof authSigninRoute
   authSignupRoute: typeof authSignupRoute
   authUnauthorizedRoute: typeof authUnauthorizedRoute
-  dashboardAccountsRoute: typeof dashboardAccountsRoute
-  dashboardCardsRoute: typeof dashboardCardsRoute
-  dashboardDashboardRoute: typeof dashboardDashboardRouteWithChildren
-  dashboardOverviewRoute: typeof dashboardOverviewRoute
-  dashboardReportsRoute: typeof dashboardReportsRoute
-  dashboardSettingsRoute: typeof dashboardSettingsRoute
-  dashboardSupportRoute: typeof dashboardSupportRouteWithChildren
-  dashboardTransactionsRoute: typeof dashboardTransactionsRoute
   landingAboutRoute: typeof landingAboutRoute
   landingContactRoute: typeof landingContactRoute
   landingFeaturesRoute: typeof landingFeaturesRoute
@@ -993,38 +767,40 @@ export interface RootRouteChildren {
   DocsIndexRoute: typeof DocsIndexRoute
   dashboardAdminAuditTrailsRoute: typeof dashboardAdminAuditTrailsRoute
   dashboardAdminComplianceRoute: typeof dashboardAdminComplianceRoute
-  dashboardAdminFlaggedRoute: typeof dashboardAdminFlaggedRoute
+  dashboardAdminOverviewRoute: typeof dashboardAdminOverviewRoute
+  dashboardAdminReportsRoute: typeof dashboardAdminReportsRoute
+  dashboardAdminSettingsRoute: typeof dashboardAdminSettingsRoute
   dashboardAdminSupportRoute: typeof dashboardAdminSupportRoute
-  dashboardAuditOverviewRoute: typeof dashboardAuditOverviewRoute
-  dashboardAuditPaymentsRoute: typeof dashboardAuditPaymentsRoute
-  dashboardAuditSettingsRoute: typeof dashboardAuditSettingsRoute
-  dashboardAuditStatementsRoute: typeof dashboardAuditStatementsRoute
-  dashboardAuditSupportRoute: typeof dashboardAuditSupportRoute
-  dashboardManagerOverviewRoute: typeof dashboardManagerOverviewRoute
-  dashboardManagerPaymentsRoute: typeof dashboardManagerPaymentsRoute
-  dashboardManagerSettingsRoute: typeof dashboardManagerSettingsRoute
-  dashboardManagerStatementsRoute: typeof dashboardManagerStatementsRoute
-  dashboardManagerSupportRoute: typeof dashboardManagerSupportRoute
-  dashboardOwnerBranchesRoute: typeof dashboardOwnerBranchesRoute
-  dashboardOwnerOverviewRoute: typeof dashboardOwnerOverviewRoute
-  dashboardOwnerReportsRoute: typeof dashboardOwnerReportsRoute
-  dashboardOwnerSettingsRoute: typeof dashboardOwnerSettingsRoute
-  dashboardOwnerStaffPerformanceRoute: typeof dashboardOwnerStaffPerformanceRoute
-  dashboardStaffOverviewRoute: typeof dashboardStaffOverviewRoute
-  dashboardStaffPaymentsRoute: typeof dashboardStaffPaymentsRoute
-  dashboardStaffSettingsRoute: typeof dashboardStaffSettingsRoute
-  dashboardStaffStatementsRoute: typeof dashboardStaffStatementsRoute
-  dashboardStaffSupportRoute: typeof dashboardStaffSupportRoute
-  dashboardSuperadminBranchesRoute: typeof dashboardSuperadminBranchesRoute
-  dashboardSuperadminEmployeesRoute: typeof dashboardSuperadminEmployeesRoute
-  dashboardSuperadminOverviewRoute: typeof dashboardSuperadminOverviewRoute
-  dashboardSuperadminReportsRoute: typeof dashboardSuperadminReportsRoute
-  dashboardSuperadminSettingsRoute: typeof dashboardSuperadminSettingsRoute
+  dashboardAdminTransactionsRoute: typeof dashboardAdminTransactionsRoute
+  dashboardAdminUsersRoute: typeof dashboardAdminUsersRoute
+  dashboardDashboardAccountsRoute: typeof dashboardDashboardAccountsRoute
+  dashboardDashboardAnalyticsRoute: typeof dashboardDashboardAnalyticsRoute
+  dashboardDashboardBillsRoute: typeof dashboardDashboardBillsRoute
+  dashboardDashboardCardsRoute: typeof dashboardDashboardCardsRoute
+  dashboardDashboardOverviewRoute: typeof dashboardDashboardOverviewRoute
+  dashboardDashboardReportsRoute: typeof dashboardDashboardReportsRoute
+  dashboardDashboardSendMoneyRoute: typeof dashboardDashboardSendMoneyRoute
+  dashboardDashboardSettingsRoute: typeof dashboardDashboardSettingsRoute
+  dashboardDashboardSupportRoute: typeof dashboardDashboardSupportRoute
+  dashboardDashboardTransactionsRoute: typeof dashboardDashboardTransactionsRoute
+  dashboardMerchantAnalyticsRoute: typeof dashboardMerchantAnalyticsRoute
+  dashboardMerchantApiKeysRoute: typeof dashboardMerchantApiKeysRoute
+  dashboardMerchantOverviewRoute: typeof dashboardMerchantOverviewRoute
+  dashboardMerchantPaymentsRoute: typeof dashboardMerchantPaymentsRoute
+  dashboardMerchantSettingsRoute: typeof dashboardMerchantSettingsRoute
+  dashboardMerchantSettlementsRoute: typeof dashboardMerchantSettlementsRoute
+  dashboardMerchantSupportRoute: typeof dashboardMerchantSupportRoute
+  dashboardMerchantWebhooksRoute: typeof dashboardMerchantWebhooksRoute
+  dashboardSupportOverviewRoute: typeof dashboardSupportOverviewRoute
+  dashboardSupportPaymentsRoute: typeof dashboardSupportPaymentsRoute
+  dashboardSupportSettingsRoute: typeof dashboardSupportSettingsRoute
+  dashboardSupportStatementsRoute: typeof dashboardSupportStatementsRoute
+  dashboardSupportSupportRoute: typeof dashboardSupportSupportRoute
+  dashboardSupportTicketsRoute: typeof dashboardSupportTicketsRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
   DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
   DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
-  dashboardOwnerIndexRoute: typeof dashboardOwnerIndexRoute
-  dashboardSuperadminIndexRoute: typeof dashboardSuperadminIndexRoute
+  dashboardDashboardIndexRoute: typeof dashboardDashboardIndexRoute
   DemoStartSsrDataOnlyRoute: typeof DemoStartSsrDataOnlyRoute
   DemoStartSsrFullSsrRoute: typeof DemoStartSsrFullSsrRoute
   DemoStartSsrSpaModeRoute: typeof DemoStartSsrSpaModeRoute
@@ -1124,62 +900,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof landingAboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/transactions': {
-      id: '/(dashboard)/transactions'
-      path: '/transactions'
-      fullPath: '/transactions'
-      preLoaderRoute: typeof dashboardTransactionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/support': {
-      id: '/(dashboard)/support'
-      path: '/support'
-      fullPath: '/support'
-      preLoaderRoute: typeof dashboardSupportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/settings': {
-      id: '/(dashboard)/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof dashboardSettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/reports': {
-      id: '/(dashboard)/reports'
-      path: '/reports'
-      fullPath: '/reports'
-      preLoaderRoute: typeof dashboardReportsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/overview': {
-      id: '/(dashboard)/overview'
-      path: '/overview'
-      fullPath: '/overview'
-      preLoaderRoute: typeof dashboardOverviewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/dashboard': {
-      id: '/(dashboard)/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof dashboardDashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/cards': {
-      id: '/(dashboard)/cards'
-      path: '/cards'
-      fullPath: '/cards'
-      preLoaderRoute: typeof dashboardCardsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/accounts': {
-      id: '/(dashboard)/accounts'
-      path: '/accounts'
-      fullPath: '/accounts'
-      preLoaderRoute: typeof dashboardAccountsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/(auth)/unauthorized': {
       id: '/(auth)/unauthorized'
       path: '/unauthorized'
@@ -1215,18 +935,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/superadmin/': {
-      id: '/(dashboard)/superadmin/'
-      path: '/superadmin'
-      fullPath: '/superadmin'
-      preLoaderRoute: typeof dashboardSuperadminIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/owner/': {
-      id: '/(dashboard)/owner/'
-      path: '/owner'
-      fullPath: '/owner'
-      preLoaderRoute: typeof dashboardOwnerIndexRouteImport
+    '/(dashboard)/dashboard/': {
+      id: '/(dashboard)/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof dashboardDashboardIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/start/server-funcs': {
@@ -1250,263 +963,186 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoApiNamesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(dashboard)/support/tickets': {
+      id: '/(dashboard)/support/tickets'
+      path: '/support/tickets'
+      fullPath: '/support/tickets'
+      preLoaderRoute: typeof dashboardSupportTicketsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(dashboard)/support/support': {
       id: '/(dashboard)/support/support'
-      path: '/support'
+      path: '/support/support'
       fullPath: '/support/support'
       preLoaderRoute: typeof dashboardSupportSupportRouteImport
-      parentRoute: typeof dashboardSupportRoute
+      parentRoute: typeof rootRouteImport
     }
     '/(dashboard)/support/statements': {
       id: '/(dashboard)/support/statements'
-      path: '/statements'
+      path: '/support/statements'
       fullPath: '/support/statements'
       preLoaderRoute: typeof dashboardSupportStatementsRouteImport
-      parentRoute: typeof dashboardSupportRoute
+      parentRoute: typeof rootRouteImport
     }
     '/(dashboard)/support/settings': {
       id: '/(dashboard)/support/settings'
-      path: '/settings'
+      path: '/support/settings'
       fullPath: '/support/settings'
       preLoaderRoute: typeof dashboardSupportSettingsRouteImport
-      parentRoute: typeof dashboardSupportRoute
+      parentRoute: typeof rootRouteImport
     }
     '/(dashboard)/support/payments': {
       id: '/(dashboard)/support/payments'
-      path: '/payments'
+      path: '/support/payments'
       fullPath: '/support/payments'
       preLoaderRoute: typeof dashboardSupportPaymentsRouteImport
-      parentRoute: typeof dashboardSupportRoute
+      parentRoute: typeof rootRouteImport
     }
     '/(dashboard)/support/overview': {
       id: '/(dashboard)/support/overview'
-      path: '/overview'
+      path: '/support/overview'
       fullPath: '/support/overview'
       preLoaderRoute: typeof dashboardSupportOverviewRouteImport
-      parentRoute: typeof dashboardSupportRoute
-    }
-    '/(dashboard)/superadmin/settings': {
-      id: '/(dashboard)/superadmin/settings'
-      path: '/superadmin/settings'
-      fullPath: '/superadmin/settings'
-      preLoaderRoute: typeof dashboardSuperadminSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/superadmin/reports': {
-      id: '/(dashboard)/superadmin/reports'
-      path: '/superadmin/reports'
-      fullPath: '/superadmin/reports'
-      preLoaderRoute: typeof dashboardSuperadminReportsRouteImport
+    '/(dashboard)/merchant/webhooks': {
+      id: '/(dashboard)/merchant/webhooks'
+      path: '/merchant/webhooks'
+      fullPath: '/merchant/webhooks'
+      preLoaderRoute: typeof dashboardMerchantWebhooksRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/superadmin/overview': {
-      id: '/(dashboard)/superadmin/overview'
-      path: '/superadmin/overview'
-      fullPath: '/superadmin/overview'
-      preLoaderRoute: typeof dashboardSuperadminOverviewRouteImport
+    '/(dashboard)/merchant/support': {
+      id: '/(dashboard)/merchant/support'
+      path: '/merchant/support'
+      fullPath: '/merchant/support'
+      preLoaderRoute: typeof dashboardMerchantSupportRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/superadmin/employees': {
-      id: '/(dashboard)/superadmin/employees'
-      path: '/superadmin/employees'
-      fullPath: '/superadmin/employees'
-      preLoaderRoute: typeof dashboardSuperadminEmployeesRouteImport
+    '/(dashboard)/merchant/settlements': {
+      id: '/(dashboard)/merchant/settlements'
+      path: '/merchant/settlements'
+      fullPath: '/merchant/settlements'
+      preLoaderRoute: typeof dashboardMerchantSettlementsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/superadmin/branches': {
-      id: '/(dashboard)/superadmin/branches'
-      path: '/superadmin/branches'
-      fullPath: '/superadmin/branches'
-      preLoaderRoute: typeof dashboardSuperadminBranchesRouteImport
+    '/(dashboard)/merchant/settings': {
+      id: '/(dashboard)/merchant/settings'
+      path: '/merchant/settings'
+      fullPath: '/merchant/settings'
+      preLoaderRoute: typeof dashboardMerchantSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/staff/support': {
-      id: '/(dashboard)/staff/support'
-      path: '/staff/support'
-      fullPath: '/staff/support'
-      preLoaderRoute: typeof dashboardStaffSupportRouteImport
+    '/(dashboard)/merchant/payments': {
+      id: '/(dashboard)/merchant/payments'
+      path: '/merchant/payments'
+      fullPath: '/merchant/payments'
+      preLoaderRoute: typeof dashboardMerchantPaymentsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/staff/statements': {
-      id: '/(dashboard)/staff/statements'
-      path: '/staff/statements'
-      fullPath: '/staff/statements'
-      preLoaderRoute: typeof dashboardStaffStatementsRouteImport
+    '/(dashboard)/merchant/overview': {
+      id: '/(dashboard)/merchant/overview'
+      path: '/merchant/overview'
+      fullPath: '/merchant/overview'
+      preLoaderRoute: typeof dashboardMerchantOverviewRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/staff/settings': {
-      id: '/(dashboard)/staff/settings'
-      path: '/staff/settings'
-      fullPath: '/staff/settings'
-      preLoaderRoute: typeof dashboardStaffSettingsRouteImport
+    '/(dashboard)/merchant/api-keys': {
+      id: '/(dashboard)/merchant/api-keys'
+      path: '/merchant/api-keys'
+      fullPath: '/merchant/api-keys'
+      preLoaderRoute: typeof dashboardMerchantApiKeysRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/staff/payments': {
-      id: '/(dashboard)/staff/payments'
-      path: '/staff/payments'
-      fullPath: '/staff/payments'
-      preLoaderRoute: typeof dashboardStaffPaymentsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/staff/overview': {
-      id: '/(dashboard)/staff/overview'
-      path: '/staff/overview'
-      fullPath: '/staff/overview'
-      preLoaderRoute: typeof dashboardStaffOverviewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/owner/staff-performance': {
-      id: '/(dashboard)/owner/staff-performance'
-      path: '/owner/staff-performance'
-      fullPath: '/owner/staff-performance'
-      preLoaderRoute: typeof dashboardOwnerStaffPerformanceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/owner/settings': {
-      id: '/(dashboard)/owner/settings'
-      path: '/owner/settings'
-      fullPath: '/owner/settings'
-      preLoaderRoute: typeof dashboardOwnerSettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/owner/reports': {
-      id: '/(dashboard)/owner/reports'
-      path: '/owner/reports'
-      fullPath: '/owner/reports'
-      preLoaderRoute: typeof dashboardOwnerReportsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/owner/overview': {
-      id: '/(dashboard)/owner/overview'
-      path: '/owner/overview'
-      fullPath: '/owner/overview'
-      preLoaderRoute: typeof dashboardOwnerOverviewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/owner/branches': {
-      id: '/(dashboard)/owner/branches'
-      path: '/owner/branches'
-      fullPath: '/owner/branches'
-      preLoaderRoute: typeof dashboardOwnerBranchesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/manager/support': {
-      id: '/(dashboard)/manager/support'
-      path: '/manager/support'
-      fullPath: '/manager/support'
-      preLoaderRoute: typeof dashboardManagerSupportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/manager/statements': {
-      id: '/(dashboard)/manager/statements'
-      path: '/manager/statements'
-      fullPath: '/manager/statements'
-      preLoaderRoute: typeof dashboardManagerStatementsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/manager/settings': {
-      id: '/(dashboard)/manager/settings'
-      path: '/manager/settings'
-      fullPath: '/manager/settings'
-      preLoaderRoute: typeof dashboardManagerSettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/manager/payments': {
-      id: '/(dashboard)/manager/payments'
-      path: '/manager/payments'
-      fullPath: '/manager/payments'
-      preLoaderRoute: typeof dashboardManagerPaymentsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/manager/overview': {
-      id: '/(dashboard)/manager/overview'
-      path: '/manager/overview'
-      fullPath: '/manager/overview'
-      preLoaderRoute: typeof dashboardManagerOverviewRouteImport
+    '/(dashboard)/merchant/analytics': {
+      id: '/(dashboard)/merchant/analytics'
+      path: '/merchant/analytics'
+      fullPath: '/merchant/analytics'
+      preLoaderRoute: typeof dashboardMerchantAnalyticsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(dashboard)/dashboard/transactions': {
       id: '/(dashboard)/dashboard/transactions'
-      path: '/transactions'
+      path: '/dashboard/transactions'
       fullPath: '/dashboard/transactions'
       preLoaderRoute: typeof dashboardDashboardTransactionsRouteImport
-      parentRoute: typeof dashboardDashboardRoute
+      parentRoute: typeof rootRouteImport
     }
     '/(dashboard)/dashboard/support': {
       id: '/(dashboard)/dashboard/support'
-      path: '/support'
+      path: '/dashboard/support'
       fullPath: '/dashboard/support'
       preLoaderRoute: typeof dashboardDashboardSupportRouteImport
-      parentRoute: typeof dashboardDashboardRoute
-    }
-    '/(dashboard)/dashboard/statements': {
-      id: '/(dashboard)/dashboard/statements'
-      path: '/statements'
-      fullPath: '/dashboard/statements'
-      preLoaderRoute: typeof dashboardDashboardStatementsRouteImport
-      parentRoute: typeof dashboardDashboardRoute
+      parentRoute: typeof rootRouteImport
     }
     '/(dashboard)/dashboard/settings': {
       id: '/(dashboard)/dashboard/settings'
-      path: '/settings'
+      path: '/dashboard/settings'
       fullPath: '/dashboard/settings'
       preLoaderRoute: typeof dashboardDashboardSettingsRouteImport
-      parentRoute: typeof dashboardDashboardRoute
+      parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/dashboard/payments': {
-      id: '/(dashboard)/dashboard/payments'
-      path: '/payments'
-      fullPath: '/dashboard/payments'
-      preLoaderRoute: typeof dashboardDashboardPaymentsRouteImport
-      parentRoute: typeof dashboardDashboardRoute
+    '/(dashboard)/dashboard/send-money': {
+      id: '/(dashboard)/dashboard/send-money'
+      path: '/dashboard/send-money'
+      fullPath: '/dashboard/send-money'
+      preLoaderRoute: typeof dashboardDashboardSendMoneyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/dashboard/reports': {
+      id: '/(dashboard)/dashboard/reports'
+      path: '/dashboard/reports'
+      fullPath: '/dashboard/reports'
+      preLoaderRoute: typeof dashboardDashboardReportsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/(dashboard)/dashboard/overview': {
       id: '/(dashboard)/dashboard/overview'
-      path: '/overview'
+      path: '/dashboard/overview'
       fullPath: '/dashboard/overview'
       preLoaderRoute: typeof dashboardDashboardOverviewRouteImport
-      parentRoute: typeof dashboardDashboardRoute
+      parentRoute: typeof rootRouteImport
     }
     '/(dashboard)/dashboard/cards': {
       id: '/(dashboard)/dashboard/cards'
-      path: '/cards'
+      path: '/dashboard/cards'
       fullPath: '/dashboard/cards'
       preLoaderRoute: typeof dashboardDashboardCardsRouteImport
-      parentRoute: typeof dashboardDashboardRoute
-    }
-    '/(dashboard)/audit/support': {
-      id: '/(dashboard)/audit/support'
-      path: '/audit/support'
-      fullPath: '/audit/support'
-      preLoaderRoute: typeof dashboardAuditSupportRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/audit/statements': {
-      id: '/(dashboard)/audit/statements'
-      path: '/audit/statements'
-      fullPath: '/audit/statements'
-      preLoaderRoute: typeof dashboardAuditStatementsRouteImport
+    '/(dashboard)/dashboard/bills': {
+      id: '/(dashboard)/dashboard/bills'
+      path: '/dashboard/bills'
+      fullPath: '/dashboard/bills'
+      preLoaderRoute: typeof dashboardDashboardBillsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/audit/settings': {
-      id: '/(dashboard)/audit/settings'
-      path: '/audit/settings'
-      fullPath: '/audit/settings'
-      preLoaderRoute: typeof dashboardAuditSettingsRouteImport
+    '/(dashboard)/dashboard/analytics': {
+      id: '/(dashboard)/dashboard/analytics'
+      path: '/dashboard/analytics'
+      fullPath: '/dashboard/analytics'
+      preLoaderRoute: typeof dashboardDashboardAnalyticsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/audit/payments': {
-      id: '/(dashboard)/audit/payments'
-      path: '/audit/payments'
-      fullPath: '/audit/payments'
-      preLoaderRoute: typeof dashboardAuditPaymentsRouteImport
+    '/(dashboard)/dashboard/accounts': {
+      id: '/(dashboard)/dashboard/accounts'
+      path: '/dashboard/accounts'
+      fullPath: '/dashboard/accounts'
+      preLoaderRoute: typeof dashboardDashboardAccountsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/audit/overview': {
-      id: '/(dashboard)/audit/overview'
-      path: '/audit/overview'
-      fullPath: '/audit/overview'
-      preLoaderRoute: typeof dashboardAuditOverviewRouteImport
+    '/(dashboard)/admin/users': {
+      id: '/(dashboard)/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof dashboardAdminUsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/admin/transactions': {
+      id: '/(dashboard)/admin/transactions'
+      path: '/admin/transactions'
+      fullPath: '/admin/transactions'
+      preLoaderRoute: typeof dashboardAdminTransactionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(dashboard)/admin/support': {
@@ -1516,11 +1152,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardAdminSupportRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/admin/flagged': {
-      id: '/(dashboard)/admin/flagged'
-      path: '/admin/flagged'
-      fullPath: '/admin/flagged'
-      preLoaderRoute: typeof dashboardAdminFlaggedRouteImport
+    '/(dashboard)/admin/settings': {
+      id: '/(dashboard)/admin/settings'
+      path: '/admin/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof dashboardAdminSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/admin/reports': {
+      id: '/(dashboard)/admin/reports'
+      path: '/admin/reports'
+      fullPath: '/admin/reports'
+      preLoaderRoute: typeof dashboardAdminReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/admin/overview': {
+      id: '/(dashboard)/admin/overview'
+      path: '/admin/overview'
+      fullPath: '/admin/overview'
+      preLoaderRoute: typeof dashboardAdminOverviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(dashboard)/admin/compliance': {
@@ -1568,62 +1218,12 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface dashboardDashboardRouteChildren {
-  dashboardDashboardCardsRoute: typeof dashboardDashboardCardsRoute
-  dashboardDashboardOverviewRoute: typeof dashboardDashboardOverviewRoute
-  dashboardDashboardPaymentsRoute: typeof dashboardDashboardPaymentsRoute
-  dashboardDashboardSettingsRoute: typeof dashboardDashboardSettingsRoute
-  dashboardDashboardStatementsRoute: typeof dashboardDashboardStatementsRoute
-  dashboardDashboardSupportRoute: typeof dashboardDashboardSupportRoute
-  dashboardDashboardTransactionsRoute: typeof dashboardDashboardTransactionsRoute
-}
-
-const dashboardDashboardRouteChildren: dashboardDashboardRouteChildren = {
-  dashboardDashboardCardsRoute: dashboardDashboardCardsRoute,
-  dashboardDashboardOverviewRoute: dashboardDashboardOverviewRoute,
-  dashboardDashboardPaymentsRoute: dashboardDashboardPaymentsRoute,
-  dashboardDashboardSettingsRoute: dashboardDashboardSettingsRoute,
-  dashboardDashboardStatementsRoute: dashboardDashboardStatementsRoute,
-  dashboardDashboardSupportRoute: dashboardDashboardSupportRoute,
-  dashboardDashboardTransactionsRoute: dashboardDashboardTransactionsRoute,
-}
-
-const dashboardDashboardRouteWithChildren =
-  dashboardDashboardRoute._addFileChildren(dashboardDashboardRouteChildren)
-
-interface dashboardSupportRouteChildren {
-  dashboardSupportOverviewRoute: typeof dashboardSupportOverviewRoute
-  dashboardSupportPaymentsRoute: typeof dashboardSupportPaymentsRoute
-  dashboardSupportSettingsRoute: typeof dashboardSupportSettingsRoute
-  dashboardSupportStatementsRoute: typeof dashboardSupportStatementsRoute
-  dashboardSupportSupportRoute: typeof dashboardSupportSupportRoute
-}
-
-const dashboardSupportRouteChildren: dashboardSupportRouteChildren = {
-  dashboardSupportOverviewRoute: dashboardSupportOverviewRoute,
-  dashboardSupportPaymentsRoute: dashboardSupportPaymentsRoute,
-  dashboardSupportSettingsRoute: dashboardSupportSettingsRoute,
-  dashboardSupportStatementsRoute: dashboardSupportStatementsRoute,
-  dashboardSupportSupportRoute: dashboardSupportSupportRoute,
-}
-
-const dashboardSupportRouteWithChildren =
-  dashboardSupportRoute._addFileChildren(dashboardSupportRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   authForgotPasswordRoute: authForgotPasswordRoute,
   authResetPasswordRoute: authResetPasswordRoute,
   authSigninRoute: authSigninRoute,
   authSignupRoute: authSignupRoute,
   authUnauthorizedRoute: authUnauthorizedRoute,
-  dashboardAccountsRoute: dashboardAccountsRoute,
-  dashboardCardsRoute: dashboardCardsRoute,
-  dashboardDashboardRoute: dashboardDashboardRouteWithChildren,
-  dashboardOverviewRoute: dashboardOverviewRoute,
-  dashboardReportsRoute: dashboardReportsRoute,
-  dashboardSettingsRoute: dashboardSettingsRoute,
-  dashboardSupportRoute: dashboardSupportRouteWithChildren,
-  dashboardTransactionsRoute: dashboardTransactionsRoute,
   landingAboutRoute: landingAboutRoute,
   landingContactRoute: landingContactRoute,
   landingFeaturesRoute: landingFeaturesRoute,
@@ -1639,38 +1239,40 @@ const rootRouteChildren: RootRouteChildren = {
   DocsIndexRoute: DocsIndexRoute,
   dashboardAdminAuditTrailsRoute: dashboardAdminAuditTrailsRoute,
   dashboardAdminComplianceRoute: dashboardAdminComplianceRoute,
-  dashboardAdminFlaggedRoute: dashboardAdminFlaggedRoute,
+  dashboardAdminOverviewRoute: dashboardAdminOverviewRoute,
+  dashboardAdminReportsRoute: dashboardAdminReportsRoute,
+  dashboardAdminSettingsRoute: dashboardAdminSettingsRoute,
   dashboardAdminSupportRoute: dashboardAdminSupportRoute,
-  dashboardAuditOverviewRoute: dashboardAuditOverviewRoute,
-  dashboardAuditPaymentsRoute: dashboardAuditPaymentsRoute,
-  dashboardAuditSettingsRoute: dashboardAuditSettingsRoute,
-  dashboardAuditStatementsRoute: dashboardAuditStatementsRoute,
-  dashboardAuditSupportRoute: dashboardAuditSupportRoute,
-  dashboardManagerOverviewRoute: dashboardManagerOverviewRoute,
-  dashboardManagerPaymentsRoute: dashboardManagerPaymentsRoute,
-  dashboardManagerSettingsRoute: dashboardManagerSettingsRoute,
-  dashboardManagerStatementsRoute: dashboardManagerStatementsRoute,
-  dashboardManagerSupportRoute: dashboardManagerSupportRoute,
-  dashboardOwnerBranchesRoute: dashboardOwnerBranchesRoute,
-  dashboardOwnerOverviewRoute: dashboardOwnerOverviewRoute,
-  dashboardOwnerReportsRoute: dashboardOwnerReportsRoute,
-  dashboardOwnerSettingsRoute: dashboardOwnerSettingsRoute,
-  dashboardOwnerStaffPerformanceRoute: dashboardOwnerStaffPerformanceRoute,
-  dashboardStaffOverviewRoute: dashboardStaffOverviewRoute,
-  dashboardStaffPaymentsRoute: dashboardStaffPaymentsRoute,
-  dashboardStaffSettingsRoute: dashboardStaffSettingsRoute,
-  dashboardStaffStatementsRoute: dashboardStaffStatementsRoute,
-  dashboardStaffSupportRoute: dashboardStaffSupportRoute,
-  dashboardSuperadminBranchesRoute: dashboardSuperadminBranchesRoute,
-  dashboardSuperadminEmployeesRoute: dashboardSuperadminEmployeesRoute,
-  dashboardSuperadminOverviewRoute: dashboardSuperadminOverviewRoute,
-  dashboardSuperadminReportsRoute: dashboardSuperadminReportsRoute,
-  dashboardSuperadminSettingsRoute: dashboardSuperadminSettingsRoute,
+  dashboardAdminTransactionsRoute: dashboardAdminTransactionsRoute,
+  dashboardAdminUsersRoute: dashboardAdminUsersRoute,
+  dashboardDashboardAccountsRoute: dashboardDashboardAccountsRoute,
+  dashboardDashboardAnalyticsRoute: dashboardDashboardAnalyticsRoute,
+  dashboardDashboardBillsRoute: dashboardDashboardBillsRoute,
+  dashboardDashboardCardsRoute: dashboardDashboardCardsRoute,
+  dashboardDashboardOverviewRoute: dashboardDashboardOverviewRoute,
+  dashboardDashboardReportsRoute: dashboardDashboardReportsRoute,
+  dashboardDashboardSendMoneyRoute: dashboardDashboardSendMoneyRoute,
+  dashboardDashboardSettingsRoute: dashboardDashboardSettingsRoute,
+  dashboardDashboardSupportRoute: dashboardDashboardSupportRoute,
+  dashboardDashboardTransactionsRoute: dashboardDashboardTransactionsRoute,
+  dashboardMerchantAnalyticsRoute: dashboardMerchantAnalyticsRoute,
+  dashboardMerchantApiKeysRoute: dashboardMerchantApiKeysRoute,
+  dashboardMerchantOverviewRoute: dashboardMerchantOverviewRoute,
+  dashboardMerchantPaymentsRoute: dashboardMerchantPaymentsRoute,
+  dashboardMerchantSettingsRoute: dashboardMerchantSettingsRoute,
+  dashboardMerchantSettlementsRoute: dashboardMerchantSettlementsRoute,
+  dashboardMerchantSupportRoute: dashboardMerchantSupportRoute,
+  dashboardMerchantWebhooksRoute: dashboardMerchantWebhooksRoute,
+  dashboardSupportOverviewRoute: dashboardSupportOverviewRoute,
+  dashboardSupportPaymentsRoute: dashboardSupportPaymentsRoute,
+  dashboardSupportSettingsRoute: dashboardSupportSettingsRoute,
+  dashboardSupportStatementsRoute: dashboardSupportStatementsRoute,
+  dashboardSupportSupportRoute: dashboardSupportSupportRoute,
+  dashboardSupportTicketsRoute: dashboardSupportTicketsRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
   DemoStartApiRequestRoute: DemoStartApiRequestRoute,
   DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,
-  dashboardOwnerIndexRoute: dashboardOwnerIndexRoute,
-  dashboardSuperadminIndexRoute: dashboardSuperadminIndexRoute,
+  dashboardDashboardIndexRoute: dashboardDashboardIndexRoute,
   DemoStartSsrDataOnlyRoute: DemoStartSsrDataOnlyRoute,
   DemoStartSsrFullSsrRoute: DemoStartSsrFullSsrRoute,
   DemoStartSsrSpaModeRoute: DemoStartSsrSpaModeRoute,
