@@ -48,7 +48,7 @@ import {
 } from "@/components/ui/select";
 import AdminLayout from "@/layout/AdminLayout";
 
-export const Route = createFileRoute("/(dashboard)/admin/flagged")({
+export const Route = createFileRoute("/(dashboard)/admin/reports")({
   component: AdminReports,
 });
 

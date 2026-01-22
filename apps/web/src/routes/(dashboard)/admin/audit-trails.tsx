@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import AdminLayout from "@/layout/AdminLayout";
 
-export const Route = createFileRoute("/(dashboarda)/admin/compliance")({
+export const Route = createFileRoute("/(dashboard)/admin/audit-trails")({
   component: AdminAudit,
 });
 

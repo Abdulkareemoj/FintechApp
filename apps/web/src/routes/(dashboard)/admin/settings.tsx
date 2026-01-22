@@ -41,7 +41,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
 import AdminLayout from "@/layout/AdminLayout";
 
-export const Route = createFileRoute("/(dashboard)/admin/flagged")({
+export const Route = createFileRoute("/(dashboard)/admin/settings")({
   component: AdminSettings,
 });
 

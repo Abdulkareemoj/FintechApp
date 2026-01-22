@@ -64,7 +64,7 @@ import {
 } from "@/components/ui/table";
 import AdminLayout from "@/layout/AdminLayout";
 
-export const Route = createFileRoute("/(dashboard)/admin/flagged")({
+export const Route = createFileRoute("/(dashboard)/admin/users")({
   component: AdminUsers,
 });
 
