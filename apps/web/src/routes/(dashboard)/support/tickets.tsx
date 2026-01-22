@@ -2,17 +2,19 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
   Search,
+  Plus,
   Filter,
-  Download,
-  Eye,
+  MessageSquare,
+  Clock,
+  User,
   AlertTriangle,
   CheckCircle2,
-  Clock,
-  CreditCard,
   ArrowUpDown,
   Calendar,
-  User,
-  DollarSign,
+  Paperclip,
+  Reply,
+  Eye,
+  Archive,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -33,67 +35,80 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import SupportLayout from "@/layout/SupportLayout";
 
-const paymentIssues = [
+const tickets = [
   {
-    id: "PAY-001",
+    id: "TKT-001",
+    subject: "Payment not received",
     user: "John Doe",
     email: "john@example.com",
-    amount: "$250.00",
-    issue: "Payment declined",
-    status: "investigating",
-    date: "2024-01-20",
+    category: "Payments",
     priority: "high",
-    transactionId: "TXN-12345",
+    status: "open",
+    assignedTo: "Support Agent A",
+    createdDate: "2024-01-20 14:30",
+    lastActivity: "2024-01-20 15:45",
+    messages: 3,
+    attachments: 2,
   },
   {
-    id: "PAY-002",
+    id: "TKT-002",
+    subject: "Account verification issue",
     user: "Sarah Smith",
     email: "sarah@example.com",
-    amount: "$1,500.00",
-    issue: "Duplicate charge",
-    status: "resolved",
-    date: "2024-01-20",
+    category: "Account",
     priority: "medium",
-    transactionId: "TXN-12346",
+    status: "in-progress",
+    assignedTo: "Support Agent B",
+    createdDate: "2024-01-20 12:15",
+    lastActivity: "2024-01-20 16:20",
+    messages: 7,
+    attachments: 1,
   },
   {
-    id: "PAY-003",
+    id: "TKT-003",
+    subject: "Card declined during purchase",
     user: "Mike Johnson",
     email: "mike@example.com",
-    amount: "$75.50",
-    issue: "Refund not processed",
-    status: "pending",
-    date: "2024-01-19",
-    priority: "medium",
-    transactionId: "TXN-12347",
+    category: "Cards",
+    priority: "high",
+    status: "resolved",
+    assignedTo: "Support Agent C",
+    createdDate: "2024-01-19 09:30",
+    lastActivity: "2024-01-19 17:45",
+    messages: 12,
+    attachments: 3,
   },
   {
-    id: "PAY-004",
+    id: "TKT-004",
+    subject: "Unable to login",
     user: "Emily Davis",
     email: "emily@example.com",
-    amount: "$3,200.00",
-    issue: "Account frozen during payment",
-    status: "investigating",
-    date: "2024-01-19",
-    priority: "high",
-    transactionId: "TXN-12348",
+    category: "Technical",
+    priority: "medium",
+    status: "pending",
+    assignedTo: "Unassigned",
+    createdDate: "2024-01-19 16:45",
+    lastActivity: "2024-01-19 16:45",
+    messages: 1,
+    attachments: 0,
   },
 ];
 
 const stats = [
-  { label: "Total Issues", value: "47", icon: AlertTriangle, color: "amber" },
-  { label: "Resolved Today", value: "12", icon: CheckCircle2, color: "emerald" },
-  { label: "Pending Review", value: "8", icon: Clock, color: "blue" },
+  { label: "Open Tickets", value: "24", icon: MessageSquare, color: "blue" },
+  { label: "In Progress", value: "18", icon: Clock, color: "amber" },
+  { label: "Resolved Today", value: "47", icon: CheckCircle2, color: "emerald" },
   { label: "High Priority", value: "5", icon: AlertTriangle, color: "red" },
 ];
 
-export const Route = createFileRoute("/(dashboard)/support/payments")({
-  component: SupportPayments,
+export const Route = createFileRoute("/(dashboard)/support/tickets")({
+  component: SupportTickets,
 });
 
-function SupportPayments() {
+function SupportTickets() {
   return (
     <SupportLayout>
       <div className="min-h-screen bg-background">
@@ -103,10 +118,18 @@ function SupportPayments() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <h1 className="text-3xl font-bold tracking-tight">Payment Issues</h1>
-            <p className="text-muted-foreground mt-1">
-              Manage and resolve customer payment-related issues.
-            </p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold tracking-tight">Support Tickets</h1>
+                <p className="text-muted-foreground mt-1">
+                  Manage customer support tickets and requests.
+                </p>
+              </div>
+              <Button className="bg-violet-500 hover:bg-violet-600">
+                <Plus className="h-4 w-4 mr-2" />
+                New Ticket
+              </Button>
+            </div>
           </motion.div>
 
           {/* Stats */}
@@ -148,7 +171,7 @@ function SupportPayments() {
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                       <Input
-                        placeholder="Search by user, email, or transaction ID..."
+                        placeholder="Search by subject, user, or ticket ID..."
                         className="pl-10 bg-muted/50"
                       />
                     </div>
@@ -159,7 +182,8 @@ function SupportPayments() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Status</SelectItem>
-                      <SelectItem value="investigating">Investigating</SelectItem>
+                      <SelectItem value="open">Open</SelectItem>
+                      <SelectItem value="in-progress">In Progress</SelectItem>
                       <SelectItem value="pending">Pending</SelectItem>
                       <SelectItem value="resolved">Resolved</SelectItem>
                     </SelectContent>
@@ -175,20 +199,32 @@ function SupportPayments() {
                       <SelectItem value="low">Low</SelectItem>
                     </SelectContent>
                   </Select>
+                  <Select>
+                    <SelectTrigger className="w-40">
+                      <SelectValue placeholder="Category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Categories</SelectItem>
+                      <SelectItem value="payments">Payments</SelectItem>
+                      <SelectItem value="account">Account</SelectItem>
+                      <SelectItem value="cards">Cards</SelectItem>
+                      <SelectItem value="technical">Technical</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <Button variant="outline" size="sm">
                     <Calendar className="h-4 w-4 mr-2" />
                     Date Range
                   </Button>
                   <Button variant="outline" size="sm">
-                    <Download className="h-4 w-4 mr-2" />
-                    Export
+                    <Filter className="h-4 w-4 mr-2" />
+                    More Filters
                   </Button>
                 </div>
               </CardContent>
             </Card>
           </motion.div>
 
-          {/* Payment Issues Table */}
+          {/* Tickets Table */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -196,74 +232,114 @@ function SupportPayments() {
           >
             <Card className="bg-card/50 backdrop-blur-sm border-border/50">
               <CardHeader>
-                <CardTitle className="text-lg font-semibold">Payment Issues</CardTitle>
-                <CardDescription>Customer payment problems requiring support attention</CardDescription>
+                <CardTitle className="text-lg font-semibold">Active Tickets</CardTitle>
+                <CardDescription>Customer support tickets requiring attention</CardDescription>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Issue ID</TableHead>
+                      <TableHead>Ticket ID</TableHead>
+                      <TableHead>Subject</TableHead>
                       <TableHead>Customer</TableHead>
-                      <TableHead>Amount</TableHead>
-                      <TableHead>Issue</TableHead>
+                      <TableHead>Category</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Priority</TableHead>
-                      <TableHead>Date</TableHead>
+                      <TableHead>Assigned To</TableHead>
+                      <TableHead>Last Activity</TableHead>
                       <TableHead>Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {paymentIssues.map((issue) => (
-                      <TableRow key={issue.id}>
-                        <TableCell className="font-mono text-sm">{issue.id}</TableCell>
+                    {tickets.map((ticket) => (
+                      <TableRow key={ticket.id}>
+                        <TableCell className="font-mono text-sm">{ticket.id}</TableCell>
                         <TableCell>
-                          <div>
-                            <div className="font-medium">{issue.user}</div>
-                            <div className="text-sm text-muted-foreground">{issue.email}</div>
+                          <div className="max-w-xs">
+                            <div className="font-medium truncate">{ticket.subject}</div>
+                            <div className="flex items-center gap-2 mt-1">
+                              {ticket.messages > 0 && (
+                                <Badge variant="secondary" className="text-xs">
+                                  <MessageSquare className="h-3 w-3 mr-1" />
+                                  {ticket.messages}
+                                </Badge>
+                              )}
+                              {ticket.attachments > 0 && (
+                                <Badge variant="outline" className="text-xs">
+                                  <Paperclip className="h-3 w-3 mr-1" />
+                                  {ticket.attachments}
+                                </Badge>
+                              )}
+                            </div>
                           </div>
                         </TableCell>
-                        <TableCell className="font-medium">{issue.amount}</TableCell>
                         <TableCell>
-                          <div>
-                            <div className="font-medium">{issue.issue}</div>
-                            <div className="text-sm text-muted-foreground font-mono">{issue.transactionId}</div>
+                          <div className="flex items-center gap-3">
+                            <Avatar className="h-8 w-8">
+                              <AvatarImage src={undefined} />
+                              <AvatarFallback className="text-xs">
+                                {ticket.user.split(' ').map(n => n[0]).join('')}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <div className="font-medium">{ticket.user}</div>
+                              <div className="text-sm text-muted-foreground">{ticket.email}</div>
+                            </div>
                           </div>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline">{ticket.category}</Badge>
                         </TableCell>
                         <TableCell>
                           <Badge
                             variant={
-                              issue.status === "resolved"
-                                ? "default"
-                                : issue.status === "investigating"
+                              ticket.status === "open"
                                 ? "destructive"
-                                : "secondary"
+                                : ticket.status === "in-progress"
+                                ? "default"
+                                : ticket.status === "resolved"
+                                ? "secondary"
+                                : "outline"
                             }
                           >
-                            {issue.status}
+                            {ticket.status}
                           </Badge>
                         </TableCell>
                         <TableCell>
                           <Badge
                             variant={
-                              issue.priority === "high"
+                              ticket.priority === "high"
                                 ? "destructive"
-                                : issue.priority === "medium"
+                                : ticket.priority === "medium"
                                 ? "default"
                                 : "secondary"
                             }
                           >
-                            {issue.priority}
+                            {ticket.priority}
                           </Badge>
                         </TableCell>
-                        <TableCell>{issue.date}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-6 w-6">
+                              <AvatarImage src={undefined} />
+                              <AvatarFallback className="text-xs">
+                                {ticket.assignedTo.split(' ').map(n => n[0]).join('')}
+                              </AvatarFallback>
+                            </Avatar>
+                            <span className="text-sm">{ticket.assignedTo}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-sm">{ticket.lastActivity}</TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
                             <Button variant="ghost" size="icon" className="h-8 w-8">
                               <Eye className="h-4 w-4" />
                             </Button>
                             <Button variant="ghost" size="icon" className="h-8 w-8">
-                              <User className="h-4 w-4" />
+                              <Reply className="h-4 w-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <Archive className="h-4 w-4" />
                             </Button>
                           </div>
                         </TableCell>
