@@ -1,70 +1,59 @@
 import { Stack } from "expo-router";
-import {
-	DarkTheme,
-	DefaultTheme,
-	type Theme,
-	ThemeProvider,
-} from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "../global.css";
-import { NAV_THEME } from "@/lib/constants";
+import { ThemeProvider } from "@react-navigation/native";
+import { PortalHost } from "@rn-primitives/portal";
+import { useColorScheme } from "nativewind";
 import React, { useRef } from "react";
-import { useColorScheme } from "@/lib/use-color-scheme";
 import { Platform } from "react-native";
-import { setAndroidNavigationBar } from "@/lib/android-navigation-bar";
+import { NAV_THEME } from "@/lib/theme";
 
-const LIGHT_THEME: Theme = {
-	...DefaultTheme,
-	colors: NAV_THEME.light,
-};
-const DARK_THEME: Theme = {
-	...DarkTheme,
-	colors: NAV_THEME.dark,
-};
+export {
+  // Catch any errors thrown by the Layout component.
+  ErrorBoundary,
+} from "expo-router";
 
 export const unstable_settings = {
-	initialRouteName: "(drawer)",
+  initialRouteName: "(drawer)",
 };
 
 export default function RootLayout() {
-	const hasMounted = useRef(false);
-	const { colorScheme, isDarkColorScheme } = useColorScheme();
-	const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
+  const hasMounted = useRef(false);
+  const { colorScheme } = useColorScheme();
+  const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
 
-	useIsomorphicLayoutEffect(() => {
-		if (hasMounted.current) {
-			return;
-		}
+  useIsomorphicLayoutEffect(() => {
+    if (hasMounted.current) {
+      return;
+    }
 
-		if (Platform.OS === "web") {
-			document.documentElement.classList.add("bg-background");
-		}
-		setAndroidNavigationBar(colorScheme);
-		setIsColorSchemeLoaded(true);
-		hasMounted.current = true;
-	}, []);
+    if (Platform.OS === "web") {
+      document.documentElement.classList.add("bg-background");
+    }
+    setIsColorSchemeLoaded(true);
+    hasMounted.current = true;
+  }, []);
 
-	if (!isColorSchemeLoaded) {
-		return null;
-	}
-	return (
-		<ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-			<StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-			<GestureHandlerRootView style={{ flex: 1 }}>
-				<Stack>
-					<Stack.Screen name="(drawer)" options={{ headerShown: false }} />
-					<Stack.Screen
-						name="modal"
-						options={{ title: "Modal", presentation: "modal" }}
-					/>
-				</Stack>
-			</GestureHandlerRootView>
-		</ThemeProvider>
-	);
+  if (!isColorSchemeLoaded) {
+    return null;
+  }
+  return (
+    <ThemeProvider value={NAV_THEME[colorScheme ?? "light"]}>
+      <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Stack>
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+
+          <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+        </Stack>
+      </GestureHandlerRootView>{" "}
+      <PortalHost />
+    </ThemeProvider>
+  );
 }
 
 const useIsomorphicLayoutEffect =
-	Platform.OS === "web" && typeof window === "undefined"
-		? React.useEffect
-		: React.useLayoutEffect;
+  Platform.OS === "web" && typeof window === "undefined"
+    ? React.useEffect
+    : React.useLayoutEffect;

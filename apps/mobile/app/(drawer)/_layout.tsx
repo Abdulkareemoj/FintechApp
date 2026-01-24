@@ -1,37 +1,68 @@
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { Link } from "expo-router";
-import { Drawer } from "expo-router/drawer";
+import Drawer from "expo-router/drawer";
+import { LayoutGrid, Search, Settings, User } from "lucide-react-native";
+import React from "react";
+import { Icon } from "@/components/ui/icon";
 
-import { HeaderButton } from "@/components/ui/header-button";
-
-const DrawerLayout = () => (
-  <Drawer>
-    <Drawer.Screen
-      name="index"
-      options={{
-        headerTitle: "Home",
-        drawerLabel: "Home",
-        drawerIcon: ({ size, color }) => (
-          <Ionicons color={color} name="home-outline" size={size} />
-        ),
+export default function AppLayout() {
+  return (
+    <Drawer
+      screenOptions={{
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: "hsl(var(--background))",
+          borderBottomWidth: 0,
+          elevation: 0,
+          height: 56,
+        },
+        headerTitleStyle: {
+          fontWeight: "600",
+          fontSize: 20,
+        },
       }}
-    />
-    <Drawer.Screen
-      name="(tabs)"
-      options={{
-        headerTitle: "Tabs",
-        drawerLabel: "Tabs",
-        drawerIcon: ({ size, color }) => (
-          <MaterialIcons color={color} name="border-bottom" size={size} />
-        ),
-        headerRight: () => (
-          <Link asChild href="/modal">
-            <HeaderButton />
-          </Link>
-        ),
-      }}
-    />
-  </Drawer>
-);
+    >
+      <Drawer.Screen
+        name="(tabs)"
+        options={{
+          title: "Home",
+          drawerLabel: "Home",
+          drawerIcon: ({ color, size }: { color: string; size: number }) => (
+            <Icon as={LayoutGrid} color={color} size={size} />
+          ),
+        }}
+      />
 
-export default DrawerLayout;
+      <Drawer.Screen
+        name="catalog"
+        options={{
+          title: "Catalog",
+          drawerLabel: "Shop Catalog",
+          drawerIcon: ({ color, size }: { color: string; size: number }) => (
+            <Icon as={Search} color={color} size={size} />
+          ),
+        }}
+      />
+
+      <Drawer.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+          drawerLabel: "My Profile",
+          drawerIcon: ({ color, size }: { color: string; size: number }) => (
+            <Icon as={User} color={color} size={size} />
+          ),
+        }}
+      />
+
+      <Drawer.Screen
+        name="settings"
+        options={{
+          title: "Settings",
+          drawerLabel: "Settings",
+          drawerIcon: ({ color, size }: { color: string; size: number }) => (
+            <Icon as={Settings} color={color} size={size} />
+          ),
+        }}
+      />
+    </Drawer>
+  );
+}

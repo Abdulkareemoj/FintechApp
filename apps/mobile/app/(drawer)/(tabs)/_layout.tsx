@@ -1,43 +1,73 @@
 import { Tabs } from "expo-router";
-import { TabBarIcon } from "@/components/ui/tabbar-icon";
-import { useColorScheme } from "@/lib/use-color-scheme";
+import { Heart, Home, MessageSquare, ShoppingCart } from "lucide-react-native";
+import type React from "react";
+import { Icon } from "@/components/ui/icon";
 
-export default function TabLayout() {
-  const { isDarkColorScheme } = useColorScheme();
+function TabBarIcon({
+  name,
+  focused,
+}: {
+  name: React.ComponentProps<typeof Icon>["as"];
+  focused: boolean;
+}) {
+  const colorClass = focused ? "text-primary" : "text-muted-foreground";
+  return <Icon as={name} className={colorClass} size={24} />;
+}
 
+export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: isDarkColorScheme
-          ? "hsl(217.2 91.2% 59.8%)"
-          : "hsl(221.2 83.2% 53.3%)",
-        tabBarInactiveTintColor: isDarkColorScheme
-          ? "hsl(215 20.2% 65.1%)"
-          : "hsl(215.4 16.3% 46.9%)",
+        headerShown: false, // Headers handled by the parent Drawer/Stack
+        tabBarActiveTintColor: "hsl(var(--primary))",
+        tabBarInactiveTintColor: "hsl(var(--muted-foreground))",
         tabBarStyle: {
-          backgroundColor: isDarkColorScheme
-            ? "hsl(222.2 84% 4.9%)"
-            : "hsl(0 0% 100%)",
-          borderTopColor: isDarkColorScheme
-            ? "hsl(217.2 32.6% 17.5%)"
-            : "hsl(214.3 31.8% 91.4%)",
+          backgroundColor: "hsl(var(--background))",
+          borderTopWidth: 0,
+        },
+
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: "600",
+          marginTop: -6,
+          marginBottom: 8,
         },
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
           title: "Home",
-          tabBarIcon: ({ color }) => <TabBarIcon color={color} name="home" />,
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon focused={focused} name={Home} />
+          ),
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="cards"
         options={{
-          title: "Explore",
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon color={color} name="compass" />
+          title: "Cards",
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon focused={focused} name={ShoppingCart} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="transfers"
+        options={{
+          title: "Transfers",
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon focused={focused} name={Heart} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="more"
+        options={{
+          title: "More",
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon focused={focused} name={MessageSquare} />
           ),
         }}
       />
