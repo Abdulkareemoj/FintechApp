@@ -1,20 +1,38 @@
-import React from 'react';
-import { Pressable, ScrollView, TextInput, View } from 'react-native';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
-import { Text } from '@/components/ui/text';
-import { api } from '@/lib/api';
-import { useAuthStore } from '@/lib/authStore';
-import { Link, router } from 'expo-router';
-import { AlertCircle } from 'lucide-react-native';
+import { Link, router } from "expo-router";
+import { AlertCircle } from "lucide-react-native";
+import React from "react";
+import { Pressable, ScrollView, type TextInput, View } from "react-native";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Text } from "@/components/ui/text";
+import { api } from "@/lib/api";
+import { useAuthStore } from "@/lib/authStore";
+
+type LoginResponse = {
+  accessToken: string;
+  refreshToken: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    role: "customer" | "merchant" | "support" | "admin";
+  };
+};
 
 export default function SignInScreen() {
-  const [email, setEmail] = React.useState('test@example.com');
-  const [password, setPassword] = React.useState('password');
+  const setAuth = useAuthStore((s) => s.setAuth);
+  const [email, setEmail] = React.useState("test@example.com");
+  const [password, setPassword] = React.useState("password");
   const passwordInputRef = React.useRef<TextInput>(null);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -27,27 +45,33 @@ export default function SignInScreen() {
     setIsSubmitting(true);
     setError(null);
     try {
-      const response = await api.publicPost('/auth/login', { email, password });
-      console.log('Login successful:', response);
-      useAuthStore.getState().setAuth(response.user, response.accessToken, response.refreshToken);
-      router.replace('/(app)/(tabs)/dashboard');
-    } catch (error: any) {
-      console.error('Sign in error:', error.message);
-      setError(error.message || 'An unexpected error occurred. Please try again.');
+      const res = await api.post<LoginResponse>("/api/auth/login", {
+        email,
+        password,
+      });
+
+      if (!res.ok) {
+        setError(res.error);
+        return;
+      }
+
+      setAuth(res.data.user, res.data.accessToken, res.data.refreshToken);
+      router.replace("/(drawer)" as any);
     } finally {
       setIsSubmitting(false);
     }
   }
   return (
     <ScrollView
-      keyboardShouldPersistTaps="handled"
       contentContainerClassName="sm:flex-1 items-center justify-center p-4 py-8 sm:py-4 sm:p-6 mt-safe"
-      keyboardDismissMode="interactive">
+      keyboardDismissMode="interactive"
+      keyboardShouldPersistTaps="handled"
+    >
       <View className="w-full max-w-sm">
         <View className="gap-6">
-          <Card className="border-border/0 shadow-none sm:border-border sm:shadow-sm sm:shadow-black/5">
+          <Card className="border-border/0 shadow-none sm:border-border sm:shadow-black/5 sm:shadow-sm">
             <CardHeader>
-              <CardTitle className="text-center text-xl sm:text-left">
+              <CardTitle className="text-center text-2xl sm:text-left">
                 Sign in to your app
               </CardTitle>
               <CardDescription className="text-center sm:text-left">
@@ -56,11 +80,11 @@ export default function SignInScreen() {
             </CardHeader>
             <CardContent className="gap-6">
               {error && (
-                <Alert variant="destructive" icon={AlertCircle}>
+                <Alert icon={AlertCircle} variant="destructive">
                   <AlertTitle>Sign-in Failed</AlertTitle>
                   <AlertDescription>
-                    {error.includes('Invalid login credentials')
-                      ? 'Incorrect email or password.'
+                    {error.includes("Invalid login credentials")
+                      ? "Incorrect email or password."
                       : error}
                   </AlertDescription>
                 </Alert>
@@ -69,59 +93,87 @@ export default function SignInScreen() {
                 <View className="gap-1.5">
                   <Label htmlFor="email">Email</Label>
                   <Input
-                    id="email"
-                    placeholder="m@example.com"
-                    keyboardType="email-address"
-                    autoComplete="email"
                     autoCapitalize="none"
+                    autoComplete="email"
+                    id="email"
+                    keyboardType="email-address"
+                    onChangeText={setEmail}
                     onSubmitEditing={onEmailSubmitEditing}
+                    placeholder="m@example.com"
                     returnKeyType="next"
                     submitBehavior="submit"
                     value={email}
-                    onChangeText={setEmail}
                   />
                 </View>
                 <View className="gap-1.5">
                   <View className="flex-row items-center">
                     <Label htmlFor="password">Password</Label>
-                    <Link href="/(auth)/forgot-password" asChild>
+                    <Link asChild href="/(auth)/forgot-password">
                       <Button
-                        variant="link"
+                        className="ml-auto h-4 web:h-fit px-1 py-0 sm:h-4"
                         size="sm"
-                        className="ml-auto h-4 px-1 py-0 web:h-fit sm:h-4">
-                        <Text className="font-normal leading-4">Forgot your password?</Text>
+                        variant="link"
+                      >
+                        <Text className="font-normal leading-4">
+                          Forgot your password?
+                        </Text>
                       </Button>
                     </Link>
                   </View>
                   <Input
-                    ref={passwordInputRef}
                     id="password"
-                    secureTextEntry
-                    returnKeyType="send"
-                    onSubmitEditing={onSubmit}
-                    value={password}
                     onChangeText={setPassword}
+                    onSubmitEditing={onSubmit}
+                    ref={passwordInputRef}
+                    returnKeyType="send"
+                    secureTextEntry
+                    value={password}
                   />
                 </View>
-                <Button className="w-full" onPress={onSubmit} disabled={isSubmitting}>
-                  <Text>{isSubmitting ? 'Signing In...' : 'Continue'}</Text>
+                <Button
+                  className="w-full"
+                  disabled={isSubmitting}
+                  onPress={onSubmit}
+                >
+                  <Text>{isSubmitting ? "Signing In..." : "Continue"}</Text>
                 </Button>
               </View>
-              <Text className="text-center text-sm">
-                Don&apos;t have an account?{' '}
+              <View className="flex flex-row items-center justify-center gap-2 text-sm">
+                <Text>Don&apos;t have an account?</Text>
                 <Pressable
                   onPress={() => {
                     router.push('/(auth)/sign-up');
                   }}>
-                  <Text className="text-sm underline underline-offset-4">Sign up</Text>
+                  <Text className="text-sm underline underline-offset-4">Sign Up</Text>
                 </Pressable>
-              </Text>
+              </View>
               <View className="flex-row items-center">
                 <Separator className="flex-1" />
                 <Text className="px-4 text-sm text-muted-foreground">or</Text>
                 <Separator className="flex-1" />
               </View>
-              {/* <SocialConnections /> */}
+
+              <View className="gap-3">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  disabled={isSubmitting}
+                  // onPress={()}
+                  >
+                  <Text>Continue with Google</Text>
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  disabled={isSubmitting}
+                  // onPress={}
+                  >
+                  <View className="flex-row items-center gap-2">
+                    <Text>Continue with Apple</Text>
+                  </View>
+                </Button>
+              </View>
+
             </CardContent>
           </Card>
         </View>

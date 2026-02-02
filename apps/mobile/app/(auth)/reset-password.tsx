@@ -1,19 +1,25 @@
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Text } from '@/components/ui/text';
-import { api } from '@/lib/api';
-import { router, useLocalSearchParams } from 'expo-router';
-import { AlertCircle } from 'lucide-react-native';
-import * as React from 'react';
-import { ScrollView, TextInput, View } from 'react-native';
+import { router, useLocalSearchParams } from "expo-router";
+import { AlertCircle } from "lucide-react-native";
+import * as React from "react";
+import { ScrollView, type TextInput, View } from "react-native";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Text } from "@/components/ui/text";
+import { api } from "@/lib/api";
 
 export default function ResetPasswordScreen() {
   const { email } = useLocalSearchParams<{ email?: string }>();
-  const [password, setPassword] = React.useState('');
-  const [code, setCode] = React.useState('');
+  const [password, setPassword] = React.useState("");
+  const [code, setCode] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -25,21 +31,26 @@ export default function ResetPasswordScreen() {
 
   async function onSubmit() {
     if (!email) {
-      setError('Email is missing. Please go back to the forgot password screen.');
+      setError(
+        "Email is missing. Please go back to the forgot password screen."
+      );
       return;
     }
     setIsSubmitting(true);
     setError(null);
     try {
-      await api.publicPost('/auth/reset-password', {
+      const res = await api.post<{ message?: string }>("/api/auth/reset-password", {
         email,
-        token: code,
-        password,
+        code,
+        newPassword: password,
       });
-      // On success, navigate to the sign-in screen to log in with the new password.
-      router.replace('/(auth)/sign-in');
-    } catch (err: any) {
-      setError(err.message || 'An unexpected error occurred. Please try again.');
+
+      if (!res.ok) {
+        setError(res.error);
+        return;
+      }
+
+      router.replace("/(auth)/sign-in" as any);
     } finally {
       setIsSubmitting(false);
     }
@@ -47,21 +58,24 @@ export default function ResetPasswordScreen() {
 
   return (
     <ScrollView
-      keyboardShouldPersistTaps="handled"
       contentContainerClassName="sm:flex-1 items-center justify-center p-4 py-8 sm:py-4 sm:p-6 mt-safe"
-      keyboardDismissMode="interactive">
+      keyboardDismissMode="interactive"
+      keyboardShouldPersistTaps="handled"
+    >
       <View className="w-full max-w-sm">
         <View className="gap-6">
-          <Card className="border-border/0 shadow-none sm:border-border sm:shadow-sm sm:shadow-black/5">
+          <Card className="border-border/0 shadow-none sm:border-border sm:shadow-black/5 sm:shadow-sm">
             <CardHeader>
-              <CardTitle className="text-center text-xl sm:text-left">Reset password</CardTitle>
+              <CardTitle className="text-center text-2xl sm:text-left">
+                Reset password
+              </CardTitle>
               <CardDescription className="text-center sm:text-left">
                 Enter the code sent to your email and set a new password
               </CardDescription>
             </CardHeader>
             <CardContent className="gap-6">
               {error && (
-                <Alert variant="destructive" icon={AlertCircle}>
+                <Alert icon={AlertCircle} variant="destructive">
                   <AlertTitle>Reset Failed</AlertTitle>
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
@@ -73,30 +87,34 @@ export default function ResetPasswordScreen() {
                   </View>
                   <Input
                     id="password"
-                    secureTextEntry
-                    returnKeyType="next"
-                    submitBehavior="submit"
-                    onSubmitEditing={onPasswordSubmitEditing}
-                    value={password}
                     onChangeText={setPassword}
+                    onSubmitEditing={onPasswordSubmitEditing}
+                    returnKeyType="next"
+                    secureTextEntry
+                    submitBehavior="submit"
+                    value={password}
                   />
                 </View>
                 <View className="gap-1.5">
                   <Label htmlFor="code">Verification code</Label>
                   <Input
-                    ref={codeInputRef}
-                    id="code"
                     autoCapitalize="none"
-                    returnKeyType="send"
-                    keyboardType="numeric"
                     autoComplete="sms-otp"
-                    textContentType="oneTimeCode"
-                    onSubmitEditing={onSubmit}
-                    value={code}
+                    id="code"
+                    keyboardType="numeric"
                     onChangeText={setCode}
+                    onSubmitEditing={onSubmit}
+                    ref={codeInputRef}
+                    returnKeyType="send"
+                    textContentType="oneTimeCode"
+                    value={code}
                   />
                 </View>
-                <Button className="w-full" onPress={onSubmit} disabled={isSubmitting}>
+                <Button
+                  className="w-full"
+                  disabled={isSubmitting}
+                  onPress={onSubmit}
+                >
                   <Text>Reset Password</Text>
                 </Button>
               </View>

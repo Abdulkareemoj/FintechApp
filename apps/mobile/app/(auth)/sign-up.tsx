@@ -1,21 +1,43 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
-import { Text } from '@/components/ui/text';
+import { AlertCircle } from "lucide-react-native";
+import * as React from "react";
+import { Pressable, ScrollView, type TextInput, View } from "react-native";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { router } from 'expo-router';
-import * as React from 'react';
-import { Pressable, TextInput, View, ScrollView } from 'react-native';
-import { api } from '@/lib/api';
-import { useAuthStore } from '@/lib/authStore';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react-native';
+import { Text } from "@/components/ui/text";
+import { useAuthStore } from "@/lib/authStore";
+import { api } from "@/lib/api";
+
+type RegisterResponse =
+  | {
+      requiresEmailVerification: true;
+    }
+  | {
+      requiresEmailVerification?: false;
+      accessToken: string;
+      refreshToken: string;
+      user: {
+        id: string;
+        name: string;
+        email: string;
+        role: "customer" | "merchant" | "support" | "admin";
+      };
+    };
 
 export default function SignUpScreen() {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [name, setName] = React.useState('');
+  const setAuth = useAuthStore((s) => s.setAuth);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [name, setName] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -29,27 +51,42 @@ export default function SignUpScreen() {
     setIsSubmitting(true);
     setError(null);
     try {
-      const response = await api.publicPost('/auth/register', { name, email, password });
-      console.log('Sign up successful:', response);
-      useAuthStore.getState().setAuth(response.user, response.accessToken, response.refreshToken); // Update Zustand store
-      router.replace('/(app)/(tabs)/dashboard');
-    } catch (error: any) {
-      console.error('Sign up error:', error.message);
-      setError(error.message || 'An unexpected error occurred. Please try again.');
+      const res = await api.post<RegisterResponse>("/api/auth/register", {
+        name,
+        email,
+        password,
+      });
+
+      if (!res.ok) {
+        setError(res.error);
+        return;
+      }
+
+      if ("requiresEmailVerification" in res.data && res.data.requiresEmailVerification) {
+        router.replace({
+          pathname: "/(auth)/verify-email" as any,
+          params: { email },
+        } as any);
+        return;
+      }
+
+      setAuth(res.data.user, res.data.accessToken, res.data.refreshToken);
+      router.replace("/(drawer)" as any);
     } finally {
       setIsSubmitting(false);
     }
   }
   return (
     <ScrollView
-      keyboardShouldPersistTaps="handled"
       contentContainerClassName="sm:flex-1 items-center justify-center p-4 py-8 sm:py-4 sm:p-6 mt-safe"
-      keyboardDismissMode="interactive">
+      keyboardDismissMode="interactive"
+      keyboardShouldPersistTaps="handled"
+    >
       <View className="w-full max-w-sm">
         <View className="gap-6">
-          <Card className="border-border/0 shadow-none sm:border-border sm:shadow-sm sm:shadow-black/5">
+          <Card className="border-border/0 shadow-none sm:border-border sm:shadow-black/5 sm:shadow-sm">
             <CardHeader>
-              <CardTitle className="text-center text-xl sm:text-left">
+              <CardTitle className="text-center text-2xl sm:text-left">
                 Create your account
               </CardTitle>
               <CardDescription className="text-center sm:text-left">
@@ -58,10 +95,12 @@ export default function SignUpScreen() {
             </CardHeader>
             <CardContent className="gap-6">
               {error && (
-                <Alert variant="destructive" icon={AlertCircle}>
+                <Alert icon={AlertCircle} variant="destructive">
                   <AlertTitle>Sign-up Failed</AlertTitle>
                   <AlertDescription>
-                    {error.includes('unique constraint') ? 'This email is already in use.' : error}
+                    {error.includes("unique constraint")
+                      ? "This email is already in use."
+                      : error}
                   </AlertDescription>
                 </Alert>
               )}
@@ -69,29 +108,29 @@ export default function SignUpScreen() {
                 <View className="gap-1.5">
                   <Label htmlFor="name">Name</Label>
                   <Input
-                    id="name"
-                    placeholder="John Doe"
-                    autoComplete="name"
                     autoCapitalize="words"
+                    autoComplete="name"
+                    id="name"
+                    onChangeText={setName}
+                    placeholder="John Doe"
                     returnKeyType="next"
                     submitBehavior="submit"
                     value={name}
-                    onChangeText={setName}
                   />
                 </View>
                 <View className="gap-1.5">
                   <Label htmlFor="email">Email</Label>
                   <Input
-                    id="email"
-                    placeholder="m@example.com"
-                    keyboardType="email-address"
-                    autoComplete="email"
                     autoCapitalize="none"
+                    autoComplete="email"
+                    id="email"
+                    keyboardType="email-address"
+                    onChangeText={setEmail}
                     onSubmitEditing={onEmailSubmitEditing}
+                    placeholder="m@example.com"
                     returnKeyType="next"
                     submitBehavior="submit"
                     value={email}
-                    onChangeText={setEmail}
                   />
                 </View>
                 <View className="gap-1.5">
@@ -99,34 +138,34 @@ export default function SignUpScreen() {
                     <Label htmlFor="password">Password</Label>
                   </View>
                   <Input
-                    ref={passwordInputRef}
                     id="password"
-                    secureTextEntry
-                    returnKeyType="send"
-                    onSubmitEditing={onSubmit}
-                    value={password}
                     onChangeText={setPassword}
+                    onSubmitEditing={onSubmit}
+                    ref={passwordInputRef}
+                    returnKeyType="send"
+                    secureTextEntry
+                    value={password}
                   />
                 </View>
-                <Button className="w-full" onPress={onSubmit} disabled={isSubmitting}>
-                  <Text>{isSubmitting ? 'Creating Account...' : 'Continue'}</Text>
+                <Button
+                  className="w-full"
+                  disabled={isSubmitting}
+                  onPress={onSubmit}
+                >
+                  <Text>
+                    {isSubmitting ? "Creating Account..." : "Continue"}
+                  </Text>
                 </Button>
               </View>
-              <Text className="text-center text-sm">
-                Already have an account?{' '}
+            <View className="flex flex-row items-center justify-center gap-2 text-sm">
+                <Text>Already have an account?</Text>
                 <Pressable
                   onPress={() => {
                     router.push('/(auth)/sign-in');
                   }}>
-                  <Text className="text-sm underline underline-offset-4">Sign in</Text>
+                  <Text className="text-sm underline underline-offset-4">Sign In</Text>
                 </Pressable>
-              </Text>
-              <View className="flex-row items-center">
-                <Separator className="flex-1" />
-                <Text className="px-4 text-sm text-muted-foreground">or</Text>
-                <Separator className="flex-1" />
               </View>
-              {/* <SocialConnections /> */}
             </CardContent>
           </Card>
         </View>
