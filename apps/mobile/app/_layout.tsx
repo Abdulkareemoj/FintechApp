@@ -1,4 +1,5 @@
 import { Stack } from "expo-router";
+import { router, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "../global.css";
@@ -8,6 +9,7 @@ import { useColorScheme } from "nativewind";
 import React, { useRef } from "react";
 import { Platform } from "react-native";
 import { NAV_THEME } from "@/lib/theme";
+import { useAuthStore } from "@/lib/authStore";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -22,6 +24,10 @@ export default function RootLayout() {
   const hasMounted = useRef(false);
   const { colorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
+  const segments = useSegments();
+  const initializeAuth = useAuthStore((s) => s.initializeAuth);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const [isAuthReady, setIsAuthReady] = React.useState(false);
 
   useIsomorphicLayoutEffect(() => {
     if (hasMounted.current) {
@@ -35,7 +41,38 @@ export default function RootLayout() {
     hasMounted.current = true;
   }, []);
 
-  if (!isColorSchemeLoaded) {
+  React.useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      await initializeAuth();
+      if (!cancelled) {
+        setIsAuthReady(true);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [initializeAuth]);
+
+  React.useEffect(() => {
+    if (!isColorSchemeLoaded || !isAuthReady) {
+      return;
+    }
+
+    const inAuthGroup = segments[0] === "(auth)";
+    const inDrawerGroup = segments[0] === "(drawer)";
+
+    if (!isAuthenticated && !inAuthGroup) {
+      router.replace("/(auth)/sign-in" as any);
+      return;
+    }
+
+    if (isAuthenticated && !inDrawerGroup) {
+      router.replace("/(drawer)" as any);
+    }
+  }, [isAuthenticated, isAuthReady, isColorSchemeLoaded, segments]);
+
+  if (!isColorSchemeLoaded || !isAuthReady) {
     return null;
   }
   return (
@@ -47,7 +84,7 @@ export default function RootLayout() {
 
           <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
         </Stack>
-      </GestureHandlerRootView>{" "}
+      </GestureHandlerRootView>
       <PortalHost />
     </ThemeProvider>
   );
