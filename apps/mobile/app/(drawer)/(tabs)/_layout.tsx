@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router";
 import { Heart, Home, MessageSquare, ShoppingCart } from "lucide-react-native";
-import type React from "react";
+import React from "react";
 import { Icon } from "@/components/ui/icon";
 
 function TabBarIcon({
