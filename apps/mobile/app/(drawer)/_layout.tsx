@@ -1,5 +1,5 @@
 import Drawer from "expo-router/drawer";
-import { LayoutGrid, Search, Settings, User } from "lucide-react-native";
+import { LayoutGrid, Settings, TrendingUp, User } from "lucide-react-native";
 import React from "react";
 import { Icon } from "@/components/ui/icon";
 
@@ -32,23 +32,23 @@ export default function AppLayout() {
       />
 
       <Drawer.Screen
-        name="catalog"
+        name="account"
         options={{
-          title: "Catalog",
-          drawerLabel: "Shop Catalog",
+          title: "Account",
+          drawerLabel: "Account",
           drawerIcon: ({ color, size }: { color: string; size: number }) => (
-            <Icon as={Search} color={color} size={size} />
+            <Icon as={User} color={color} size={size} />
           ),
         }}
       />
 
       <Drawer.Screen
-        name="profile"
+        name="invest"
         options={{
-          title: "Profile",
-          drawerLabel: "My Profile",
+          title: "Invest",
+          drawerLabel: "Invest",
           drawerIcon: ({ color, size }: { color: string; size: number }) => (
-            <Icon as={User} color={color} size={size} />
+            <Icon as={TrendingUp} color={color} size={size} />
           ),
         }}
       />
