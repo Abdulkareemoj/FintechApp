@@ -1,5 +1,5 @@
 {
-  "name": "BankSystem",
+  "name": "FintechSystem",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -8,13 +8,11 @@
   ],
   "scripts": {
     "check": "biome check --write .",
-    "ruler:apply": "pnpm dlx @intellectronica/ruler@latest apply --local-only",
     "dev": "turbo dev",
     "build": "turbo build",
     "check-types": "turbo check-types",
     "dev:native": "turbo -F native dev",
-    "dev:web": "turbo -F web dev",
-    "dev:server": "turbo -F server dev"
+    "dev:web": "turbo -F web dev"
   },
 
   "devDependencies": {
