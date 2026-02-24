@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import * as React from "react";
+import { useRouter } from "@tanstack/react-router";
 import { AppSidebar } from "@/components/admin-dashboard/app-sidebar";
 import {
   Breadcrumb,
@@ -14,11 +16,36 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { useAuthStore } from "@/lib/authStore";
 
 type AdminLayoutProps = {
   children: ReactNode;
 };
 export default function AdminLayout({ children }: AdminLayoutProps) {
+  const router = useRouter();
+  const isInitializing = useAuthStore((s) => s.isInitializing);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const user = useAuthStore((s) => s.user);
+
+  React.useEffect(() => {
+    if (isInitializing) {
+      return;
+    }
+
+    if (!isAuthenticated) {
+      router.navigate({ to: "/signin", replace: true });
+      return;
+    }
+
+    if (user && user.role !== "Admin") {
+      router.navigate({ to: "/unauthorized", replace: true });
+    }
+  }, [isAuthenticated, isInitializing, router, user]);
+
+  if (isInitializing) {
+    return null;
+  }
+
   return (
     <SidebarProvider>
       <AppSidebar />
