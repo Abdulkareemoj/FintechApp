@@ -3,9 +3,10 @@ import { deleteTokens, getAccessToken, getRefreshToken, setTokens } from './stor
 
 interface User {
   id: string;
-  name: string;
   email: string;
-  role: 'customer' | 'merchant' | 'support' | 'admin';
+  firstName: string;
+  lastName: string;
+  role: "User" | "Admin" | "Support" | "Merchant";
 }
 
 interface AuthState {

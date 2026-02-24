@@ -1,4 +1,5 @@
 import { useAuthStore } from "@/lib/authStore";
+import axios, { type AxiosRequestConfig } from "axios";
 
 type ApiResult<T> = {
   ok: true;
@@ -24,32 +25,25 @@ async function request<T>(input: {
   try {
     const token = input.auth ? useAuthStore.getState().accessToken : null;
 
-    const res = await fetch(`${getBaseUrl()}${input.path}`, {
+    const config: AxiosRequestConfig = {
+      url: `${getBaseUrl()}${input.path}`,
       method: input.method,
       headers: {
         "Content-Type": "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
-      body: input.body ? JSON.stringify(input.body) : undefined,
-    });
+      data: input.body,
+    };
 
-    const contentType = res.headers.get("content-type") ?? "";
-    const isJson = contentType.includes("application/json");
-    const payload = isJson ? await res.json() : await res.text();
-
-    if (!res.ok) {
-      return {
-        ok: false,
-        error:
-          typeof payload === "string"
-            ? payload
-            : (payload?.message ?? "Request failed"),
-        status: res.status,
-      };
+    const res = await axios.request<T>(config);
+    return { ok: true, data: res.data };
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      const status = e.response?.status;
+      const data = e.response?.data as any;
+      const error = data?.error ?? data?.message ?? e.message ?? "Request failed";
+      return { ok: false, error, status };
     }
-
-    return { ok: true, data: payload as T };
-  } catch {
     return { ok: false, error: "Network error" };
   }
 }
