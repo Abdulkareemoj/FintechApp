@@ -1,15 +1,15 @@
-import { Stack } from "expo-router";
-import { router, useSegments } from "expo-router";
+import { router, Stack, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "../global.css";
 import { ThemeProvider } from "@react-navigation/native";
 import { PortalHost } from "@rn-primitives/portal";
-import { useColorScheme } from "nativewind";
 import React, { useRef } from "react";
 import { Platform } from "react-native";
-import { NAV_THEME } from "@/lib/theme";
+import { SafeAreaListener } from "react-native-safe-area-context";
+import { Uniwind, useUniwind } from "uniwind";
 import { useAuthStore } from "@/lib/authStore";
+import { NAV_THEME } from "@/lib/theme";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -22,7 +22,8 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const hasMounted = useRef(false);
-  const { colorScheme } = useColorScheme();
+  const { theme } = useUniwind();
+
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
   const segments = useSegments();
   const initializeAuth = useAuthStore((s) => s.initializeAuth);
@@ -55,14 +56,14 @@ export default function RootLayout() {
   }, [initializeAuth]);
 
   React.useEffect(() => {
-    if (!isColorSchemeLoaded || !isAuthReady) {
+    if (!(isColorSchemeLoaded && isAuthReady)) {
       return;
     }
 
     const inAuthGroup = segments[0] === "(auth)";
     const inDrawerGroup = segments[0] === "(drawer)";
 
-    if (!isAuthenticated && !inAuthGroup) {
+    if (!(isAuthenticated || inAuthGroup)) {
       router.replace("/(auth)/sign-in" as any);
       return;
     }
@@ -72,21 +73,27 @@ export default function RootLayout() {
     }
   }, [isAuthenticated, isAuthReady, isColorSchemeLoaded, segments]);
 
-  if (!isColorSchemeLoaded || !isAuthReady) {
+  if (!(isColorSchemeLoaded && isAuthReady)) {
     return null;
   }
   return (
-    <ThemeProvider value={NAV_THEME[colorScheme ?? "light"]}>
-      <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <Stack>
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+    <SafeAreaListener
+      onChange={({ insets }) => {
+        Uniwind.updateInsets(insets);
+      }}
+    >
+      <ThemeProvider value={NAV_THEME[theme ?? "light"]}>
+        <StatusBar style={theme === "dark" ? "light" : "dark"} />
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <Stack>
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
 
-          <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
-        </Stack>
-      </GestureHandlerRootView>
-      <PortalHost />
-    </ThemeProvider>
+            <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+          </Stack>
+        </GestureHandlerRootView>
+        <PortalHost />
+      </ThemeProvider>
+    </SafeAreaListener>
   );
 }
 
