@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import MerchantLayout from "@/layout/MerchantLayout";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useState } from "react";
 import {
   Search,
