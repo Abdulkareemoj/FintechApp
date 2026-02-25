@@ -6,79 +6,83 @@ import { Logo } from "./Logo";
 import { MobileNav } from "./MobileNav";
 
 export const navLinks = [
-  {
-    label: "Features",
-    href: "/features",
-  },
+	{
+		label: "Features",
+		href: "/features",
+	},
 
-  {
-    label: "About",
-    href: "/about",
-  },
-  {
-    label: "Contact",
-    href: "/contact",
-  },
-  {
-    label: "Blog",
-    href: "#",
-  },
-  {
-    label: "FAQ",
-    href: "#",
-  },
-  {
-    label: "Support",
-    href: "#",
-  },
+	{
+		label: "About",
+		href: "/about",
+	},
+	{
+		label: "Contact",
+		href: "/contact",
+	},
+	{
+		label: "Blog",
+		href: "#",
+	},
+	{
+		label: "FAQ",
+		href: "#",
+	},
+	{
+		label: "Support",
+		href: "#",
+	},
 ];
 
 export default function Header() {
-  const scrolled = useScroll(10);
+	const scrolled = useScroll(10);
 
-  return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 mx-auto w-full max-w-5xl border-transparent border-b md:rounded-md md:border md:transition-all md:ease-out",
-        {
-          "border-border bg-background/95 backdrop-blur-sm supports-backdrop-filter:bg-background/50 md:top-2 md:shadow":
-            scrolled,
-        }
-      )}
-    >
-      <nav
-        className={cn(
-          "flex h-14 w-full items-center justify-between px-4 md:h-12 md:transition-all md:ease-out",
-          {
-            "md:px-2": scrolled,
-          }
-        )}
-      >
-        <Link
-          className="flex items-center gap-4 rounded-md p-2 hover:bg-accent"
-          to="/"
-        >
-          <Logo />
-        </Link>
+	return (
+		<header
+			className={cn(
+				"sticky top-0 z-50 mx-auto w-full max-w-6xl border-transparent border-b md:rounded-md md:border md:transition-all md:ease-out",
+				{
+					"border-border bg-background/95 backdrop-blur-sm supports-backdrop-filter:bg-background/50 md:top-2 md:shadow":
+						scrolled,
+				},
+			)}
+		>
+			<nav
+				className={cn(
+					"flex h-14 w-full items-center justify-between px-4 md:h-12 md:transition-all md:ease-out",
+					{
+						"md:px-2": scrolled,
+					},
+				)}
+			>
+				<Link
+					className="flex items-center gap-4 rounded-md p-2 hover:bg-accent"
+					to="/"
+				>
+					<Logo />
+				</Link>
 
-        <div className="hidden items-center justify-center gap-1 md:flex">
-          {navLinks.map((link, i) => (
-            <Link
-              className={buttonVariants({ variant: "ghost" })}
-              key={i}
-              to={link.href}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
+				<div className="hidden items-center justify-center gap-1 md:flex">
+					{navLinks.map((link, i) => (
+						<Link
+							className={buttonVariants({ variant: "ghost" })}
+							key={i}
+							to={link.href}
+						>
+							{link.label}
+						</Link>
+					))}
+				</div>
 
-        <div className="hidden items-center gap-4 md:flex">
-          <Button variant="outline">Sign In</Button>
-          <Button>Get Started</Button>
-        </div>
-        <MobileNav />
-      </nav>
-    </header>
-  );
+				<div className="hidden items-center gap-4 md:flex">
+					<Button variant="outline">
+						<Link to="/signin"> Sign In</Link>
+					</Button>
+					<Button>
+						<Link to="/signup">Get Started</Link>
+					</Button>
+				</div>
+				<MobileNav />
+			</nav>
+		</header>
+	);
 }
