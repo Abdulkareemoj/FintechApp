@@ -1,28 +1,25 @@
-import { createFileRoute } from '@tanstack/react-router'
-import Hero from "@/components/landing/Hero";
+import { createFileRoute } from "@tanstack/react-router";
+import CTA from "@/components/landing/CTA";
 import Features from "@/components/landing/Features";
+import Hero from "@/components/landing/Hero";
 import HowItWorks from "@/components/landing/HowItWorks";
 import Security from "@/components/landing/Security";
 import Testimonials from "@/components/landing/Testimonials";
-import CTA from "@/components/landing/CTA";
-import { LandingLayout } from '@/layout/LandingLayout';
+import { LandingLayout } from "@/layout/LandingLayout";
 
-
-export const Route = createFileRoute('/(landing)/')({ component: App })
+export const Route = createFileRoute("/(landing)/")({ component: App });
 
 function App() {
-
-
-  return (
-  <LandingLayout>
-      <main>
-        <Hero />
-        <Features />
-        <HowItWorks />
-        <Security />
-        <Testimonials />
-        <CTA />
-      </main>
-      </LandingLayout>
-  );
+	return (
+		<LandingLayout>
+			<main>
+				<Hero />
+				<Features />
+				<HowItWorks />
+				<Security />
+				<Testimonials />
+				<CTA />
+			</main>
+		</LandingLayout>
+	);
 }
