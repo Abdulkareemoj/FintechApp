@@ -27,20 +27,22 @@ export default function ForgotPasswordScreen() {
     setError(null);
     setSuccess(null);
     try {
-      const res = await api.post<{ message?: string }>("/api/auth/forgot-password", {
-        email,
-      });
+      const res = await api.post<{ message?: string }>(
+        "/api/auth/forgot-password",
+        {
+          email,
+        }
+      );
 
       if (!res.ok) {
         setError(res.error);
         return;
       }
 
-      setSuccess(res.data.message ?? "If an account exists, we sent a reset code.");
-      router.push({
-        pathname: "/(auth)/reset-password" as any,
-        params: { email },
-      } as any);
+      setSuccess(
+        res.data.message ??
+          "If an account exists, a password reset link has been sent to your email."
+      );
     } finally {
       setIsSubmitting(false);
     }

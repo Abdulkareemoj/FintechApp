@@ -1,5 +1,11 @@
-import { create } from 'zustand';
-import { deleteTokens, getAccessToken, getRefreshToken, setTokens } from './storage';
+import { create } from "zustand";
+import { api } from "@/lib/api";
+import {
+  deleteTokens,
+  getAccessToken,
+  getRefreshToken,
+  setTokens,
+} from "./storage";
 
 interface User {
   id: string;
@@ -14,17 +20,20 @@ interface AuthState {
   accessToken: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
+  isInitializing: boolean;
   setAuth: (user: User, accessToken: string, refreshToken: string) => void;
   clearAuth: () => void;
   initializeAuth: () => Promise<void>;
   setAccessToken: (token: string) => void;
+  setTokensFromRefresh: (accessToken: string, refreshToken: string) => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   accessToken: null,
   refreshToken: null,
   isAuthenticated: false,
+  isInitializing: true,
 
   setAuth: (user, accessToken, refreshToken) => {
     set({ user, accessToken, refreshToken, isAuthenticated: true });
@@ -32,7 +41,12 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   clearAuth: () => {
-    set({ user: null, accessToken: null, refreshToken: null, isAuthenticated: false });
+    set({
+      user: null,
+      accessToken: null,
+      refreshToken: null,
+      isAuthenticated: false,
+    });
     void deleteTokens();
   },
 
@@ -40,18 +54,53 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ accessToken: token });
   },
 
-  initializeAuth: async () => {
-    const accessToken = await getAccessToken();
-    const refreshToken = await getRefreshToken();
+  setTokensFromRefresh: (accessToken: string, refreshToken: string) => {
+    set({ accessToken, refreshToken, isAuthenticated: true });
+    void setTokens({ accessToken, refreshToken });
+  },
 
-    if (accessToken && refreshToken) {
-      // In a real app, you might want to verify the accessToken with the backend
-      // or decode it to get user info without a full API call here.
-      // For now, we'll assume the presence of tokens means authenticated.
-      // A more robust solution would fetch user profile on app start.
-      set({ accessToken, refreshToken, isAuthenticated: true });
-    } else {
-      set({ isAuthenticated: false });
+  initializeAuth: async () => {
+    const currentState = get();
+    if (currentState.isInitializing) return; // Prevent multiple simultaneous calls
+
+    set({ isInitializing: true });
+    try {
+      const accessToken = await getAccessToken();
+      const refreshToken = await getRefreshToken();
+
+      if (accessToken && refreshToken) {
+        set({ accessToken, refreshToken, isAuthenticated: true });
+
+        const meRes = await api.get<User>("/api/auth/me", { auth: true });
+        if (meRes.ok) {
+          set({ user: meRes.data });
+        } else {
+          set({
+            user: null,
+            accessToken: null,
+            refreshToken: null,
+            isAuthenticated: false,
+          });
+          await deleteTokens();
+        }
+      } else {
+        set({
+          isAuthenticated: false,
+          user: null,
+          accessToken: null,
+          refreshToken: null,
+        });
+      }
+    } catch (error) {
+      console.error("Auth initialization error:", error);
+      set({
+        isAuthenticated: false,
+        user: null,
+        accessToken: null,
+        refreshToken: null,
+      });
+    } finally {
+      set({ isInitializing: false });
     }
   },
 }));

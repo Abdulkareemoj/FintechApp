@@ -17,9 +17,9 @@ import { Text } from "@/components/ui/text";
 import { api } from "@/lib/api";
 
 export default function ResetPasswordScreen() {
-  const { email } = useLocalSearchParams<{ email?: string }>();
+  const { token } = useLocalSearchParams<{ token?: string }>();
   const [password, setPassword] = React.useState("");
-  const [code, setCode] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -30,20 +30,21 @@ export default function ResetPasswordScreen() {
   }
 
   async function onSubmit() {
-    if (!email) {
-      setError(
-        "Email is missing. Please go back to the forgot password screen."
-      );
+    if (!token) {
+      setError("Reset token is missing. Please open the link from your email.");
       return;
     }
     setIsSubmitting(true);
     setError(null);
     try {
-      const res = await api.post<{ message?: string }>("/api/auth/reset-password", {
-        email,
-        code,
-        newPassword: password,
-      });
+      const res = await api.post<{ message?: string }>(
+        "/api/auth/reset-password",
+        {
+          token,
+          newPassword: password,
+          confirmPassword,
+        }
+      );
 
       if (!res.ok) {
         setError(res.error);
@@ -101,13 +102,12 @@ export default function ResetPasswordScreen() {
                     autoCapitalize="none"
                     autoComplete="sms-otp"
                     id="code"
-                    keyboardType="numeric"
-                    onChangeText={setCode}
+                    onChangeText={setConfirmPassword}
                     onSubmitEditing={onSubmit}
                     ref={codeInputRef}
                     returnKeyType="send"
-                    textContentType="oneTimeCode"
-                    value={code}
+                    secureTextEntry
+                    value={confirmPassword}
                   />
                 </View>
                 <Button

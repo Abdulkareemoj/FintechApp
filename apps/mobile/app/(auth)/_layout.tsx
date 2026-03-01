@@ -1,19 +1,19 @@
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { useColorScheme } from 'nativewind';
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import { useUniwind } from "uniwind";
 
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
-} from 'expo-router';
+} from "expo-router";
 
 export default function AuthLayout() {
-  const { colorScheme } = useColorScheme();
+  const { theme } = useUniwind();
 
   return (
     <>
-      <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />{' '}
+      <StatusBar style={theme === "dark" ? "light" : "dark"} />
       <Stack>
         <Stack.Screen name="sign-in" options={{ headerShown: false }} />
         <Stack.Screen name="sign-up" options={{ headerShown: false }} />

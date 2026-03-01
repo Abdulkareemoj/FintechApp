@@ -14,8 +14,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Text } from "@/components/ui/text";
-import { useAuthStore } from "@/lib/authStore";
 import { api } from "@/lib/api";
+import { useAuthStore } from "@/lib/authStore";
 
 const RESEND_CODE_INTERVAL_SECONDS = 30;
 
@@ -31,6 +31,16 @@ function useCountdown(seconds = 30) {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
+
+    React.useEffect(() => {
+      if (!token) {
+        return;
+      }
+      onSubmit().catch(() => {
+        // state handled in onSubmit
+      });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [token]);
 
     intervalRef.current = setInterval(() => {
       setCountdown((prev) => {
@@ -60,38 +70,54 @@ function useCountdown(seconds = 30) {
 }
 
 export default function VerifyEmailScreen() {
-  const { countdown, restartCountdown } = useCountdown(
-    RESEND_CODE_INTERVAL_SECONDS
-  );
-  const { email } = useLocalSearchParams<{ email?: string }>();
+  const { token } = useLocalSearchParams<{ token?: string }>();
+  const [email, setEmail] = React.useState("");
   const [code, setCode] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [success, setSuccess] = React.useState<string | null>(null);
+  const [status, setStatus] = React.useState<
+    "idle" | "verifying" | "success" | "error"
+  >("idle");
 
-  async function onSubmit() {
-    if (!email) {
-      setError(
-        "Email is missing from the request. Please try signing up again."
-      );
+  // Auto-submit if token is present
+  React.useEffect(() => {
+    if (token) {
+      handleVerify();
+    }
+  }, [token]);
+
+  async function handleVerify() {
+    if (!token) {
+      setStatus("error");
+      setError("Missing verification token");
       return;
     }
     setIsSubmitting(true);
+    setStatus("verifying");
     setError(null);
     setSuccess(null);
     try {
-      const res = await api.post<{ message?: string }>("/api/auth/verify-email", {
-        email,
-        code,
-      });
+      const res = await api.post<{ message?: string }>(
+        "/api/auth/verify-email",
+        { token }
+      );
 
       if (!res.ok) {
+        setStatus("error");
         setError(res.error);
         return;
       }
 
-      setSuccess(res.data.message ?? "Email verified. You can now sign in.");
-      router.replace("/(auth)/sign-in" as any);
+      setStatus("success");
+      setSuccess(res.data.message ?? "Email verified successfully");
+      // Navigate to sign-in after a delay
+      setTimeout(() => {
+        router.replace("/(auth)/sign-in" as any);
+      }, 2000);
+    } catch {
+      setStatus("error");
+      setError("Verification failed. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -108,8 +134,9 @@ export default function VerifyEmailScreen() {
     setSuccess(null);
     try {
       const res = await api.post<{ message?: string }>(
-        "/api/auth/resend-verification",
-        { email }
+        "/api/auth/send-verification-email",
+        { email },
+        { auth: true }
       );
 
       if (!res.ok) {
@@ -117,7 +144,7 @@ export default function VerifyEmailScreen() {
         return;
       }
 
-      setSuccess(res.data.message ?? "Verification code sent.");
+      setSuccess(res.data.message ?? "Verification email sent.");
       restartCountdown();
     } catch {
       setError("Network error");
@@ -150,61 +177,63 @@ export default function VerifyEmailScreen() {
               )}
               {success && (
                 <Alert icon={CheckCircle2} variant="default">
-                  <AlertTitle>Code Sent</AlertTitle>
+                  <AlertTitle>Success</AlertTitle>
                   <AlertDescription>{success}</AlertDescription>
                 </Alert>
               )}
-              <View className="gap-6">
-                <View className="gap-1.5">
-                  <Label htmlFor="code">Verification code</Label>
-                  <Input
-                    autoCapitalize="none"
-                    autoComplete="sms-otp"
-                    id="code"
-                    keyboardType="numeric"
-                    onChangeText={setCode}
-                    onSubmitEditing={onSubmit}
-                    returnKeyType="send"
-                    textContentType="oneTimeCode"
-                    value={code}
-                  />
-                  <Button
-                    disabled={countdown > 0}
-                    onPress={onResend}
-                    size="sm"
-                    variant="link"
-                  >
-                    <Text className="text-center text-xs">
-                      Didn&apos;t receive the code? Resend{" "}
-                      {countdown > 0 ? (
-                        <Text className="text-xs" style={TABULAR_NUMBERS_STYLE}>
-                          ({countdown})
-                        </Text>
-                      ) : null}
-                    </Text>
-                  </Button>
-                </View>
+              {status === "verifying" && (
+                <Alert icon={AlertCircle} variant="default">
+                  <AlertTitle>Verifying...</AlertTitle>
+                  <AlertDescription>
+                    Please wait while we verify your email.
+                  </AlertDescription>
+                </Alert>
+              )}
+              {!token && (
                 <View className="gap-3">
-                  <Button
-                    className="w-full"
-                    disabled={isSubmitting}
-                    onPress={onSubmit}
-                  >
-                    <Text>Continue</Text>
-                  </Button>
-                  <Button
-                    className="mx-auto"
-                    onPress={() => {
-                      router.back();
-                    }}
-                    variant="link"
-                  >
-                    <Text>Cancel</Text>
-                  </Button>
+                  <Text className="text-center text-muted-foreground">
+                    No verification token provided. Please check your email and
+                    click the verification link.
+                  </Text>
                 </View>
-              </View>
+              )}
+              {token && status === "idle" && (
+                <Button
+                  className="w-full"
+                  disabled={isSubmitting}
+                  onPress={handleVerify}
+                >
+                  {isSubmitting ? "Verifying..." : "Verify Email"}
+                </Button>
+              )}
             </CardContent>
           </Card>
+          <View className="flex flex-row justify-center gap-2">
+            <Button
+              disabled={countdown > 0}
+              onPress={onResend}
+              size="sm"
+              variant="link"
+            >
+              <Text className="text-center text-xs">
+                Didn&apos;t receive the email? Resend{" "}
+                {countdown > 0 ? (
+                  <Text className="text-xs" style={TABULAR_NUMBERS_STYLE}>
+                    ({countdown})
+                  </Text>
+                ) : null}
+              </Text>
+            </Button>
+            <Button
+              className="mx-auto"
+              onPress={() => {
+                router.back();
+              }}
+              variant="link"
+            >
+              <Text>Cancel</Text>
+            </Button>
+          </View>
         </View>
       </View>
     </ScrollView>

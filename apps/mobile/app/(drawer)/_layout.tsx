@@ -54,6 +54,28 @@ export default function AppLayout() {
       />
 
       <Drawer.Screen
+        name="exchange"
+        options={{
+          title: "Exchange",
+          drawerLabel: "Exchange",
+          drawerIcon: ({ color, size }: { color: string; size: number }) => (
+            <Icon as={TrendingUp} color={color} size={size} />
+          ),
+        }}
+      />
+
+      <Drawer.Screen
+        name="request-money"
+        options={{
+          title: "Request Money",
+          drawerLabel: "Request Money",
+          drawerIcon: ({ color, size }: { color: string; size: number }) => (
+            <Icon as={TrendingUp} color={color} size={size} />
+          ),
+        }}
+      />
+
+      <Drawer.Screen
         name="settings"
         options={{
           title: "Settings",
