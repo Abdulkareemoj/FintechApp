@@ -39,4 +39,13 @@ namespace FinTech.Models.Enums
         Failed,
         Reversed
     }
+
+        public enum CardStatus
+    {
+        Active,
+        Frozen,
+        Blocked,
+        Expired,
+        Cancelled
+    }
 }
