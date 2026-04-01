@@ -1,11 +1,6 @@
 {
   "name": "FintechSystem",
   "private": true,
-  "type": "module",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "scripts": {
     "check": "biome check --write .",
     "dev": "turbo dev",
@@ -27,13 +22,6 @@
       "pnpm dlx ultracite fix"
     ]
   },
-  "pnpm": {
-    "overrides": {
-      "react": "19.1.0",
-      "react-dom": "19.1.0",
-      "@types/react": "19.1.7",
-      "@types/react-dom": "19.1.7"
-    }
-  },
+
   "packageManager": "pnpm@10.24.0"
 }
