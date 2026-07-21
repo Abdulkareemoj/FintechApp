@@ -1,2 +1,5 @@
 packages:
-- "apps/*"
+  - "mobile/"
+  - "web/"
+allowBuilds:
+  esbuild: true

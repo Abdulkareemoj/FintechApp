@@ -1,27 +1,25 @@
 {
-  "name": "FintechSystem",
+  "name": "freader",
   "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "check": "biome check --write .",
     "dev": "turbo dev",
     "build": "turbo build",
     "check-types": "turbo check-types",
-    "dev:native": "turbo -F native dev",
+    "dev:mobile": "turbo -F mobile dev",
     "dev:web": "turbo -F web dev"
   },
-
+  "dependencies": {
+    "@react-navigation/drawer": "^7.12.3",
+    "turbo": "^2.9.18"
+  },
   "devDependencies": {
-    "@biomejs/biome": "2.2.4",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.1.2",
-    "turbo": "^2.5.4",
-    "ultracite": "5.4.7"
+    "@biomejs/biome": "^2.5.0"
   },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
-      "pnpm dlx ultracite fix"
-    ]
-  },
-
-  "packageManager": "pnpm@10.24.0"
+  "packageManager": "pnpm@11.1.2"
 }
