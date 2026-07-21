@@ -31,7 +31,6 @@ namespace FinTech.Services
         private readonly ILogger<AuthService> _logger;
         private readonly IEmailService _emailService;
 
-        // Update constructor to include IEmailService
         public AuthService(
             AppDbContext context,
             IJwtService jwtService,
@@ -41,20 +40,18 @@ namespace FinTech.Services
         {
             _context = context;
             _jwtService = jwtService;
-            _jwtSettings = jwtSettings.Value;
+            _jwtSettings = jwtSettings.Value ?? throw new ArgumentNullException(nameof(jwtSettings));
             _logger = logger;
             _emailService = emailService;
         }
 
         public async Task<AuthResponse> RegisterAsync(RegisterRequest request, string? ipAddress)
         {
-            // Check if user already exists
             if (await _context.Users.AnyAsync(u => u.Email == request.Email))
             {
                 throw new InvalidOperationException("Email already registered");
             }
 
-            // Create user
             var user = new User
             {
                 Email = request.Email,
@@ -70,7 +67,6 @@ namespace FinTech.Services
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            // Create default USD wallet
             var wallet = new Wallet
             {
                 UserId = user.Id,
@@ -81,7 +77,6 @@ namespace FinTech.Services
             _context.Wallets.Add(wallet);
             await _context.SaveChangesAsync();
 
-            // Generate tokens
             return await GenerateAuthResponse(user, ipAddress);
         }
 
@@ -114,13 +109,10 @@ namespace FinTech.Services
                 throw new UnauthorizedAccessException("Invalid refresh token");
             }
 
-            // Revoke old token
             token.IsRevoked = true;
             token.RevokedAt = DateTime.UtcNow;
 
-            // Generate new tokens
             var response = await GenerateAuthResponse(token.User, ipAddress);
-            
             await _context.SaveChangesAsync();
 
             return response;

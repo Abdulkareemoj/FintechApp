@@ -9,34 +9,43 @@ using FinTech.Services;
 using Hangfire;
 using Hangfire.Dashboard;
 using Hangfire.MemoryStorage;
-using Hangfire.PostgreSql;
+using Hangfire.SqlServer;
 using Scalar.AspNetCore;
 using Microsoft.OpenApi.Models;
+using FinTech.Services.UserDashboard;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ============================================
-// SERILOG CONFIGURATION
-// ============================================
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
-    .Enrich.FromLogContext()
-    .Enrich.WithProperty("Application", "FinTech")
-    .WriteTo.Console()
-    .WriteTo.File(
-        path: "logs/fintech-.txt",
-        rollingInterval: RollingInterval.Day,
-        retainedFileCountLimit: 30)
-    .CreateLogger();
-
+// Configure Serilog
+Log.Logger = CreateSerilogLogger(builder);
 builder.Host.UseSerilog();
+
+static LoggerConfiguration CreateSerilogLogger(WebApplicationBuilder builder)
+{
+    return new LoggerConfiguration()
+        .ReadFrom.Configuration(builder.Configuration)
+        .Enrich.FromLogContext()
+        .Enrich.WithProperty("Application", "FinTech")
+        .Enrich.WithProperty("Environment", builder.Environment.EnvironmentName)
+        .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}")
+        .WriteTo.File(
+            path: "logs/fintech-.txt",
+            rollingInterval: RollingInterval.Day,
+            retainedFileCountLimit: 30,
+            outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}");
+}
 
 // ============================================
 // DATABASE CONTEXT
 // ============================================
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlServerOptions =>
+        {
+            sqlServerOptions.UseNetTopologySuite();
+            sqlServerOptions.EnableRetryOnFailure();
+        });
     
     // Enable detailed errors in development
     if (builder.Environment.IsDevelopment())
@@ -113,11 +122,16 @@ builder.Services.AddAuthorization(options =>
 // ============================================
 // DEPENDENCY INJECTION - SERVICES
 // ============================================
+// Auth Services
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-// Add more services here as you create them:
-// builder.Services.AddScoped<ITransactionService, TransactionService>();
-// builder.Services.AddScoped<IWalletService, WalletService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+
+// User Dashboard Services
+builder.Services.AddScoped<IWalletService, WalletService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<ICardService, CardService>();
+builder.Services.AddMemoryCache(); // For caching
 
 // ============================================
 // CORS
@@ -143,11 +157,10 @@ builder.Services.AddCors(options =>
 // ============================================
 builder.Services.AddHangfire(config =>
 {
-    // Use PostgreSQL instead of memory storage for production
+    // Use SQL Server instead of memory storage for production
     if (builder.Environment.IsProduction())
     {
-        config.UsePostgreSqlStorage(options => 
-            options.UseNpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
+        config.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"));
     }
     else
     {

@@ -1,7 +1,4 @@
-// ============================================
-// FILE: Services/UserDashboard/WalletService.cs
-// PURPOSE: Handle all wallet operations for users
-// ============================================
+
 
 using System;
 using System.Collections.Generic;
