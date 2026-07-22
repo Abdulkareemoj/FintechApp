@@ -418,3 +418,5 @@ sketch
 .agents/
 .turbo/
 .od-skills/
+web/.tanstack/tmp/
+mobile/.expo/
