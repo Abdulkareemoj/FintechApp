@@ -20,7 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 Log.Logger = CreateSerilogLogger(builder);
 builder.Host.UseSerilog();
 
-static LoggerConfiguration CreateSerilogLogger(WebApplicationBuilder builder)
+static Serilog.ILogger CreateSerilogLogger(WebApplicationBuilder builder)
 {
     return new LoggerConfiguration()
         .ReadFrom.Configuration(builder.Configuration)
@@ -32,7 +32,8 @@ static LoggerConfiguration CreateSerilogLogger(WebApplicationBuilder builder)
             path: "logs/fintech-.txt",
             rollingInterval: RollingInterval.Day,
             retainedFileCountLimit: 30,
-            outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}");
+            outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}")
+        .CreateLogger(); 
 }
 
 // ============================================
@@ -43,10 +44,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
         sqlServerOptions =>
         {
-            sqlServerOptions.UseNetTopologySuite();
+            //sqlServerOptions.UseNetTopologySuite();
             sqlServerOptions.EnableRetryOnFailure();
         });
-    
+
     // Enable detailed errors in development
     if (builder.Environment.IsDevelopment())
     {
@@ -60,7 +61,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // ============================================
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
-var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>() 
+var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>()
     ?? throw new InvalidOperationException("JWT settings not found");
 
 var key = Encoding.UTF8.GetBytes(jwtSettings.Key);
@@ -106,16 +107,16 @@ builder.Services.AddAuthentication(options =>
 // ============================================
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminOnly", policy => 
+    options.AddPolicy("AdminOnly", policy =>
         policy.RequireRole("Admin"));
-    
-    options.AddPolicy("SupportOrAdmin", policy => 
+
+    options.AddPolicy("SupportOrAdmin", policy =>
         policy.RequireRole("Admin", "Support"));
-    
-    options.AddPolicy("UserOnly", policy => 
+
+    options.AddPolicy("UserOnly", policy =>
         policy.RequireRole("User"));
-    
-    options.AddPolicy("MerchantOrAdmin", policy => 
+
+    options.AddPolicy("MerchantOrAdmin", policy =>
         policy.RequireRole("Admin", "Merchant"));
 });
 
@@ -141,7 +142,7 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
     {
         policy.WithOrigins(
-                "http://localhost:5173", 
+                "http://localhost:5173",
                 "https://localhost:5173",
                 "http://localhost:3000",  // Add other frontend URLs as needed
                 "https://localhost:3000"
@@ -258,7 +259,7 @@ app.UseSerilogRequestLogging(options =>
         diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
         diagnosticContext.Set("RequestScheme", httpContext.Request.Scheme);
         diagnosticContext.Set("UserAgent", httpContext.Request.Headers["User-Agent"].ToString());
-        
+
         // Add user info if authenticated
         if (httpContext.User.Identity?.IsAuthenticated == true)
         {
@@ -302,7 +303,7 @@ if (app.Environment.IsDevelopment())
             .WithTheme(ScalarTheme.Purple)
             .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
     });
-    
+
     app.MapOpenApi();
 }
 
