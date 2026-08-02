@@ -184,7 +184,7 @@ const Features = () => {
 						<span className="italic-accent">smarter</span> financial decisions
 					</h2>
 					<p className="text-muted-foreground text-lg">
-						Everything you need to take control of your finances—built to be
+						Everything you need to take control of your finances, built to be
 						simple, secure, and smart.
 					</p>
 				</motion.div>

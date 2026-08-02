@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import testimonialImage from "/testimonial-1.jpg";
+import { Button } from "../ui/button";
 
 const Testimonials = () => {
 	const [currentIndex, setCurrentIndex] = useState(0);
@@ -65,7 +66,7 @@ const Testimonials = () => {
 							<span className="italic-accent">real</span> people
 						</h2>
 						<p className="text-muted-foreground max-w-md">
-							From everyday wins to big milestones—here's how we've helped
+							From everyday wins to big milestones, here's how we've helped
 							others take control of their money.
 						</p>
 					</div>
@@ -80,18 +81,18 @@ const Testimonials = () => {
 				>
 					{/* Controls */}
 					<div className="flex items-center gap-4 order-2 lg:order-1">
-						<button
+						<Button
 							onClick={prevTestimonial}
 							className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors"
 						>
 							<ChevronLeft className="w-5 h-5 text-foreground" />
-						</button>
-						<button
+						</Button>
+						<Button
 							onClick={nextTestimonial}
 							className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-secondary transition-colors"
 						>
 							<ChevronRight className="w-5 h-5 text-foreground" />
-						</button>
+						</Button>
 					</div>
 
 					{/* Quote Card */}

@@ -8,7 +8,7 @@ const HowItWorks = () => {
 			number: "01",
 			icon: UserPlus,
 			title: "Sign up",
-			description: "Create your free account in minutes—no payment, no hassle.",
+			description: "Create your free account in minutes no payment, no hassle.",
 		},
 		{
 			number: "02",
@@ -45,7 +45,7 @@ const HowItWorks = () => {
 						three <span className="italic-accent">simple</span> steps
 					</h2>
 					<p className="text-muted-foreground text-lg">
-						From setting goals to tracking your progress—here's how we help you
+						From setting goals to tracking your progress, here's how we help you
 						take control of your money.
 					</p>
 				</motion.div>

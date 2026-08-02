@@ -25,7 +25,7 @@ const CTA = () => {
 					</h2>
 					<p className="text-primary-foreground/80 text-lg mb-10 max-w-xl mx-auto">
 						Join thousands of users already mastering their finances. Get
-						started with a free account now—no credit card required.
+						started with a free account now, no credit card required.
 					</p>
 					<Button
 						size="xl"

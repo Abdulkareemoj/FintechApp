@@ -39,7 +39,7 @@ const Hero = () => {
 						{/* Subheadline */}
 						<p className="mx-auto mb-8 max-w-lg text-lg text-muted-foreground lg:mx-0">
 							A seamless platform to track spending, set savings goals, and
-							begin investing—all in one place. Take control today.
+							begin investing, all in one place. Take control today.
 						</p>
 
 						{/* CTAs */}
