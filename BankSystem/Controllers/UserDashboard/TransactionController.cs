@@ -137,5 +137,42 @@ namespace FinTech.Controllers.UserDashboard
             
             return Guid.Parse(userIdClaim);
         }
+        
+/// <summary>
+/// Lightweight status check for any transaction type.
+/// Useful for polling after initiating a transfer or deposit.
+/// </summary>
+[HttpGet("{id}/status")]
+public async Task<IActionResult> GetTransactionStatus(Guid id)
+{
+    try
+    {
+        var userId = GetCurrentUserId();
+        var transaction = await _transactionService.GetTransactionDetailAsync(id, userId);
+
+        if (transaction == null)
+            return NotFound(new { success = false, error = "Transaction not found" });
+
+        return Ok(new
+        {
+            success = true,
+            data = new
+            {
+                id = transaction.Id,
+                status = transaction.Status,
+                type = transaction.Type,
+                amount = transaction.Amount,
+                currency = transaction.Currency,
+                createdAt = transaction.CreatedAt,
+                completedAt = transaction.CompletedAt
+            }
+        });
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error retrieving transaction status {TransactionId}", id);
+        return StatusCode(500, new { success = false, error = "Failed to retrieve status" });
+    }
+}
     }
 }
