@@ -1,12 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Mail, MapPin, MessageSquare, Phone } from "lucide-react";
-import { motion } from "motion/react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-
 import { LandingLayout } from "@/layout/LandingLayout";
 
 export const Route = createFileRoute("/(landing)/contact")({
@@ -56,46 +54,48 @@ function ContactPage() {
 
 	return (
 		<LandingLayout>
-			<main className="pt-24">
+			<main>
 				{/* Hero */}
-				<section className="py-20 lg:py-28 bg-gradient-hero">
-					<div className="container mx-auto px-4 sm:px-6 lg:px-8">
-						<motion.div
-							initial={{ opacity: 0, y: 20 }}
-							animate={{ opacity: 1, y: 0 }}
-							className="text-center max-w-3xl mx-auto"
-						>
-							<h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6">
-								Get in <span className="italic-accent">touch</span>
-							</h1>
-							<p className="text-lg text-muted-foreground">
-								Have questions? We'd love to hear from you. Send us a message
-								and we'll respond as soon as possible.
-							</p>
-						</motion.div>
+				<section
+					className="relative flex items-center justify-center overflow-hidden"
+					style={{ height: "100vh" }}
+				>
+					<div
+						className="absolute inset-0"
+						style={{
+							background:
+								"radial-gradient(120% 90% at 50% 25%, #232e44 0%, #171a20 55%, #0d1016 100%)",
+						}}
+					/>
+					<div className="relative z-10 px-4 text-center">
+						<h1 className="text-[40px] font-medium text-white">Get in touch</h1>
+						<p className="mx-auto mt-4 max-w-xl text-sm text-white/70">
+							Have questions? We'd love to hear from you. Send us a message and
+							we'll respond as soon as possible.
+						</p>
 					</div>
 				</section>
 
 				{/* Contact Form & Info */}
-				<section className="py-20 bg-background">
-					<div className="container mx-auto px-4 sm:px-6 lg:px-8">
-						<div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
+				<section className="bg-background py-24">
+					<div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+						<div className="grid gap-16 lg:grid-cols-2">
 							{/* Form */}
-							<motion.div
-								initial={{ opacity: 0, x: -20 }}
-								whileInView={{ opacity: 1, x: 0 }}
-								viewport={{ once: true }}
-							>
-								<h2 className="text-2xl font-bold text-foreground mb-6">
+							<div>
+								<h2 className="text-[22px] font-medium text-foreground">
 									Send us a message
 								</h2>
-								<form onSubmit={handleSubmit} className="space-y-6">
-									<div className="grid sm:grid-cols-2 gap-4">
+								<form onSubmit={handleSubmit} className="mt-8 space-y-6">
+									<div className="grid gap-6 sm:grid-cols-2">
 										<div>
-											<label className="block text-sm font-medium text-foreground mb-2">
+											<label
+												htmlFor="contact-name"
+												className="mb-2 block text-sm font-medium text-foreground"
+											>
 												Name
 											</label>
 											<Input
+												id="contact-name"
 												placeholder="Your name"
 												value={formData.name}
 												onChange={(e) =>
@@ -105,10 +105,14 @@ function ContactPage() {
 											/>
 										</div>
 										<div>
-											<label className="block text-sm font-medium text-foreground mb-2">
+											<label
+												htmlFor="contact-email"
+												className="mb-2 block text-sm font-medium text-foreground"
+											>
 												Email
 											</label>
 											<Input
+												id="contact-email"
 												type="email"
 												placeholder="you@example.com"
 												value={formData.email}
@@ -120,10 +124,14 @@ function ContactPage() {
 										</div>
 									</div>
 									<div>
-										<label className="block text-sm font-medium text-foreground mb-2">
+										<label
+											htmlFor="contact-subject"
+											className="mb-2 block text-sm font-medium text-foreground"
+										>
 											Subject
 										</label>
 										<Input
+											id="contact-subject"
 											placeholder="How can we help?"
 											value={formData.subject}
 											onChange={(e) =>
@@ -133,10 +141,14 @@ function ContactPage() {
 										/>
 									</div>
 									<div>
-										<label className="block text-sm font-medium text-foreground mb-2">
+										<label
+											htmlFor="contact-message"
+											className="mb-2 block text-sm font-medium text-foreground"
+										>
 											Message
 										</label>
 										<Textarea
+											id="contact-message"
 											placeholder="Tell us more about your question..."
 											rows={5}
 											value={formData.message}
@@ -147,47 +159,38 @@ function ContactPage() {
 										/>
 									</div>
 									<Button
-										variant="hero"
-										size="lg"
 										type="submit"
-										className="w-full sm:w-auto"
+										className="h-10 rounded bg-primary text-sm font-medium text-white transition-colors duration-300 hover:bg-primary/90"
 									>
 										Send message
 									</Button>
 								</form>
-							</motion.div>
+							</div>
 
 							{/* Contact Info */}
-							<motion.div
-								initial={{ opacity: 0, x: 20 }}
-								whileInView={{ opacity: 1, x: 0 }}
-								viewport={{ once: true }}
-							>
-								<h2 className="text-2xl font-bold text-foreground mb-6">
+							<div>
+								<h2 className="text-[22px] font-medium text-foreground">
 									Contact information
 								</h2>
-								<div className="grid sm:grid-cols-2 gap-6">
+								<div className="mt-8 grid gap-px bg-border sm:grid-cols-2">
 									{contactInfo.map((info) => (
-										<div
-											key={info.title}
-											className="bg-secondary/30 rounded-2xl p-6"
-										>
-											<div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-4">
-												<info.icon className="w-6 h-6 text-primary" />
+										<div key={info.title} className="bg-card p-8">
+											<div className="mb-4 flex h-12 w-12 items-center justify-center rounded bg-muted">
+												<info.icon className="size-6 text-primary" />
 											</div>
-											<h3 className="font-semibold text-foreground mb-1">
+											<h3 className="font-medium text-foreground">
 												{info.title}
 											</h3>
-											<p className="text-foreground font-medium mb-1">
+											<p className="mt-1 font-medium text-foreground">
 												{info.content}
 											</p>
-											<p className="text-sm text-muted-foreground">
+											<p className="mt-1 text-sm text-muted-foreground">
 												{info.description}
 											</p>
 										</div>
 									))}
 								</div>
-							</motion.div>
+							</div>
 						</div>
 					</div>
 				</section>

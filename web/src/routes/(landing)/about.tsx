@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Heart, Target, Users, Zap } from "lucide-react";
-import { motion } from "motion/react";
 import { LandingLayout } from "@/layout/LandingLayout";
 
 export const Route = createFileRoute("/(landing)/about")({
@@ -57,46 +56,49 @@ function AboutPage() {
 			bio: "Ex-Apple, award-winning designer",
 		},
 	];
+
+	const stats = [
+		{ number: "500K+", label: "Active Users" },
+		{ number: "$2B+", label: "Assets Tracked" },
+		{ number: "98%", label: "User Satisfaction" },
+		{ number: "50+", label: "Countries" },
+	];
+
 	return (
 		<LandingLayout>
-			<main className="pt-24">
+			<main>
 				{/* Hero */}
-				<section className="py-20 lg:py-28 bg-gradient-hero">
-					<div className="container mx-auto px-4 sm:px-6 lg:px-8">
-						<motion.div
-							initial={{ opacity: 0, y: 20 }}
-							animate={{ opacity: 1, y: 0 }}
-							className="text-center max-w-3xl mx-auto"
-						>
-							<h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6">
-								About <span className="italic-accent">Finova</span>
-							</h1>
-							<p className="text-lg text-muted-foreground leading-relaxed">
-								We're building the future of personal finance. Founded in 2023,
-								Finova combines cutting-edge technology with human-centered
-								design to help millions take control of their financial future.
-							</p>
-						</motion.div>
+				<section
+					className="relative flex items-center justify-center overflow-hidden"
+					style={{ height: "100vh" }}
+				>
+					<div
+						className="absolute inset-0"
+						style={{
+							background:
+								"radial-gradient(120% 90% at 50% 25%, #253048 0%, #171a20 55%, #0d1016 100%)",
+						}}
+					/>
+					<div className="relative z-10 px-4 text-center">
+						<h1 className="text-[40px] font-medium text-white">About Finova</h1>
+						<p className="mx-auto mt-4 max-w-xl text-sm text-white/70">
+							We're building the future of personal finance. Founded in 2023,
+							Finova combines cutting-edge technology with human-centered design
+							to help millions take control of their financial future.
+						</p>
 					</div>
 				</section>
 
-				{/* Story */}
-				<section className="py-20 bg-background">
-					<div className="container mx-auto px-4 sm:px-6 lg:px-8">
-						<div className="grid lg:grid-cols-2 gap-12 items-center">
-							<motion.div
-								initial={{ opacity: 0, x: -20 }}
-								whileInView={{ opacity: 1, x: 0 }}
-								viewport={{ once: true }}
-							>
-								<span className="text-sm font-medium text-primary uppercase tracking-wider mb-4 block">
-									Our Story
-								</span>
-								<h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-6">
-									Born from a <span className="italic-accent">simple</span>{" "}
-									frustration
+				{/* Story + Stats */}
+				<section className="bg-background py-24">
+					<div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+						<div className="grid gap-16 lg:grid-cols-2">
+							<div>
+								<p className="text-sm font-medium text-primary">Our Story</p>
+								<h2 className="mt-3 text-[40px] font-medium text-foreground">
+									Born from a simple frustration
 								</h2>
-								<div className="space-y-4 text-muted-foreground leading-relaxed">
+								<div className="mt-6 space-y-4 text-sm leading-relaxed text-muted-foreground">
 									<p>
 										It started when our founders, both finance professionals,
 										realized that the tools they used daily at work were
@@ -108,114 +110,76 @@ function AboutPage() {
 										investing be intimidating?
 									</p>
 									<p>
-										We set out to build something different—a platform that
+										We set out to build something different, a platform that
 										makes financial management as intuitive as scrolling through
 										your favorite app.
 									</p>
 								</div>
-							</motion.div>
-							<motion.div
-								initial={{ opacity: 0, x: 20 }}
-								whileInView={{ opacity: 1, x: 0 }}
-								viewport={{ once: true }}
-								className="bg-secondary/30 rounded-3xl p-8 lg:p-12"
-							>
-								<div className="grid grid-cols-2 gap-6">
-									{[
-										{ number: "500K+", label: "Active Users" },
-										{ number: "$2B+", label: "Assets Tracked" },
-										{ number: "98%", label: "User Satisfaction" },
-										{ number: "50+", label: "Countries" },
-									].map((stat) => (
-										<div key={stat.label} className="text-center">
-											<div className="text-3xl lg:text-4xl font-bold text-primary mb-2">
-												{stat.number}
-											</div>
-											<div className="text-sm text-muted-foreground">
-												{stat.label}
-											</div>
+							</div>
+							<div className="grid grid-cols-2 gap-px self-center bg-border">
+								{stats.map((stat) => (
+									<div key={stat.label} className="bg-card p-8 text-center">
+										<div className="text-[40px] font-medium text-foreground">
+											{stat.number}
 										</div>
-									))}
-								</div>
-							</motion.div>
+										<div className="mt-2 text-sm text-muted-foreground">
+											{stat.label}
+										</div>
+									</div>
+								))}
+							</div>
 						</div>
 					</div>
 				</section>
 
 				{/* Values */}
-				<section className="py-20 bg-secondary/30">
-					<div className="container mx-auto px-4 sm:px-6 lg:px-8">
-						<motion.div
-							initial={{ opacity: 0, y: 20 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true }}
-							className="text-center max-w-2xl mx-auto mb-16"
-						>
-							<h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-								Our <span className="italic-accent">values</span>
-							</h2>
-							<p className="text-muted-foreground">
-								The principles that guide every decision we make.
-							</p>
-						</motion.div>
-						<div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-							{values.map((value, index) => (
-								<motion.div
-									key={value.title}
-									initial={{ opacity: 0, y: 20 }}
-									whileInView={{ opacity: 1, y: 0 }}
-									viewport={{ once: true }}
-									transition={{ delay: index * 0.1 }}
-									className="bg-card rounded-2xl p-6 shadow-card text-center"
-								>
-									<div className="w-14 h-14 rounded-xl bg-blue-100 flex items-center justify-center mx-auto mb-4">
-										<value.icon className="w-7 h-7 text-primary" />
+				<section className="bg-muted py-24">
+					<div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+						<h2 className="text-center text-[40px] font-medium text-foreground">
+							Our values
+						</h2>
+						<p className="mx-auto mt-3 max-w-md text-center text-sm text-muted-foreground">
+							The principles that guide every decision we make.
+						</p>
+						<div className="mt-14 grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-4">
+							{values.map((value) => (
+								<div key={value.title} className="bg-card p-8 text-center">
+									<div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded bg-muted">
+										<value.icon className="size-7 text-primary" />
 									</div>
-									<h3 className="text-lg font-semibold text-foreground mb-2">
+									<h3 className="text-[17px] font-medium text-foreground">
 										{value.title}
 									</h3>
-									<p className="text-sm text-muted-foreground">
+									<p className="mt-3 text-sm text-muted-foreground">
 										{value.description}
 									</p>
-								</motion.div>
+								</div>
 							))}
 						</div>
 					</div>
 				</section>
 
 				{/* Team */}
-				<section className="py-20 bg-background">
-					<div className="container mx-auto px-4 sm:px-6 lg:px-8">
-						<motion.div
-							initial={{ opacity: 0, y: 20 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true }}
-							className="text-center max-w-2xl mx-auto mb-16"
-						>
-							<h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-								Meet the <span className="italic-accent">team</span>
-							</h2>
-							<p className="text-muted-foreground">
-								World-class talent united by a shared mission.
-							</p>
-						</motion.div>
-						<div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-							{team.map((member, index) => (
-								<motion.div
-									key={member.name}
-									initial={{ opacity: 0, y: 20 }}
-									whileInView={{ opacity: 1, y: 0 }}
-									viewport={{ once: true }}
-									transition={{ delay: index * 0.1 }}
-									className="text-center"
-								>
-									<div className="w-32 h-32 rounded-full bg-secondary mx-auto mb-4" />
-									<h3 className="font-semibold text-foreground mb-1">
+				<section className="bg-background py-24">
+					<div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+						<h2 className="text-center text-[40px] font-medium text-foreground">
+							Meet the team
+						</h2>
+						<p className="mx-auto mt-3 max-w-md text-center text-sm text-muted-foreground">
+							World-class talent united by a shared mission.
+						</p>
+						<div className="mt-14 grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+							{team.map((member) => (
+								<div key={member.name} className="text-center">
+									<div className="mx-auto mb-4 h-24 w-24 rounded-full bg-muted" />
+									<h3 className="text-[17px] font-medium text-foreground">
 										{member.name}
 									</h3>
-									<p className="text-sm text-primary mb-2">{member.role}</p>
-									<p className="text-xs text-muted-foreground">{member.bio}</p>
-								</motion.div>
+									<p className="mt-1 text-sm text-primary">{member.role}</p>
+									<p className="mt-1 text-xs text-muted-foreground">
+										{member.bio}
+									</p>
+								</div>
 							))}
 						</div>
 					</div>

@@ -10,8 +10,6 @@ import {
 	Wallet,
 	Zap,
 } from "lucide-react";
-import { motion } from "motion/react";
-
 import { Button } from "@/components/ui/button";
 import { LandingLayout } from "@/layout/LandingLayout";
 
@@ -72,86 +70,85 @@ function FeaturesPage() {
 	];
 	return (
 		<LandingLayout>
-			<main className="pt-24">
+			<main>
 				{/* Hero */}
-				<section className="py-20 lg:py-28 bg-soft-teal">
-					<div className="container mx-auto px-4 sm:px-6 lg:px-8">
-						<motion.div
-							initial={{ opacity: 0, y: 20 }}
-							animate={{ opacity: 1, y: 0 }}
-							className="text-center max-w-3xl mx-auto"
-						>
-							<h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6">
-								Powerful <span className="italic-accent">features</span> for
-								your financial success
-							</h1>
-							<p className="text-lg text-muted-foreground mb-8">
-								Everything you need to budget, save, invest, and grow—all in one
-								beautifully designed platform.
-							</p>
-							<Button variant="hero" size="lg" asChild>
+				<section
+					className="relative flex items-center justify-center overflow-hidden"
+					style={{ height: "100vh" }}
+				>
+					<div
+						className="absolute inset-0"
+						style={{
+							background:
+								"radial-gradient(120% 90% at 50% 20%, #212a3a 0%, #171a20 55%, #0d1016 100%)",
+						}}
+					/>
+					<div className="relative z-10 px-4 text-center">
+						<h1 className="text-[40px] font-medium text-white">
+							Powerful features for your financial success
+						</h1>
+						<p className="mx-auto mt-4 max-w-xl text-sm text-white/70">
+							Everything you need to budget, save, invest, and grow, all in one
+							beautifully designed platform.
+						</p>
+						<div className="mt-10 flex justify-center">
+							<Button
+								className="h-10 w-60 rounded bg-primary text-sm font-medium text-white transition-colors duration-300 hover:bg-primary/90"
+								asChild
+							>
 								<Link to="/signup">
-									Start for free
-									<ArrowRight className="w-4 h-4" />
+									Start for free <ArrowRight className="ml-2 size-4" />
 								</Link>
 							</Button>
-						</motion.div>
+						</div>
 					</div>
 				</section>
 
 				{/* Features Grid */}
-				<section className="py-20 bg-background">
-					<div className="container mx-auto px-4 sm:px-6 lg:px-8">
-						<div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-							{features.map((feature, index) => (
-								<motion.div
-									key={feature.title}
-									initial={{ opacity: 0, y: 20 }}
-									whileInView={{ opacity: 1, y: 0 }}
-									viewport={{ once: true }}
-									transition={{ delay: index * 0.05 }}
-									className="bg-card rounded-2xl p-6 shadow-card hover:shadow-lg transition-shadow"
-								>
-									<div className="w-12 h-12 rounded-xl bg-teal-100 flex items-center justify-center mb-4">
-										<feature.icon className="w-6 h-6 text-primary" />
+				<section className="bg-background py-24">
+					<div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+						<div className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-4">
+							{features.map((feature) => (
+								<div key={feature.title} className="bg-card p-8">
+									<div className="mb-5 flex h-12 w-12 items-center justify-center rounded bg-muted">
+										<feature.icon className="size-6 text-primary" />
 									</div>
-									<h3 className="text-lg font-semibold text-foreground mb-2">
+									<h3 className="text-[17px] font-medium text-foreground">
 										{feature.title}
 									</h3>
-									<p className="text-sm text-muted-foreground leading-relaxed">
+									<p className="mt-3 text-sm leading-relaxed text-muted-foreground">
 										{feature.description}
 									</p>
-								</motion.div>
+								</div>
 							))}
 						</div>
 					</div>
 				</section>
 
 				{/* CTA */}
-				<section className="py-20 bg-secondary/30">
-					<div className="container mx-auto px-4 sm:px-6 lg:px-8">
-						<motion.div
-							initial={{ opacity: 0, y: 20 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true }}
-							className="text-center max-w-2xl mx-auto"
-						>
-							<h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-6">
-								Ready to take <span className="italic-accent">control</span>?
-							</h2>
-							<p className="text-muted-foreground mb-8">
-								Join thousands of users who have transformed their financial
-								lives with Finova.
-							</p>
-							<div className="flex flex-col sm:flex-row gap-4 justify-center">
-								<Button variant="hero" size="lg" asChild>
-									<Link to="/signup">Get started free</Link>
-								</Button>
-								<Button variant="hero-outline" size="lg" asChild>
-									<Link to="/contact">Contact sales</Link>
-								</Button>
-							</div>
-						</motion.div>
+				<section className="bg-muted py-24">
+					<div className="mx-auto max-w-2xl px-4 text-center sm:px-6">
+						<h2 className="text-[40px] font-medium text-foreground">
+							Ready to take control?
+						</h2>
+						<p className="mt-3 text-sm text-muted-foreground">
+							Join thousands of users who have transformed their financial lives
+							with Finova.
+						</p>
+						<div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
+							<Button
+								className="h-10 w-60 rounded bg-primary text-sm font-medium text-white transition-colors duration-300 hover:bg-primary/90"
+								asChild
+							>
+								<Link to="/signup">Get started free</Link>
+							</Button>
+							<Button
+								className="h-10 w-60 rounded bg-card text-sm font-medium text-foreground transition-colors duration-300 hover:bg-muted"
+								asChild
+							>
+								<Link to="/contact">Contact sales</Link>
+							</Button>
+						</div>
 					</div>
 				</section>
 			</main>

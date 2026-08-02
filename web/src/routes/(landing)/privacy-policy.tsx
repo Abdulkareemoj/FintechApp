@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion } from "motion/react";
 import { LandingLayout } from "@/layout/LandingLayout";
+
 export const Route = createFileRoute("/(landing)/privacy-policy")({
 	component: PrivacyPolicyPage,
 });
@@ -68,59 +68,39 @@ Address: 123 Finance Street, Suite 400, San Francisco, CA 94102`,
 
 	return (
 		<LandingLayout>
-			<main className="pt-24">
-				{/* Hero */}
-				<section className="py-20 lg:py-28 bg-gradient-hero">
-					<div className="container mx-auto px-4 sm:px-6 lg:px-8">
-						<motion.div
-							initial={{ opacity: 0, y: 20 }}
-							animate={{ opacity: 1, y: 0 }}
-							className="text-center max-w-3xl mx-auto"
-						>
-							<h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6">
-								Privacy <span className="italic-accent">Policy</span>
-							</h1>
-							<p className="text-lg text-muted-foreground">
-								Last updated: January 13, 2026
-							</p>
-						</motion.div>
+			<main>
+				{/* Header */}
+				<section className="border-b border-border bg-background py-24">
+					<div className="mx-auto max-w-3xl px-4 sm:px-6">
+						<h1 className="text-[40px] font-medium text-foreground">
+							Privacy Policy
+						</h1>
+						<p className="mt-3 text-sm text-muted-foreground">
+							Last updated: January 13, 2026
+						</p>
 					</div>
 				</section>
 
 				{/* Content */}
-				<section className="py-20 bg-background">
-					<div className="container mx-auto px-4 sm:px-6 lg:px-8">
-						<div className="max-w-3xl mx-auto">
-							<motion.p
-								initial={{ opacity: 0, y: 20 }}
-								whileInView={{ opacity: 1, y: 0 }}
-								viewport={{ once: true }}
-								className="text-muted-foreground mb-12 leading-relaxed"
-							>
-								At Finova, we are committed to protecting your privacy and
-								ensuring the security of your personal information. This Privacy
-								Policy explains how we collect, use, disclose, and safeguard
-								your information when you use our services.
-							</motion.p>
+				<section className="bg-background py-20">
+					<div className="mx-auto max-w-3xl px-4 sm:px-6">
+						<p className="mb-14 text-sm leading-relaxed text-muted-foreground">
+							At Finova, we are committed to protecting your privacy and
+							ensuring the security of your personal information. This Privacy
+							Policy explains how we collect, use, disclose, and safeguard your
+							information when you use our services.
+						</p>
 
-							{sections.map((section, index) => (
-								<motion.div
-									key={section.title}
-									initial={{ opacity: 0, y: 20 }}
-									whileInView={{ opacity: 1, y: 0 }}
-									viewport={{ once: true }}
-									transition={{ delay: index * 0.05 }}
-									className="mb-10"
-								>
-									<h2 className="text-xl font-semibold text-foreground mb-4">
-										{section.title}
-									</h2>
-									<div className="text-muted-foreground leading-relaxed whitespace-pre-line">
-										{section.content}
-									</div>
-								</motion.div>
-							))}
-						</div>
+						{sections.map((section) => (
+							<div key={section.title} className="mb-10">
+								<h2 className="mb-4 text-[17px] font-medium text-foreground">
+									{section.title}
+								</h2>
+								<div className="text-sm leading-relaxed text-muted-foreground whitespace-pre-line">
+									{section.content}
+								</div>
+							</div>
+						))}
 					</div>
 				</section>
 			</main>
