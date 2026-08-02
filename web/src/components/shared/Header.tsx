@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { useScroll } from "@/hooks/use-scroll";
 import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
@@ -9,6 +9,14 @@ export const navLinks = [
 	{
 		label: "Features",
 		href: "/features",
+	},
+	{
+		label: "How it Works",
+		href: "/how-it-works",
+	},
+	{
+		label: "Security",
+		href: "/security",
 	},
 	{
 		label: "About",
@@ -27,57 +35,55 @@ export default function Header() {
 	return (
 		<header
 			className={cn(
-				"sticky top-0 z-50 mx-auto w-full border-transparent border-b md:rounded-md md:border md:transition-all md:ease-out",
-				{
-					"border-border bg-background/80 backdrop-blur-sm supports-backdrop-filter:bg-background/50 md:top-2 md:max-w-6xl md:shadow-sm":
-						scrolled,
-				},
+				"sticky top-0 z-50 w-full border-b border-border bg-background/75 backdrop-blur-xl transition-all duration-500",
+				scrolled && "bg-background/90",
 			)}
 		>
-			<nav
-				className={cn(
-					"mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4 md:h-12 md:transition-all md:ease-out",
-					{
-						"md:px-2": scrolled,
-					},
-				)}
-			>
-				<Link
-					className="flex items-center gap-4 rounded-md p-2 hover:bg-accent/50"
-					to="/"
-				>
-					<Logo />
-				</Link>
+			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+				<nav className="flex h-16 items-center justify-between">
+					<Link
+						className="flex items-center gap-2 p-2 transition-opacity duration-500 hover:opacity-80"
+						to="/"
+					>
+						<Logo />
+					</Link>
 
-				<div className="hidden items-center justify-center gap-1 md:flex">
-					{navLinks.map((link) => (
-						<Link
-							key={link.href}
-							to={link.href}
-							className={buttonVariants({
-								variant: "ghost",
-								className: cn(
-									"relative",
-									location.pathname === link.href &&
-										"text-primary after:absolute after:-bottom-1 after:left-1/2 after:h-0.5 after:w-1/2 after:-translate-x-1/2 after:rounded-full after:bg-primary",
-								),
-							})}
+					<div className="hidden items-center justify-center gap-1 md:flex">
+						{navLinks.map((link) => (
+							<Link
+								key={link.href}
+								to={link.href}
+								className={cn(
+									"min-h-8 rounded px-4 py-1 text-sm font-medium transition-colors duration-300",
+									location.pathname === link.href
+										? "bg-muted text-primary"
+										: "text-foreground hover:bg-muted",
+								)}
+							>
+								{link.label}
+							</Link>
+						))}
+					</div>
+
+					<div className="hidden items-center gap-3 md:flex">
+						<Button
+							variant="ghost"
+							className="text-sm font-medium text-foreground transition-colors duration-300 hover:bg-muted"
+							asChild
 						>
-							{link.label}
-						</Link>
-					))}
-				</div>
+							<Link to="/signin">Sign In</Link>
+						</Button>
+						<Button
+							className="min-h-10  rounded bg-primary text-sm font-medium text-white transition-colors duration-300 hover:bg-primary/90"
+							asChild
+						>
+							<Link to="/signup">Get Started</Link>
+						</Button>
+					</div>
 
-				<div className="hidden items-center gap-3 md:flex">
-					<Button variant="outline" asChild>
-						<Link to="/signin">Sign In</Link>
-					</Button>
-					<Button asChild>
-						<Link to="/signup">Get Started</Link>
-					</Button>
-				</div>
-				<MobileNav />
-			</nav>
+					<MobileNav />
+				</nav>
+			</div>
 		</header>
 	);
 }
