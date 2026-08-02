@@ -8,7 +8,7 @@ type LandingLayoutProps = {
 
 export function LandingLayout({ children }: LandingLayoutProps) {
 	return (
-		<div className="mx-auto flex min-h-svh max-w-6xl flex-col">
+		<div className="tesla flex min-h-svh flex-col">
 			<Header />
 			<main className="flex-1">{children}</main>
 			<Footer />

@@ -1,32 +1,26 @@
-import browserCollections from "fumadocs-mdx:collections/browser";
-import { createFileRoute, notFound } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
-import { source } from "fumadocs-core/source";
-import { useFumadocsLoader } from "fumadocs-core/source/client";
-import { DocsLayout } from "fumadocs-ui/layouts/docs";
-import {
-	DocsBody,
-	DocsDescription,
-	DocsPage,
-	DocsTitle,
-} from "fumadocs-ui/layouts/docs/page";
-import defaultMdxComponents from "fumadocs-ui/mdx";
-import { baseOptions } from "@/layout/layout.shared";
+import { createFileRoute, notFound } from '@tanstack/react-router';
+import { DocsLayout } from 'fumadocs-ui/layouts/docs';
+import { createServerFn } from '@tanstack/react-start';
+import { source } from '@/lib/source';
+import { DocsBody, DocsDescription, DocsPage, DocsTitle } from 'fumadocs-ui/layouts/docs/page';
+import browserCollections from '../../../.source/browser';
+import { baseOptions } from '@/layout/layout.shared';
+import { useFumadocsLoader } from 'fumadocs-core/source/client';
+import { Suspense } from 'react';
+import { useMDXComponents } from '@/components/mdx';
 
-export const Route = createFileRoute("/docs/$")({
+export const Route = createFileRoute('/docs/$')({
 	component: Page,
 	loader: async ({ params }) => {
-		const slugs = params._splat?.split("/") ?? [];
+		const slugs = params._splat?.split('/') ?? [];
 		const data = await serverLoader({ data: slugs });
 		await clientLoader.preload(data.path);
 		return data;
 	},
 });
 
-const serverLoader = createServerFn({
-	method: "GET",
-})
-	.inputValidator((slugs: string[]) => slugs)
+const serverLoader = createServerFn({ method: 'GET' })
+	.validator((slugs: string[]) => slugs)
 	.handler(async ({ data: slugs }) => {
 		const page = source.getPage(slugs);
 		if (!page) throw notFound();
@@ -44,11 +38,7 @@ const clientLoader = browserCollections.docs.createClientLoader({
 				<DocsTitle>{frontmatter.title}</DocsTitle>
 				<DocsDescription>{frontmatter.description}</DocsDescription>
 				<DocsBody>
-					<MDX
-						components={{
-							...defaultMdxComponents,
-						}}
-					/>
+					<MDX components={useMDXComponents()} />
 				</DocsBody>
 			</DocsPage>
 		);
@@ -56,13 +46,11 @@ const clientLoader = browserCollections.docs.createClientLoader({
 });
 
 function Page() {
-	const data = Route.useLoaderData();
-	const { pageTree } = useFumadocsLoader(data);
-	const Content = clientLoader.getComponent(data.path);
+	const data = useFumadocsLoader(Route.useLoaderData());
 
 	return (
-		<DocsLayout {...baseOptions()} tree={pageTree}>
-			<Content />
+		<DocsLayout {...baseOptions()} tree={data.pageTree}>
+			<Suspense>{clientLoader.useContent(data.path, data)}</Suspense>
 		</DocsLayout>
 	);
 }
