@@ -40,7 +40,7 @@ namespace FinTech.Models.Enums
         Reversed
     }
 
-        public enum CardStatus
+    public enum CardStatus
     {
         Active,
         Frozen,
@@ -48,4 +48,22 @@ namespace FinTech.Models.Enums
         Expired,
         Cancelled
     }
+
+    public enum DepositSource
+    {
+        BankTransfer,
+        DebitCard,
+        USSD,
+        Other
+    }
+
+    public enum MoneyRequestStatus
+    {
+        Pending,
+        Paid,
+        Declined,
+        Cancelled,
+        Expired
+    }
 }
+
