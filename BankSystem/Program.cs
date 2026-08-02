@@ -132,6 +132,9 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IWalletService, WalletService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<ICardService, CardService>();
+builder.Services.AddScoped<IDepositService, DepositService>();
+builder.Services.AddScoped<IRecipientLookupService, RecipientLookupService>();
+builder.Services.AddScoped<IMoneyRequestService, MoneyRequestService>();
 builder.Services.AddMemoryCache(); // For caching
 
 // ============================================
@@ -322,7 +325,13 @@ app.UseHangfireDashboard("/hangfire", new Hangfire.DashboardOptions
 
 // Map controllers
 app.MapControllers();
-
+using (var scope = app.Services.CreateScope())
+{
+    RecurringJob.AddOrUpdate<IMoneyRequestService>(
+        "expire-stale-money-requests",
+        svc => svc.ExpireStaleRequestsAsync(),
+        Cron.Daily);
+}
 // Health check endpoint
 app.MapGet("/health", () => Results.Ok(new
 {
@@ -344,6 +353,7 @@ app.MapGet("/", () => Results.Ok(new
 }))
 .WithName("Root")
 .WithOpenApi();
+
 
 // ============================================
 // RUN APPLICATION
