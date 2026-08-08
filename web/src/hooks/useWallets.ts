@@ -3,7 +3,7 @@
 // PURPOSE: React Query hook for wallets
 // ============================================
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { walletsApi } from "@/lib/api/wallets";
 
 export function useWallets() {
@@ -29,6 +29,7 @@ export function useWalletBalance(walletId: string) {
     refetchInterval: 30_000, // Refresh every 30 seconds
   });
 }
+
 
 export function useCreateWallet() {
   const queryClient = useQueryClient();

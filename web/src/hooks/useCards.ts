@@ -4,7 +4,7 @@
 // ============================================
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { cardsApi } from "@/lib/api/cards";
+import { cardsApi, UpdateCardLimitsRequest } from "@/lib/api/cards";
 
 export function useCards() {
   return useQuery({
@@ -51,5 +51,22 @@ export function useUnfreezeCard() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cards"] });
     },
+  });
+}
+
+export function useUpdateCardLimits() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, limits }: { id: string; limits: UpdateCardLimitsRequest }) =>
+      cardsApi.updateLimits(id, limits),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["cards"] }),
+  });
+}
+
+export function useDeleteCard() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: cardsApi.deleteCard,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["cards"] }),
   });
 }
