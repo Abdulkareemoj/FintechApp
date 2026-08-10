@@ -1,6 +1,8 @@
 import { Building2, CreditCard, PiggyBank, Wallet } from "lucide-react";
 import { motion } from "motion/react";
+import { AnimatedNumber } from "@/components/shared/AnimatedNumber";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 interface Account {
 	id: string;
@@ -8,6 +10,7 @@ interface Account {
 	type: "checking" | "savings" | "credit" | "business";
 	balance: number;
 	lastFour: string;
+	currency?: string; // Defaults to USD if omitted
 }
 
 interface AccountsListProps {
@@ -22,10 +25,10 @@ const accountIcons = {
 };
 
 export function AccountsList({ accounts }: AccountsListProps) {
-	const formatBalance = (amount: number) =>
+	const formatBalance = (amount: number, currency = "USD") =>
 		new Intl.NumberFormat("en-US", {
 			style: "currency",
-			currency: "USD",
+			currency,
 			minimumFractionDigits: 2,
 		}).format(amount);
 
@@ -44,7 +47,10 @@ export function AccountsList({ accounts }: AccountsListProps) {
 						All your linked accounts
 					</p>
 				</CardHeader>
-				<CardContent className="space-y-4">
+				<CardContent className="flex flex-col gap-4">
+					{accounts.length === 0 && (
+						<p className="text-muted-foreground text-sm">No wallets yet.</p>
+					)}
 					{accounts.map((account, index) => {
 						const Icon = accountIcons[account.type];
 						const isNegative = account.balance < 0;
@@ -59,7 +65,7 @@ export function AccountsList({ accounts }: AccountsListProps) {
 							>
 								<div className="flex items-center gap-4">
 									<div className="rounded-xl bg-primary/10 p-3 transition-colors group-hover:bg-primary/20">
-										<Icon className="h-5 w-5 text-primary" />
+										<Icon className="size-5 text-primary" />
 									</div>
 									<div>
 										<p className="font-medium">{account.name}</p>
@@ -70,11 +76,14 @@ export function AccountsList({ accounts }: AccountsListProps) {
 								</div>
 								<div className="text-right">
 									<p
-										className={`number-display font-semibold text-lg ${
-											isNegative ? "text-destructive" : "text-foreground"
-										}`}
+										className={cn(
+											"number-display font-semibold text-lg",
+											isNegative ? "text-destructive" : "text-foreground",
+										)}
 									>
-										{formatBalance(account.balance)}
+										<AnimatedNumber
+											value={formatBalance(account.balance, account.currency)}
+										/>
 									</p>
 								</div>
 							</motion.div>

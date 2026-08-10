@@ -1,6 +1,7 @@
 import { ArrowDownToLine, Eye, EyeOff, Plus, Send } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
+import { AnimatedNumber } from "@/components/shared/AnimatedNumber";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -40,22 +41,31 @@ export function BalanceCard({
 				<CardContent className="relative p-8">
 					<div className="mb-6 flex items-start justify-between">
 						<div>
-							<p className="mb-1 font-medium  text-sm">
-								Total Balance
-							</p>
+							<p className="mb-1 font-medium  text-sm">Total Balance</p>
 							<div className="flex items-center gap-3">
 								<h2 className="number-display font-bold text-4xl tracking-tight">
-									{isVisible ? formatBalance(totalBalance) : "••••••••"}
+									{isVisible ? (
+										<AnimatedNumber value={formatBalance(totalBalance)} />
+									) : (
+										"••••••••"
+									)}
 								</h2>
 								<button
-									className="rounded-lg p-2 transition-colors hover:bg-white/10"
+									type="button"
+									className="rounded-lg p-2 transition-colors hover:bg-primary-foreground/10"
 									onClick={() => setIsVisible(!isVisible)}
 								>
-									{isVisible ? (
-										<Eye className="h-5 w-5 text-primary-foreground/70" />
-									) : (
-										<EyeOff className="h-5 w-5 text-primary-foreground/70" />
-									)}
+									<span
+										className="t-icon-swap"
+										data-state={isVisible ? "a" : "b"}
+									>
+										<span className="t-icon" data-icon="a">
+											<Eye className="size-5 text-primary-foreground/70" />
+										</span>
+										<span className="t-icon" data-icon="b">
+											<EyeOff className="size-5 text-primary-foreground/70" />
+										</span>
+									</span>
 								</button>
 							</div>
 						</div>
@@ -66,7 +76,7 @@ export function BalanceCard({
 							className="flex-1 bg-primary-foreground font-semibold text-primary hover:bg-primary-foreground/90"
 							size="lg"
 						>
-							<Send className="mr-2 h-4 w-4" />
+							<Send data-icon />
 							Send
 						</Button>
 						<Button
@@ -74,7 +84,7 @@ export function BalanceCard({
 							size="lg"
 							variant="outline"
 						>
-							<ArrowDownToLine className="mr-2 h-4 w-4" />
+							<ArrowDownToLine data-icon />
 							Receive
 						</Button>
 						<Button
@@ -82,7 +92,7 @@ export function BalanceCard({
 							size="lg"
 							variant="outline"
 						>
-							<Plus className="h-4 w-4" />
+							<Plus data-icon />
 						</Button>
 					</div>
 				</CardContent>

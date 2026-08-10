@@ -130,11 +130,11 @@ export function SpendingChart() {
 					</div>
 					<div className="mt-4 flex items-center justify-center gap-6">
 						<div className="flex items-center gap-2">
-							<div className="h-3 w-3 rounded-full bg-primary" />
+							<div className="size-3 rounded-full bg-primary" />
 							<span className="text-muted-foreground text-sm">Income</span>
 						</div>
 						<div className="flex items-center gap-2">
-							<div className="h-3 w-3 rounded-full bg-muted-foreground" />
+							<div className="size-3 rounded-full bg-muted-foreground" />
 							<span className="text-muted-foreground text-sm">Spending</span>
 						</div>
 					</div>

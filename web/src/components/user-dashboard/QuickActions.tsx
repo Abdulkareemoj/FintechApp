@@ -1,3 +1,4 @@
+import { useNavigate } from "@tanstack/react-router";
 import {
 	ArrowDownToLine,
 	CreditCard,
@@ -8,25 +9,50 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 const actions = [
-	{ icon: Send, label: "Send Money", color: "bg-primary/10 text-primary" },
+	{
+		icon: Send,
+		label: "Send Money",
+		color: "bg-primary/10 text-primary",
+		to: "/dashboard/send-money",
+	},
 	{
 		icon: ArrowDownToLine,
 		label: "Request",
 		color: "bg-success/10 text-success",
+		to: "/dashboard/top-up",
 	},
-	{ icon: CreditCard, label: "Cards", color: "bg-warning/10 text-warning" },
-	{ icon: Smartphone, label: "Top Up", color: "bg-primary/10 text-primary" },
+	{
+		icon: CreditCard,
+		label: "Cards",
+		color: "bg-warning/10 text-warning",
+		to: "/dashboard/cards",
+	},
+	{
+		icon: Smartphone,
+		label: "Top Up",
+		color: "bg-primary/10 text-primary",
+		to: "/dashboard/top-up",
+	},
 	{
 		icon: Receipt,
 		label: "Pay Bills",
 		color: "bg-muted text-muted-foreground",
+		to: "/dashboard/bills",
 	},
-	{ icon: RefreshCw, label: "Exchange", color: "bg-success/10 text-success" },
-];
+	{
+		icon: RefreshCw,
+		label: "Exchange",
+		color: "bg-success/10 text-success",
+		to: null,
+	},
+] as const;
 
 export function QuickActions() {
+	const navigate = useNavigate();
+
 	return (
 		<motion.div
 			animate={{ opacity: 1, y: 0 }}
@@ -39,17 +65,25 @@ export function QuickActions() {
 				</CardHeader>
 				<CardContent>
 					<div className="grid grid-cols-3 gap-4">
-						{actions.map((action, index) => (
+						{actions.map((action) => (
 							<motion.button
-								className="group flex flex-col items-center gap-3 rounded-xl p-4 transition-colors hover:bg-accent/50"
+								className={cn(
+									"group flex flex-col items-center gap-3 rounded-xl p-4 transition-colors hover:bg-accent/50",
+									!action.to && "cursor-not-allowed opacity-50",
+								)}
+								disabled={!action.to}
 								key={action.label}
-								whileHover={{ scale: 1.05 }}
-								whileTap={{ scale: 0.95 }}
+								onClick={() => action.to && navigate({ to: action.to })}
+								whileHover={action.to ? { scale: 1.05 } : undefined}
+								whileTap={action.to ? { scale: 0.95 } : undefined}
 							>
 								<div
-									className={`rounded-2xl p-4 ${action.color} transition-transform group-hover:scale-110`}
+									className={cn(
+										"rounded-2xl p-4 transition-transform group-hover:scale-110",
+										action.color,
+									)}
 								>
-									<action.icon className="h-5 w-5" />
+									<action.icon className="size-5" />
 								</div>
 								<span className="font-medium text-muted-foreground text-sm transition-colors group-hover:text-foreground">
 									{action.label}
