@@ -1,7 +1,10 @@
 
 // ================================================================
-// WEB — FILE: src/lib/api/deposits.ts   (NEW)
+// FILE: src/lib/api/deposits.ts
+
 // ================================================================
+
+import { api } from ".";
 
 export type DepositSource = "BankTransfer" | "DebitCard" | "USSD" | "Other";
 

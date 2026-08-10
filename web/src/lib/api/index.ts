@@ -1,5 +1,5 @@
 // ================================================================
-// WEB — FILE: src/lib/api/index.ts   (MISSING FILE — creates it)
+// FILE: src/lib/api/index.ts   (MISSING FILE — creates it)
 // PURPOSE: Base wrapper around apiClient (axios). Unwraps the
 // backend's { success, data, error } envelope and throws on failure
 // so TanStack Query treats failures as errors automatically.
