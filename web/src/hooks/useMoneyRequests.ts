@@ -3,7 +3,7 @@
 // FILE: src/hooks/useMoneyRequests.ts
 // PURPOSE: React Query hook for requests
 // ================================================================
-import { AcceptMoneyRequestRequest, CreateMoneyRequestRequest, moneyRequestsApi } from "@/lib/api/money-requests";
+import { type AcceptMoneyRequestRequest, type CreateMoneyRequestRequest, moneyRequestsApi } from "@/lib/api/money-requests";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useIncomingMoneyRequests(page = 1, pageSize = 20) {
@@ -32,8 +32,8 @@ export function useCreateMoneyRequest() {
 export function useAcceptMoneyRequest() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ requesId, req }: { requesId: string; req: AcceptMoneyRequestRequest }) =>
-      moneyRequestsApi.accept(requesId, req),
+    mutationFn: ({ requestId, req }: { requestId: string; req: AcceptMoneyRequestRequest }) =>
+      moneyRequestsApi.accept(requestId, req),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["money-requests"] });
       queryClient.invalidateQueries({ queryKey: ["wallets"] });
