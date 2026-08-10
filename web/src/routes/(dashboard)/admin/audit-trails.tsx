@@ -213,7 +213,7 @@ function AdminAudit() {
 								Audit Trails
 							</h1>
 							<p className="mt-1 text-muted-foreground">
-								Track every action across the platform — security events, admin
+								Track every action across the platform, security events, admin
 								changes, and system activity.
 							</p>
 						</div>

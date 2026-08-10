@@ -1,5 +1,5 @@
 // ================================================================
-//FILE: src/routes/(dashboard)/dashboard/send-money.tsx
+// FILE: src/routes/(dashboard)/dashboard/send-money.tsx
 // ================================================================
 
 import { zodResolver } from "@hookform/resolvers/zod";
