@@ -1,10 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
 	ArrowDownLeft,
 	ArrowUpRight,
 	Calendar,
 	Download,
-	Filter,
 	MoreVertical,
 	Search,
 } from "lucide-react";
@@ -19,6 +18,13 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+	Empty,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+	EmptyTitle,
+} from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
 import {
 	Select,
@@ -27,6 +33,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { Spinner } from "@/components/ui/spinner";
 import {
 	Table,
 	TableBody,
@@ -35,142 +42,76 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { useTransactions } from "@/hooks/useTransactions";
 import DashboardLayout from "@/layout/DashboardLayout";
-
-const transactionsData = [
-	{
-		id: "TXN001",
-		name: "Starbucks",
-		category: "Food & Drink",
-		amount: 15.0,
-		status: "completed",
-		date: "2024-07-20",
-		type: "outgoing",
-		method: "Card •••• 4567",
-	},
-	{
-		id: "TXN002",
-		name: "Amazon Prime",
-		category: "Shopping",
-		amount: 120.5,
-		status: "completed",
-		date: "2024-07-19",
-		type: "outgoing",
-		method: "Card •••• 4567",
-	},
-	{
-		id: "TXN003",
-		name: "Salary Deposit",
-		category: "Income",
-		amount: 5000.0,
-		status: "completed",
-		date: "2024-07-18",
-		type: "incoming",
-		method: "Bank Transfer",
-	},
-	{
-		id: "TXN004",
-		name: "Netflix",
-		category: "Entertainment",
-		amount: 19.99,
-		status: "completed",
-		date: "2024-07-17",
-		type: "outgoing",
-		method: "Card •••• 4567",
-	},
-	{
-		id: "TXN005",
-		name: "Freelance Payment",
-		category: "Income",
-		amount: 800.0,
-		status: "pending",
-		date: "2024-07-16",
-		type: "incoming",
-		method: "Bank Transfer",
-	},
-	{
-		id: "TXN006",
-		name: "Uber",
-		category: "Transport",
-		amount: 24.5,
-		status: "completed",
-		date: "2024-07-15",
-		type: "outgoing",
-		method: "Card •••• 9012",
-	},
-	{
-		id: "TXN007",
-		name: "Grocery Store",
-		category: "Food & Drink",
-		amount: 85.3,
-		status: "completed",
-		date: "2024-07-14",
-		type: "outgoing",
-		method: "Card •••• 4567",
-	},
-	{
-		id: "TXN008",
-		name: "Electric Bill",
-		category: "Utilities",
-		amount: 120.0,
-		status: "processing",
-		date: "2024-07-13",
-		type: "outgoing",
-		method: "Bank Transfer",
-	},
-	{
-		id: "TXN009",
-		name: "Client Payment",
-		category: "Income",
-		amount: 2500.0,
-		status: "completed",
-		date: "2024-07-12",
-		type: "incoming",
-		method: "Bank Transfer",
-	},
-	{
-		id: "TXN010",
-		name: "Gym Membership",
-		category: "Health",
-		amount: 49.99,
-		status: "completed",
-		date: "2024-07-11",
-		type: "outgoing",
-		method: "Card •••• 4567",
-	},
-];
+import type { Transaction } from "@/lib/api/transactions";
+import { cn } from "@/lib/utils";
 
 const statusVariants: Record<string, string> = {
 	completed: "bg-success/10 text-success border-success/20",
 	pending: "bg-warning/10 text-warning border-warning/20",
 	processing: "bg-primary/10 text-primary border-primary/20",
+	paid: "bg-success/10 text-success border-success/20",
 	failed: "bg-destructive/10 text-destructive border-destructive/20",
 };
+
+function humanize(value: string) {
+	if (!value) return "—";
+	return value
+		.toLowerCase()
+		.split(/[\s_-]+/)
+		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+		.join(" ");
+}
 
 export const Route = createFileRoute("/(dashboard)/dashboard/transactions/")({
 	component: TransactionsPage,
 });
 
 function TransactionsPage() {
+	const navigate = useNavigate();
 	const [searchQuery, setSearchQuery] = useState("");
 	const [statusFilter, setStatusFilter] = useState("all");
 	const [typeFilter, setTypeFilter] = useState("all");
+	const [isExiting, setIsExiting] = useState(false);
 
-	const filteredTransactions = transactionsData.filter((tx) => {
+	const goToDetail = (id: string) => {
+		setIsExiting(true);
+		window.setTimeout(() => {
+			navigate({
+				to: "/dashboard/transactions/$id",
+				params: { id },
+			});
+		}, 200);
+	};
+
+	const { data, isPending, isError, refetch } = useTransactions({
+		page: 1,
+		pageSize: 100,
+	});
+
+	const items: Transaction[] = (data?.items ?? []) as Transaction[];
+
+	const filteredTransactions = items.filter((tx) => {
 		const matchesSearch =
-			tx.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			tx.category.toLowerCase().includes(searchQuery.toLowerCase());
-		const matchesStatus = statusFilter === "all" || tx.status === statusFilter;
-		const matchesType = typeFilter === "all" || tx.type === typeFilter;
+			tx.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			tx.type.toLowerCase().includes(searchQuery.toLowerCase());
+		const matchesStatus =
+			statusFilter === "all" || tx.status.toLowerCase() === statusFilter;
+		const matchesType = typeFilter === "all" || tx.direction === typeFilter;
 		return matchesSearch && matchesStatus && matchesType;
 	});
 
-	const formatAmount = (amount: number, type: string) => {
+	const formatAmount = (
+		amount: number,
+		currency: string,
+		direction: string,
+	) => {
 		const formatted = new Intl.NumberFormat("en-US", {
 			style: "currency",
-			currency: "USD",
-		}).format(amount);
-		return type === "incoming" ? "+${formatted}" : "-${formatted}";
+			currency,
+		}).format(Math.abs(amount));
+		return direction === "incoming" ? `+${formatted}` : `-${formatted}`;
 	};
 
 	const formatDate = (dateString: string) =>
@@ -180,18 +121,23 @@ function TransactionsPage() {
 			year: "numeric",
 		});
 
-	const totalIncome = transactionsData
-		.filter((t) => t.type === "incoming")
+	const totalIncome = items
+		.filter((t) => t.direction === "incoming")
 		.reduce((sum, t) => sum + t.amount, 0);
-	const totalExpenses = transactionsData
-		.filter((t) => t.type === "outgoing")
+	const totalExpenses = items
+		.filter((t) => t.direction === "outgoing")
 		.reduce((sum, t) => sum + t.amount, 0);
 
 	return (
 		<DashboardLayout>
 			<div className="min-h-screen bg-background">
 				{/* Main Content */}
-				<main className="mx-auto space-y-6 px-6 py-8">
+				<main
+					className={cn(
+						"mx-auto flex flex-col gap-6 px-6 py-8",
+						isExiting && "t-page-exit",
+					)}
+				>
 					<motion.div
 						animate={{ opacity: 1, y: 0 }}
 						className="flex flex-col justify-between gap-4 pb-4 md:flex-row md:items-center"
@@ -205,8 +151,8 @@ function TransactionsPage() {
 								View and manage your transaction history
 							</p>
 						</div>
-						<Button variant="outline">
-							<Download className="mr-2 h-4 w-4" />
+						<Button variant="outline" disabled>
+							<Download data-icon />
 							Export CSV
 						</Button>
 					</motion.div>
@@ -260,7 +206,12 @@ function TransactionsPage() {
 								<CardContent className="p-6">
 									<p className="text-muted-foreground text-sm">Net Balance</p>
 									<p
-										className={`number-display mt-1 font-bold text-2xl ${totalIncome - totalExpenses >= 0 ? "text-success" : "text-destructive"}`}
+										className={cn(
+											"number-display mt-1 font-bold text-2xl",
+											totalIncome - totalExpenses >= 0
+												? "text-success"
+												: "text-destructive",
+										)}
 									>
 										{new Intl.NumberFormat("en-US", {
 											style: "currency",
@@ -283,7 +234,7 @@ function TransactionsPage() {
 							<CardContent className="p-4">
 								<div className="flex flex-col gap-4 md:flex-row">
 									<div className="relative flex-1">
-										<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-muted-foreground" />
+										<Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
 										<Input
 											className="bg-muted/50 pl-10"
 											onChange={(e) => setSearchQuery(e.target.value)}
@@ -312,8 +263,8 @@ function TransactionsPage() {
 											<SelectItem value="outgoing">Expenses</SelectItem>
 										</SelectContent>
 									</Select>
-									<Button className="gap-2" variant="outline">
-										<Calendar className="h-4 w-4" />
+									<Button className="gap-2" variant="outline" disabled>
+										<Calendar data-icon />
 										Date Range
 									</Button>
 								</div>
@@ -357,84 +308,156 @@ function TransactionsPage() {
 										</TableRow>
 									</TableHeader>
 									<TableBody>
-										{filteredTransactions.map((tx, index) => (
-											<motion.tr
-												animate={{ opacity: 1, x: 0 }}
-												className="group border-border/30 transition-colors hover:bg-accent/50"
-												initial={{ opacity: 0, x: -10 }}
-												key={tx.id}
-												transition={{ delay: 0.3 + index * 0.03 }}
-											>
-												<TableCell className="py-4">
-													<div className="flex items-center gap-3">
-														<div
-															className={`rounded-full p-2 ${tx.type === "incoming" ? "bg-success/10" : "bg-muted"}`}
-														>
-															{tx.type === "incoming" ? (
-																<ArrowDownLeft className="h-4 w-4 text-success" />
-															) : (
-																<ArrowUpRight className="h-4 w-4 text-muted-foreground" />
-															)}
-														</div>
-														<div>
-															<p className="font-medium">{tx.name}</p>
-															<p className="text-muted-foreground text-xs">
-																{tx.id}
-															</p>
-														</div>
-													</div>
-												</TableCell>
-												<TableCell>
-													<Badge className="font-normal" variant="secondary">
-														{tx.category}
-													</Badge>
-												</TableCell>
-												<TableCell className="hidden text-muted-foreground md:table-cell">
-													{tx.method}
-												</TableCell>
-												<TableCell>
-													<Badge
-														className={`capitalize ${statusVariants[tx.status]}`}
-														variant="outline"
-													>
-														{tx.status}
-													</Badge>
-												</TableCell>
-												<TableCell className="hidden text-muted-foreground md:table-cell">
-													{formatDate(tx.date)}
-												</TableCell>
-												<TableCell className="text-right">
-													<span
-														className={`number-display font-semibold ${tx.type === "incoming" ? "text-success" : ""}`}
-													>
-														{formatAmount(tx.amount, tx.type)}
+										{isPending ? (
+											<TableRow>
+												<TableCell colSpan={7} className="py-8 text-center">
+													<span className="inline-flex items-center gap-2 text-muted-foreground">
+														<Spinner />
+														Loading transactions…
 													</span>
 												</TableCell>
-												<TableCell>
-													<DropdownMenu>
-														<DropdownMenuTrigger asChild>
-															<Button
-																className="h-8 w-8 opacity-0 group-hover:opacity-100"
-																size="icon"
-																variant="ghost"
-															>
-																<MoreVertical className="h-4 w-4" />
-															</Button>
-														</DropdownMenuTrigger>
-														<DropdownMenuContent
-															align="end"
-															className="border-border bg-card"
+											</TableRow>
+										) : isError ? (
+											<TableRow>
+												<TableCell colSpan={7} className="py-8">
+													<Empty className="border-0">
+														<EmptyHeader>
+															<EmptyTitle>
+																Couldn't load transactions
+															</EmptyTitle>
+															<EmptyDescription>
+																Something went wrong while fetching your
+																transaction history.
+															</EmptyDescription>
+														</EmptyHeader>
+														<Button
+															onClick={() => refetch()}
+															size="sm"
+															variant="outline"
 														>
-															<DropdownMenuItem>View Details</DropdownMenuItem>
-															<DropdownMenuItem>
-																Download Receipt
-															</DropdownMenuItem>
-															<DropdownMenuItem>Report Issue</DropdownMenuItem>
-														</DropdownMenuContent>
-													</DropdownMenu>
+															Retry
+														</Button>
+													</Empty>
 												</TableCell>
-											</motion.tr>
-										))}
+											</TableRow>
+										) : filteredTransactions.length === 0 ? (
+											<TableRow>
+												<TableCell colSpan={7} className="py-8">
+													<Empty className="border-0">
+														<EmptyHeader>
+															<EmptyMedia variant="icon">
+																<Search />
+															</EmptyMedia>
+															<EmptyTitle>No transactions found</EmptyTitle>
+															<EmptyDescription>
+																Try adjusting your search or filters, or make
+																your first transaction.
+															</EmptyDescription>
+														</EmptyHeader>
+													</Empty>
+												</TableCell>
+											</TableRow>
+										) : (
+											filteredTransactions.map((tx, index) => (
+												<motion.tr
+													animate={{ opacity: 1, x: 0 }}
+													className="group cursor-pointer border-border/30 transition-colors hover:bg-accent/50"
+													initial={{ opacity: 0, x: -10 }}
+													key={tx.id}
+													onClick={() => goToDetail(tx.id)}
+													transition={{ delay: 0.3 + index * 0.03 }}
+												>
+													<TableCell className="py-4">
+														<div className="flex items-center gap-3">
+															<div
+																className={cn(
+																	"rounded-full p-2",
+																	tx.direction === "incoming"
+																		? "bg-success/10"
+																		: "bg-muted",
+																)}
+															>
+																{tx.direction === "incoming" ? (
+																	<ArrowDownLeft className="size-4 text-success" />
+																) : (
+																	<ArrowUpRight className="size-4 text-muted-foreground" />
+																)}
+															</div>
+															<div>
+																<p className="font-medium">
+																	{tx.description || humanize(tx.type)}
+																</p>
+																<p className="text-muted-foreground text-xs">
+																	{tx.id}
+																</p>
+															</div>
+														</div>
+													</TableCell>
+													<TableCell>
+														<Badge className="font-normal" variant="secondary">
+															{humanize(tx.type)}
+														</Badge>
+													</TableCell>
+													<TableCell className="hidden text-muted-foreground md:table-cell">
+														{humanize(tx.direction)} · {humanize(tx.status)}
+													</TableCell>
+													<TableCell>
+														<Badge
+															className={cn(
+																"capitalize",
+																statusVariants[tx.status.toLowerCase()] ??
+																	statusVariants.completed,
+															)}
+															variant="outline"
+														>
+															{humanize(tx.status)}
+														</Badge>
+													</TableCell>
+													<TableCell className="hidden text-muted-foreground md:table-cell">
+														{formatDate(tx.createdAt)}
+													</TableCell>
+													<TableCell className="text-right">
+														<span
+															className={cn(
+																"number-display font-semibold",
+																tx.direction === "incoming"
+																	? "text-success"
+																	: "text-foreground",
+															)}
+														>
+															{formatAmount(
+																tx.amount,
+																tx.currency,
+																tx.direction,
+															)}
+														</span>
+													</TableCell>
+													<TableCell onClick={(e) => e.stopPropagation()}>
+														<DropdownMenu>
+															<DropdownMenuTrigger asChild>
+																<Button
+																	className="size-8 opacity-0 group-hover:opacity-100"
+																	size="icon"
+																	variant="ghost"
+																>
+																	<MoreVertical data-icon />
+																</Button>
+															</DropdownMenuTrigger>
+															<DropdownMenuContent
+																align="end"
+																className="border-border bg-card"
+															>
+																<DropdownMenuItem
+																	onSelect={() => goToDetail(tx.id)}
+																>
+																	View Details
+																</DropdownMenuItem>
+															</DropdownMenuContent>
+														</DropdownMenu>
+													</TableCell>
+												</motion.tr>
+											))
+										)}
 									</TableBody>
 								</Table>
 							</CardContent>
