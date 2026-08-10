@@ -1,6 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import {
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
+import { Reveal } from "@/components/landing/Reveal";
 import { Button } from "@/components/ui/button";
 import { LandingLayout } from "@/layout/LandingLayout";
 
@@ -16,6 +23,32 @@ function LandingPage() {
 			<TestimonialSection />
 			<CTASection />
 		</LandingLayout>
+	);
+}
+
+// ─── Staggered text block (replays via .is-shown toggle) ─────────────────────
+function StaggerText({ lines }: { lines: { key: string; node: ReactNode }[] }) {
+	const ref = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const block = ref.current;
+		if (!block) return;
+		block.classList.remove("is-shown");
+		void block.offsetHeight;
+		block.classList.add("is-shown");
+	}, []);
+
+	return (
+		<div ref={ref} className="t-stagger">
+			{lines.map(({ key, node }, i) => (
+				<div
+					key={key}
+					className={`t-stagger-line ${i > 0 ? `t-stagger-line--${i + 1}` : ""}`}
+				>
+					{node}
+				</div>
+			))}
+		</div>
 	);
 }
 
@@ -78,30 +111,57 @@ function HeroCarousel() {
 						}}
 					/>
 					<div className="relative flex h-full flex-col items-center justify-center px-4 text-center">
-						<p
-							className="mb-3 text-[22px] font-normal text-primary"
-							style={{ lineHeight: 1 }}
-						>
-							{slide.promo}
-						</p>
-						<h1 className="text-[40px] font-medium text-white">{slide.name}</h1>
-						<p className="mt-4 max-w-md text-sm font-normal text-white/70">
-							{slide.subtitle}
-						</p>
-						<div className="mt-10 flex flex-col gap-4 sm:flex-row">
-							<Button
-								className="h-10 w-60 rounded bg-primary text-sm font-medium text-white transition-colors duration-300 hover:bg-primary/90"
-								asChild
-							>
-								<Link to="/signup">Get Started</Link>
-							</Button>
-							<Button
-								className="h-10 w-60 rounded border-2 border-white/30 bg-white text-sm font-medium text-[#171a20] transition-colors duration-300 hover:bg-white/90"
-								asChild
-							>
-								<Link to="/features">Learn More</Link>
-							</Button>
-						</div>
+						<StaggerText
+							key={index}
+							lines={[
+								{
+									key: `promo-${slide.name}`,
+									node: (
+										<p
+											className="mb-3 text-[22px] font-normal text-primary"
+											style={{ lineHeight: 1 }}
+										>
+											{slide.promo}
+										</p>
+									),
+								},
+								{
+									key: `title-${slide.name}`,
+									node: (
+										<h1 className="text-[40px] font-medium text-white">
+											{slide.name}
+										</h1>
+									),
+								},
+								{
+									key: `subtitle-${slide.name}`,
+									node: (
+										<p className="mt-4 max-w-md text-sm font-normal text-white/70">
+											{slide.subtitle}
+										</p>
+									),
+								},
+								{
+									key: `cta-${slide.name}`,
+									node: (
+										<div className="mt-10 flex flex-col gap-4 sm:flex-row">
+											<Button
+												className="h-10 w-60 rounded bg-primary text-sm font-medium text-white transition-colors duration-300 hover:bg-primary/90"
+												asChild
+											>
+												<Link to="/signup">Get Started</Link>
+											</Button>
+											<Button
+												className="h-10 w-60 rounded border-2 border-white/30 bg-white text-sm font-medium text-[#171a20] transition-colors duration-300 hover:bg-white/90"
+												asChild
+											>
+												<Link to="/features">Learn More</Link>
+											</Button>
+										</div>
+									),
+								},
+							]}
+						/>
 					</div>
 				</div>
 			))}
@@ -170,28 +230,32 @@ function CategorySection() {
 	return (
 		<section className="bg-background py-24">
 			<div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-				<h2 className="mb-10 text-center text-[40px] font-medium text-foreground">
-					Explore Finova
-				</h2>
+				<Reveal>
+					<h2 className="t-stagger-line t-stagger-line--2 mb-10 text-center text-[40px] font-medium text-foreground">
+						Explore Finova
+					</h2>
+				</Reveal>
 				<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 					{categories.map((cat, i) => (
-						<Link
+						<Reveal
 							key={cat.label}
-							to="/features"
-							className={
-								"group relative overflow-hidden rounded-xl transition-opacity duration-300 hover:opacity-95 " +
-								(i === 0 ? "sm:col-span-2 lg:col-span-1" : "")
-							}
-							style={{ aspectRatio: "16 / 10" }}
+							stagger={false}
+							className={i === 0 ? "sm:col-span-2 lg:col-span-1" : ""}
 						>
-							<div
-								className="absolute inset-0"
-								style={{ background: cat.background }}
-							/>
-							<span className="absolute top-4 left-5 text-lg font-medium text-white">
-								{cat.label}
-							</span>
-						</Link>
+							<Link
+								to="/features"
+								className="group relative block h-full overflow-hidden rounded-xl transition-opacity duration-300 hover:opacity-95"
+								style={{ aspectRatio: "16 / 10" }}
+							>
+								<div
+									className="absolute inset-0"
+									style={{ background: cat.background }}
+								/>
+								<span className="absolute top-4 left-5 text-lg font-medium text-white">
+									{cat.label}
+								</span>
+							</Link>
+						</Reveal>
 					))}
 				</div>
 			</div>
@@ -222,25 +286,29 @@ function FeaturesSection() {
 	return (
 		<section className="bg-muted py-24">
 			<div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-				<div className="mb-14 text-center">
-					<h2 className="text-[40px] font-medium text-foreground">
-						Built for modern finances
-					</h2>
-					<p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground">
-						We combine cutting-edge technology with a human-centric approach to
-						redefine your financial experience.
-					</p>
-				</div>
+				<Reveal>
+					<div className="mb-14 text-center">
+						<h2 className="t-stagger-line text-[40px] font-medium text-foreground">
+							Built for modern finances
+						</h2>
+						<p className="t-stagger-line t-stagger-line--2 mx-auto mt-3 max-w-2xl text-sm text-muted-foreground">
+							We combine cutting-edge technology with a human-centric approach
+							to redefine your financial experience.
+						</p>
+					</div>
+				</Reveal>
 				<div className="grid gap-px bg-border md:grid-cols-3">
 					{features.map((item) => (
-						<div key={item.title} className="bg-card p-10">
-							<h3 className="text-[17px] font-medium text-foreground">
-								{item.title}
-							</h3>
-							<p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-								{item.description}
-							</p>
-						</div>
+						<Reveal key={item.title} stagger={false}>
+							<div className="h-full bg-card p-10">
+								<h3 className="text-[17px] font-medium text-foreground">
+									{item.title}
+								</h3>
+								<p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+									{item.description}
+								</p>
+							</div>
+						</Reveal>
 					))}
 				</div>
 			</div>
@@ -261,15 +329,19 @@ function StatsSection() {
 		<section className="bg-background py-24">
 			<div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
 				<div className="grid grid-cols-2 gap-12 text-center md:grid-cols-4">
-					{stats.map((stat) => (
-						<div key={stat.label}>
-							<p className="text-[40px] font-medium text-foreground">
-								{stat.value}
-							</p>
-							<p className="mt-2 text-sm font-medium text-muted-foreground">
-								{stat.label}
-							</p>
-						</div>
+					{stats.map((stat, i) => (
+						<Reveal key={stat.label}>
+							<div
+								className={`t-stagger-line ${i > 0 ? `t-stagger-line--${i + 1}` : ""}`}
+							>
+								<p className="text-[40px] font-medium text-foreground">
+									{stat.value}
+								</p>
+								<p className="mt-2 text-sm font-medium text-muted-foreground">
+									{stat.label}
+								</p>
+							</div>
+						</Reveal>
 					))}
 				</div>
 			</div>
@@ -282,16 +354,18 @@ function TestimonialSection() {
 	return (
 		<section className="bg-muted py-24">
 			<div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
-				<p className="text-[22px] font-normal leading-relaxed text-foreground">
-					"Finova has completely transformed how we handle our finances. The
-					platform is intuitive, secure, and the insights are invaluable."
-				</p>
-				<p className="mt-6 text-sm font-medium text-foreground">
-					Sarah Mitchell
-				</p>
-				<p className="mt-1 text-sm text-muted-foreground">
-					CEO, TechVentures Inc.
-				</p>
+				<Reveal>
+					<p className="t-stagger-line text-[22px] font-normal leading-relaxed text-foreground">
+						"Finova has completely transformed how we handle our finances. The
+						platform is intuitive, secure, and the insights are invaluable."
+					</p>
+					<p className="t-stagger-line t-stagger-line--2 mt-6 text-sm font-medium text-foreground">
+						Sarah Mitchell
+					</p>
+					<p className="t-stagger-line t-stagger-line--3 mt-1 text-sm text-muted-foreground">
+						CEO, TechVentures Inc.
+					</p>
+				</Reveal>
 			</div>
 		</section>
 	);
@@ -302,29 +376,31 @@ function CTASection() {
 	return (
 		<section className="bg-background py-24">
 			<div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
-				<h2 className="text-[40px] font-medium text-foreground">
-					Ready to transform your finances?
-				</h2>
-				<p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
-					Join thousands of businesses that trust Finova to manage their money
-					smarter.
-				</p>
-				<div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
-					<Button
-						className="h-10 w-60 rounded bg-primary text-sm font-medium text-white transition-colors duration-300 hover:bg-primary/90"
-						asChild
-					>
-						<Link to="/signup">
-							Open Your Account <ArrowRight className="ml-2 size-4" />
-						</Link>
-					</Button>
-					<Button
-						className="h-10 w-60 rounded bg-card text-sm font-medium text-foreground transition-colors duration-300 hover:bg-muted"
-						asChild
-					>
-						<Link to="/features">Learn More</Link>
-					</Button>
-				</div>
+				<Reveal>
+					<h2 className="t-stagger-line text-[40px] font-medium text-foreground">
+						Ready to transform your finances?
+					</h2>
+					<p className="t-stagger-line t-stagger-line--2 mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
+						Join thousands of businesses that trust Finova to manage their money
+						smarter.
+					</p>
+					<div className="t-stagger-line t-stagger-line--3 mt-10 flex flex-col justify-center gap-4 sm:flex-row">
+						<Button
+							className="h-10 w-60 rounded bg-primary text-sm font-medium text-white transition-colors duration-300 hover:bg-primary/90"
+							asChild
+						>
+							<Link to="/signup">
+								Open Your Account <ArrowRight className="ml-2 size-4" />
+							</Link>
+						</Button>
+						<Button
+							className="h-10 w-60 rounded bg-card text-sm font-medium text-foreground transition-colors duration-300 hover:bg-muted"
+							asChild
+						>
+							<Link to="/features">Learn More</Link>
+						</Button>
+					</div>
+				</Reveal>
 			</div>
 		</section>
 	);

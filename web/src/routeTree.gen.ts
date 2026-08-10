@@ -9,10 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as DocsIndexRouteImport } from './routes/docs/index'
 import { Route as landingIndexRouteImport } from './routes/(landing)/index'
-import { Route as DocsSplatRouteImport } from './routes/docs/$'
-import { Route as ApiSearchRouteImport } from './routes/api/search'
 import { Route as landingTermsOfServiceRouteImport } from './routes/(landing)/terms-of-service'
 import { Route as landingSecurityRouteImport } from './routes/(landing)/security'
 import { Route as landingPrivacyPolicyRouteImport } from './routes/(landing)/privacy-policy'
@@ -48,9 +45,7 @@ import { Route as dashboardDashboardTopUpRouteImport } from './routes/(dashboard
 import { Route as dashboardDashboardSupportRouteImport } from './routes/(dashboard)/dashboard/support'
 import { Route as dashboardDashboardSettingsRouteImport } from './routes/(dashboard)/dashboard/settings'
 import { Route as dashboardDashboardSendMoneyRouteImport } from './routes/(dashboard)/dashboard/send-money'
-import { Route as dashboardDashboardRequestMoneyRouteImport } from './routes/(dashboard)/dashboard/request-money'
 import { Route as dashboardDashboardReportsRouteImport } from './routes/(dashboard)/dashboard/reports'
-import { Route as dashboardDashboardOverviewRouteImport } from './routes/(dashboard)/dashboard/overview'
 import { Route as dashboardDashboardCardsRouteImport } from './routes/(dashboard)/dashboard/cards'
 import { Route as dashboardDashboardBillsRouteImport } from './routes/(dashboard)/dashboard/bills'
 import { Route as dashboardDashboardAnalyticsRouteImport } from './routes/(dashboard)/dashboard/analytics'
@@ -66,24 +61,9 @@ import { Route as dashboardAdminAuditTrailsRouteImport } from './routes/(dashboa
 import { Route as dashboardDashboardTransactionsIndexRouteImport } from './routes/(dashboard)/dashboard/transactions/index'
 import { Route as dashboardDashboardTransactionsIdRouteImport } from './routes/(dashboard)/dashboard/transactions/$id'
 
-const DocsIndexRoute = DocsIndexRouteImport.update({
-  id: '/docs/',
-  path: '/docs/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const landingIndexRoute = landingIndexRouteImport.update({
   id: '/(landing)/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DocsSplatRoute = DocsSplatRouteImport.update({
-  id: '/docs/$',
-  path: '/docs/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiSearchRoute = ApiSearchRouteImport.update({
-  id: '/api/search',
-  path: '/api/search',
   getParentRoute: () => rootRouteImport,
 } as any)
 const landingTermsOfServiceRoute = landingTermsOfServiceRouteImport.update({
@@ -277,22 +257,10 @@ const dashboardDashboardSendMoneyRoute =
     path: '/dashboard/send-money',
     getParentRoute: () => rootRouteImport,
   } as any)
-const dashboardDashboardRequestMoneyRoute =
-  dashboardDashboardRequestMoneyRouteImport.update({
-    id: '/(dashboard)/dashboard/request-money',
-    path: '/dashboard/request-money',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const dashboardDashboardReportsRoute =
   dashboardDashboardReportsRouteImport.update({
     id: '/(dashboard)/dashboard/reports',
     path: '/dashboard/reports',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardDashboardOverviewRoute =
-  dashboardDashboardOverviewRouteImport.update({
-    id: '/(dashboard)/dashboard/overview',
-    path: '/dashboard/overview',
     getParentRoute: () => rootRouteImport,
   } as any)
 const dashboardDashboardCardsRoute = dashboardDashboardCardsRouteImport.update({
@@ -387,10 +355,7 @@ export interface FileRoutesByFullPath {
   '/privacy-policy': typeof landingPrivacyPolicyRoute
   '/security': typeof landingSecurityRoute
   '/terms-of-service': typeof landingTermsOfServiceRoute
-  '/api/search': typeof ApiSearchRoute
-  '/docs/$': typeof DocsSplatRoute
   '/': typeof landingIndexRoute
-  '/docs/': typeof DocsIndexRoute
   '/admin/audit-trails': typeof dashboardAdminAuditTrailsRoute
   '/admin/compliance': typeof dashboardAdminComplianceRoute
   '/admin/overview': typeof dashboardAdminOverviewRoute
@@ -403,9 +368,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/analytics': typeof dashboardDashboardAnalyticsRoute
   '/dashboard/bills': typeof dashboardDashboardBillsRoute
   '/dashboard/cards': typeof dashboardDashboardCardsRoute
-  '/dashboard/overview': typeof dashboardDashboardOverviewRoute
   '/dashboard/reports': typeof dashboardDashboardReportsRoute
-  '/dashboard/request-money': typeof dashboardDashboardRequestMoneyRoute
   '/dashboard/send-money': typeof dashboardDashboardSendMoneyRoute
   '/dashboard/settings': typeof dashboardDashboardSettingsRoute
   '/dashboard/support': typeof dashboardDashboardSupportRoute
@@ -445,10 +408,7 @@ export interface FileRoutesByTo {
   '/privacy-policy': typeof landingPrivacyPolicyRoute
   '/security': typeof landingSecurityRoute
   '/terms-of-service': typeof landingTermsOfServiceRoute
-  '/api/search': typeof ApiSearchRoute
-  '/docs/$': typeof DocsSplatRoute
   '/': typeof landingIndexRoute
-  '/docs': typeof DocsIndexRoute
   '/admin/audit-trails': typeof dashboardAdminAuditTrailsRoute
   '/admin/compliance': typeof dashboardAdminComplianceRoute
   '/admin/overview': typeof dashboardAdminOverviewRoute
@@ -461,9 +421,7 @@ export interface FileRoutesByTo {
   '/dashboard/analytics': typeof dashboardDashboardAnalyticsRoute
   '/dashboard/bills': typeof dashboardDashboardBillsRoute
   '/dashboard/cards': typeof dashboardDashboardCardsRoute
-  '/dashboard/overview': typeof dashboardDashboardOverviewRoute
   '/dashboard/reports': typeof dashboardDashboardReportsRoute
-  '/dashboard/request-money': typeof dashboardDashboardRequestMoneyRoute
   '/dashboard/send-money': typeof dashboardDashboardSendMoneyRoute
   '/dashboard/settings': typeof dashboardDashboardSettingsRoute
   '/dashboard/support': typeof dashboardDashboardSupportRoute
@@ -504,10 +462,7 @@ export interface FileRoutesById {
   '/(landing)/privacy-policy': typeof landingPrivacyPolicyRoute
   '/(landing)/security': typeof landingSecurityRoute
   '/(landing)/terms-of-service': typeof landingTermsOfServiceRoute
-  '/api/search': typeof ApiSearchRoute
-  '/docs/$': typeof DocsSplatRoute
   '/(landing)/': typeof landingIndexRoute
-  '/docs/': typeof DocsIndexRoute
   '/(dashboard)/admin/audit-trails': typeof dashboardAdminAuditTrailsRoute
   '/(dashboard)/admin/compliance': typeof dashboardAdminComplianceRoute
   '/(dashboard)/admin/overview': typeof dashboardAdminOverviewRoute
@@ -520,9 +475,7 @@ export interface FileRoutesById {
   '/(dashboard)/dashboard/analytics': typeof dashboardDashboardAnalyticsRoute
   '/(dashboard)/dashboard/bills': typeof dashboardDashboardBillsRoute
   '/(dashboard)/dashboard/cards': typeof dashboardDashboardCardsRoute
-  '/(dashboard)/dashboard/overview': typeof dashboardDashboardOverviewRoute
   '/(dashboard)/dashboard/reports': typeof dashboardDashboardReportsRoute
-  '/(dashboard)/dashboard/request-money': typeof dashboardDashboardRequestMoneyRoute
   '/(dashboard)/dashboard/send-money': typeof dashboardDashboardSendMoneyRoute
   '/(dashboard)/dashboard/settings': typeof dashboardDashboardSettingsRoute
   '/(dashboard)/dashboard/support': typeof dashboardDashboardSupportRoute
@@ -564,10 +517,7 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/security'
     | '/terms-of-service'
-    | '/api/search'
-    | '/docs/$'
     | '/'
-    | '/docs/'
     | '/admin/audit-trails'
     | '/admin/compliance'
     | '/admin/overview'
@@ -580,9 +530,7 @@ export interface FileRouteTypes {
     | '/dashboard/analytics'
     | '/dashboard/bills'
     | '/dashboard/cards'
-    | '/dashboard/overview'
     | '/dashboard/reports'
-    | '/dashboard/request-money'
     | '/dashboard/send-money'
     | '/dashboard/settings'
     | '/dashboard/support'
@@ -622,10 +570,7 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/security'
     | '/terms-of-service'
-    | '/api/search'
-    | '/docs/$'
     | '/'
-    | '/docs'
     | '/admin/audit-trails'
     | '/admin/compliance'
     | '/admin/overview'
@@ -638,9 +583,7 @@ export interface FileRouteTypes {
     | '/dashboard/analytics'
     | '/dashboard/bills'
     | '/dashboard/cards'
-    | '/dashboard/overview'
     | '/dashboard/reports'
-    | '/dashboard/request-money'
     | '/dashboard/send-money'
     | '/dashboard/settings'
     | '/dashboard/support'
@@ -680,10 +623,7 @@ export interface FileRouteTypes {
     | '/(landing)/privacy-policy'
     | '/(landing)/security'
     | '/(landing)/terms-of-service'
-    | '/api/search'
-    | '/docs/$'
     | '/(landing)/'
-    | '/docs/'
     | '/(dashboard)/admin/audit-trails'
     | '/(dashboard)/admin/compliance'
     | '/(dashboard)/admin/overview'
@@ -696,9 +636,7 @@ export interface FileRouteTypes {
     | '/(dashboard)/dashboard/analytics'
     | '/(dashboard)/dashboard/bills'
     | '/(dashboard)/dashboard/cards'
-    | '/(dashboard)/dashboard/overview'
     | '/(dashboard)/dashboard/reports'
-    | '/(dashboard)/dashboard/request-money'
     | '/(dashboard)/dashboard/send-money'
     | '/(dashboard)/dashboard/settings'
     | '/(dashboard)/dashboard/support'
@@ -739,10 +677,7 @@ export interface RootRouteChildren {
   landingPrivacyPolicyRoute: typeof landingPrivacyPolicyRoute
   landingSecurityRoute: typeof landingSecurityRoute
   landingTermsOfServiceRoute: typeof landingTermsOfServiceRoute
-  ApiSearchRoute: typeof ApiSearchRoute
-  DocsSplatRoute: typeof DocsSplatRoute
   landingIndexRoute: typeof landingIndexRoute
-  DocsIndexRoute: typeof DocsIndexRoute
   dashboardAdminAuditTrailsRoute: typeof dashboardAdminAuditTrailsRoute
   dashboardAdminComplianceRoute: typeof dashboardAdminComplianceRoute
   dashboardAdminOverviewRoute: typeof dashboardAdminOverviewRoute
@@ -755,9 +690,7 @@ export interface RootRouteChildren {
   dashboardDashboardAnalyticsRoute: typeof dashboardDashboardAnalyticsRoute
   dashboardDashboardBillsRoute: typeof dashboardDashboardBillsRoute
   dashboardDashboardCardsRoute: typeof dashboardDashboardCardsRoute
-  dashboardDashboardOverviewRoute: typeof dashboardDashboardOverviewRoute
   dashboardDashboardReportsRoute: typeof dashboardDashboardReportsRoute
-  dashboardDashboardRequestMoneyRoute: typeof dashboardDashboardRequestMoneyRoute
   dashboardDashboardSendMoneyRoute: typeof dashboardDashboardSendMoneyRoute
   dashboardDashboardSettingsRoute: typeof dashboardDashboardSettingsRoute
   dashboardDashboardSupportRoute: typeof dashboardDashboardSupportRoute
@@ -786,32 +719,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/docs/': {
-      id: '/docs/'
-      path: '/docs'
-      fullPath: '/docs/'
-      preLoaderRoute: typeof DocsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/(landing)/': {
       id: '/(landing)/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof landingIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/docs/$': {
-      id: '/docs/$'
-      path: '/docs/$'
-      fullPath: '/docs/$'
-      preLoaderRoute: typeof DocsSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/search': {
-      id: '/api/search'
-      path: '/api/search'
-      fullPath: '/api/search'
-      preLoaderRoute: typeof ApiSearchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(landing)/terms-of-service': {
@@ -1059,25 +971,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardDashboardSendMoneyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/dashboard/request-money': {
-      id: '/(dashboard)/dashboard/request-money'
-      path: '/dashboard/request-money'
-      fullPath: '/dashboard/request-money'
-      preLoaderRoute: typeof dashboardDashboardRequestMoneyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/(dashboard)/dashboard/reports': {
       id: '/(dashboard)/dashboard/reports'
       path: '/dashboard/reports'
       fullPath: '/dashboard/reports'
       preLoaderRoute: typeof dashboardDashboardReportsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/dashboard/overview': {
-      id: '/(dashboard)/dashboard/overview'
-      path: '/dashboard/overview'
-      fullPath: '/dashboard/overview'
-      preLoaderRoute: typeof dashboardDashboardOverviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(dashboard)/dashboard/cards': {
@@ -1195,10 +1093,7 @@ const rootRouteChildren: RootRouteChildren = {
   landingPrivacyPolicyRoute: landingPrivacyPolicyRoute,
   landingSecurityRoute: landingSecurityRoute,
   landingTermsOfServiceRoute: landingTermsOfServiceRoute,
-  ApiSearchRoute: ApiSearchRoute,
-  DocsSplatRoute: DocsSplatRoute,
   landingIndexRoute: landingIndexRoute,
-  DocsIndexRoute: DocsIndexRoute,
   dashboardAdminAuditTrailsRoute: dashboardAdminAuditTrailsRoute,
   dashboardAdminComplianceRoute: dashboardAdminComplianceRoute,
   dashboardAdminOverviewRoute: dashboardAdminOverviewRoute,
@@ -1211,9 +1106,7 @@ const rootRouteChildren: RootRouteChildren = {
   dashboardDashboardAnalyticsRoute: dashboardDashboardAnalyticsRoute,
   dashboardDashboardBillsRoute: dashboardDashboardBillsRoute,
   dashboardDashboardCardsRoute: dashboardDashboardCardsRoute,
-  dashboardDashboardOverviewRoute: dashboardDashboardOverviewRoute,
   dashboardDashboardReportsRoute: dashboardDashboardReportsRoute,
-  dashboardDashboardRequestMoneyRoute: dashboardDashboardRequestMoneyRoute,
   dashboardDashboardSendMoneyRoute: dashboardDashboardSendMoneyRoute,
   dashboardDashboardSettingsRoute: dashboardDashboardSettingsRoute,
   dashboardDashboardSupportRoute: dashboardDashboardSupportRoute,
