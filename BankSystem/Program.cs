@@ -347,7 +347,7 @@ app.MapGet("/", () => Results.Ok(new
 {
     name = "FinTech Payment API",
     version = "1.0.0",
-    documentation = "/scalar/v1",
+    documentation = "/scalar/",
     swagger = "/swagger",
     health = "/health"
 }))
