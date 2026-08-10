@@ -2,10 +2,7 @@
   "name": "freader",
   "private": true,
   "type": "module",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+ 
   "scripts": {
     "check": "biome check --write .",
     "dev": "turbo dev",
