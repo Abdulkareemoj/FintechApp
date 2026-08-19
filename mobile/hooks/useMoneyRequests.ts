@@ -48,3 +48,19 @@ export function useAcceptMoneyRequest() {
     },
   });
 }
+
+export function useDeclineMoneyRequest() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => unwrapResult(moneyRequestsApi.decline(id)),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["money-requests"] }),
+  });
+}
+
+export function useCancelMoneyRequest() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => unwrapResult(moneyRequestsApi.cancel(id)),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["money-requests"] }),
+  });
+}

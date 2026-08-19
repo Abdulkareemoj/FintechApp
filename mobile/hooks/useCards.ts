@@ -88,3 +88,21 @@ export function useUnfreezeCard() {
     },
   });
 }
+
+export function useDeleteCard() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (cardId: string) => {
+      const result = await cardsApi.deleteCard(cardId);
+      if (!result.ok) {
+        throw new Error(result.error);
+      }
+      const response = result.data as any;
+      return response.data || response;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cards"] });
+    },
+  });
+}

@@ -26,3 +26,18 @@ export function useInitiateDeposit() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["transactions"] }),
   });
 }
+
+
+export function useSimulateDepositCallback() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ depositId, success }: { depositId: string; success: boolean }) =>
+      unwrapResult(depositsApi.simulateCallback(depositId, success)),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["wallets"] });
+      queryClient.invalidateQueries({ queryKey: ["wallet-balance"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["deposit-status"] });
+    },
+  });
+}

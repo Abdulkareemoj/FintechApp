@@ -1,6 +1,6 @@
 
 // ================================================================
-// MOBILE — FILE: hooks/useRecipientLookup.ts
+// FILE: hooks/useRecipientLookup.ts
 // PURPOSE: React Query hook for lookups
 // ================================================================
 
