@@ -24,7 +24,7 @@ export default function More() {
         </CardHeader>
         <CardContent className="gap-2">
           <Button
-            onPress={() => router.push("/(drawer)/account")}
+            onPress={() => router.push("/(drawer)/profile")}
             variant="outline"
           >
             <Text>Profile & verification</Text>

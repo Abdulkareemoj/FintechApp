@@ -55,14 +55,6 @@ function TabHeader({ title }: { title: string }) {
             </View>
           </View>
         </TouchableOpacity>
-
-        <TouchableOpacity
-          activeOpacity={0.7}
-          className="h-10 w-10 items-center justify-center rounded-xl bg-zinc-900"
-          onPress={() => router.push("/search")}
-        >
-          <Icon as={Menu} className="text-zinc-200" size={20} />
-        </TouchableOpacity>
       </View>
     </View>
   );

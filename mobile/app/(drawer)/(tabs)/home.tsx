@@ -1,127 +1,195 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
-import React from "react";
-import { ActivityIndicator, ScrollView, View } from "react-native";
+import { useState } from "react";
+import {
+	ActivityIndicator,
+	RefreshControl,
+	ScrollView,
+	View,
+} from "react-native";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
 import { useTransactions } from "@/hooks/useTransactions";
 import { useWallets } from "@/hooks/useWallets";
 
-function formatAmount(amount: number, currency: string) {
-  const sign = amount < 0 ? "-" : "+";
-  const abs = Math.abs(amount);
-  return `${sign} ${currency} ${abs.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+function formatBalance(amount: number, currency: string) {
+	return `${currency} ${amount.toLocaleString(undefined, {
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
+	})}`;
+}
+
+function formatAmount(
+	amount: number,
+	currency: string,
+	direction: "incoming" | "outgoing",
+) {
+	const sign = direction === "outgoing" ? "-" : "+";
+	return `${sign} ${currency} ${amount.toLocaleString(undefined, {
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
+	})}`;
 }
 
 export default function Home() {
-  const {
-    data: wallets,
-    isLoading: walletsLoading,
-    error: walletsError,
-  } = useWallets();
-  const {
-    data: transactionsData,
-    isLoading: transactionsLoading,
-    error: transactionsError,
-  } = useTransactions({
-    page: 1,
-    pageSize: 5,
-  });
+	const queryClient = useQueryClient();
+	const [refreshing, setRefreshing] = useState(false);
 
-  // Debug logs
-  console.log("Wallets data:", wallets);
-  console.log("Wallets error:", walletsError);
-  console.log("Transactions data:", transactionsData);
-  console.log("Transactions error:", transactionsError);
+	const { data: wallets, isLoading: walletsLoading } = useWallets();
+	const { data: txData, isLoading: txLoading } = useTransactions({
+		page: 1,
+		pageSize: 5,
+	});
 
-  if (walletsLoading || transactionsLoading) {
-    return <ActivityIndicator />;
-  }
+	const onRefresh = async () => {
+		setRefreshing(true);
+		await Promise.all([
+			queryClient.invalidateQueries({ queryKey: ["wallets"] }),
+			queryClient.invalidateQueries({ queryKey: ["transactions"] }),
+		]);
+		setRefreshing(false);
+	};
 
-  if (walletsError || transactionsError) {
-    return (
-      <ScrollView className="flex-1 p-6">
-        <Text className="text-destructive">Error loading data</Text>
-        <Text>{walletsError?.message || transactionsError?.message}</Text>
-      </ScrollView>
-    );
-  }
+	if (walletsLoading || txLoading) {
+		return (
+			<View className="flex-1 items-center justify-center bg-background">
+				<ActivityIndicator />
+			</View>
+		);
+	}
 
-  return (
-    <ScrollView className="flex-1 p-6" contentContainerClassName="gap-4">
-      <View className="gap-1">
-        <Text className="font-bold text-3xl text-foreground">Wallet</Text>
-        <Text className="text-muted-foreground">
-          Balances and recent activity
-        </Text>
-      </View>
+	const transactions = txData?.items ?? [];
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Balances</CardTitle>
-        </CardHeader>
-        <CardContent className="gap-3">
-          {Array.isArray(wallets) ? (
-            wallets.map((wallet) => (
-              <View
-                className="flex-row items-center justify-between rounded-lg border border-border bg-background px-4 py-3"
-                key={wallet.id}
-              >
-                <View>
-                  <Text className="font-medium">
-                    {wallet.currencyCode} Wallet
-                  </Text>
-                  <Text className="text-muted-foreground text-sm">
-                    Available
-                  </Text>
-                </View>
-                <Text className="font-semibold">
-                  {wallet.currencyCode} {wallet.balance.toLocaleString()}
-                </Text>
-              </View>
-            ))
-          ) : (
-            <Text className="text-muted-foreground">No wallets found</Text>
-          )}
-        </CardContent>
-      </Card>
+	return (
+		<ScrollView
+			className="flex-1 p-6"
+			contentContainerClassName="gap-4"
+			refreshControl={
+				<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+			}
+		>
+			<View className="gap-1">
+				<Text className="font-bold text-3xl text-foreground">Wallet</Text>
+				<Text className="text-muted-foreground">
+					Balances and recent activity
+				</Text>
+			</View>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent transactions</CardTitle>
-        </CardHeader>
-        <CardContent className="gap-3">
-          {transactionsData?.items && Array.isArray(transactionsData.items) ? (
-            transactionsData.items.map((tx: any) => (
-              <View
-                className="flex-row items-start justify-between"
-                key={tx.id}
-              >
-                <View className="flex-1 pr-3">
-                  <Text className="font-medium">
-                    {tx.description || "Transaction"}
-                  </Text>
-                  <Text className="text-muted-foreground text-sm">
-                    {tx.type} · {new Date(tx.createdAt).toLocaleDateString()}
-                  </Text>
-                </View>
-                <Text
-                  className={
-                    tx.direction === "outgoing"
-                      ? "text-destructive"
-                      : "text-emerald-600"
-                  }
-                >
-                  {tx.direction === "outgoing" ? "-" : "+"}
-                  {tx.currency} {tx.amount.toFixed(2)}
-                </Text>
-              </View>
-            ))
-          ) : (
-            <Text className="text-muted-foreground">No transactions found</Text>
-          )}
-        </CardContent>
-      </Card>
-    </ScrollView>
-  );
+			<Card>
+				<CardHeader>
+					<CardTitle>Balances</CardTitle>
+				</CardHeader>
+				<CardContent className="gap-3">
+					{wallets?.length === 0 && (
+						<Text className="text-muted-foreground">No wallets yet.</Text>
+					)}
+					{wallets?.map((w) => (
+						<View
+							className="flex-row items-center justify-between rounded-lg border border-border bg-background px-4 py-3"
+							key={w.id}
+						>
+							<View>
+								<Text className="font-medium">{w.currencyCode} Wallet</Text>
+								<Text className="text-muted-foreground text-sm">Available</Text>
+							</View>
+							<Text className="font-semibold">
+								{formatBalance(w.balance, w.currencyCode)}
+							</Text>
+						</View>
+					))}
+
+					<View className="flex-row gap-2">
+						<Button
+							className="flex-1"
+							onPress={() => router.push("/(drawer)/(tabs)/transfers")}
+						>
+							<Text>Send</Text>
+						</Button>
+						<Button
+							className="flex-1"
+							onPress={() => router.push("/(drawer)/top-up" as any)}
+							variant="outline"
+						>
+							<Text>Add money</Text>
+						</Button>
+					</View>
+				</CardContent>
+			</Card>
+
+			<Card>
+				<CardHeader>
+					<CardTitle>Quick actions</CardTitle>
+				</CardHeader>
+				<CardContent className="gap-2">
+					<View className="flex-row gap-2">
+						<Button
+							className="flex-1"
+							onPress={() => router.push("/(drawer)/bills" as any)}
+							variant="secondary"
+						>
+							<Text>Pay bills</Text>
+						</Button>
+						<Button
+							className="flex-1"
+							onPress={() => router.push("/(drawer)/top-up" as any)}
+							variant="secondary"
+						>
+							<Text>Request money</Text>
+						</Button>
+					</View>
+					<View className="flex-row gap-2">
+						{/* Exchange has no page/backend yet */}
+						<Button className="flex-1" disabled variant="secondary">
+							<Text>Exchange</Text>
+						</Button>
+						<Button
+							className="flex-1"
+							onPress={() => router.push("/(drawer)/statements" as any)}
+							variant="secondary"
+						>
+							<Text>Statements</Text>
+						</Button>
+					</View>
+				</CardContent>
+			</Card>
+
+			<Card>
+				<CardHeader>
+					<CardTitle>Recent transactions</CardTitle>
+				</CardHeader>
+				<CardContent className="gap-3">
+					{transactions.length === 0 && (
+						<Text className="text-muted-foreground">No transactions yet.</Text>
+					)}
+					{transactions.map((tx) => (
+						<View className="flex-row items-start justify-between" key={tx.id}>
+							<View className="flex-1 pr-3">
+								<Text className="font-medium">{tx.description || tx.type}</Text>
+								<Text className="text-muted-foreground text-sm">
+									{tx.type} · {new Date(tx.createdAt).toLocaleDateString()}
+								</Text>
+							</View>
+							<Text
+								className={
+									tx.direction === "outgoing"
+										? "text-destructive"
+										: "text-emerald-600"
+								}
+							>
+								{formatAmount(tx.amount, tx.currency, tx.direction)}
+							</Text>
+						</View>
+					))}
+
+					<Button
+						onPress={() => router.push("/(drawer)/transactions" as any)}
+						variant="outline"
+					>
+						<Text>View all</Text>
+					</Button>
+				</CardContent>
+			</Card>
+		</ScrollView>
+	);
 }
