@@ -31,10 +31,6 @@ async function request<T>(input: {
   _retry?: boolean; // Add retry flag to type
 }): Promise<ApiResult<T>> {
   const url = `${getBaseUrl()}${input.path}`;
-  console.log(`[API] ${input.method} ${url}`, {
-    auth: input.auth,
-    body: input.body,
-  });
   try {
     const { useAuthStore } = await import("@/lib/authStore");
     const token = input.auth ? useAuthStore.getState().accessToken : null;
@@ -50,10 +46,8 @@ async function request<T>(input: {
     };
 
     const res = await axios.request<T>(config);
-    console.log(`[API] SUCCESS ${input.method} ${url}`, res.data);
     return { ok: true, data: res.data };
   } catch (e) {
-    console.log(`[API] ERROR ${input.method} ${url}`, e);
     if (axios.isAxiosError(e)) {
       const status = e.response?.status;
 

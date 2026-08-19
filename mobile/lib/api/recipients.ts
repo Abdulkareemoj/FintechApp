@@ -1,6 +1,6 @@
 
 // ================================================================
-// MOBILE — FILE: lib/api/recipients.ts   (NEW)
+// FILE: lib/api/recipients.ts
 // ================================================================
 
 export interface RecipientLookup {
