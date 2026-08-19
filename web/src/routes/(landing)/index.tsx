@@ -167,27 +167,27 @@ function HeroCarousel() {
 			))}
 
 			{/* edge arrows */}
-			<button
+			<Button
 				type="button"
 				aria-label="Previous"
 				onClick={prev}
 				className="absolute top-1/2 left-4 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/30 text-white transition-colors duration-300 hover:bg-white/50 sm:flex"
 			>
 				<ChevronLeft className="size-5" />
-			</button>
-			<button
+			</Button>
+			<Button
 				type="button"
 				aria-label="Next"
 				onClick={next}
 				className="absolute top-1/2 right-4 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/30 text-white transition-colors duration-300 hover:bg-white/50 sm:flex"
 			>
 				<ChevronRight className="size-5" />
-			</button>
+			</Button>
 
 			{/* dot indicators */}
 			<div className="absolute bottom-10 left-1/2 z-10 flex -translate-x-1/2 gap-2">
 				{slides.map((slide, i) => (
-					<button
+					<Button
 						key={slide.name}
 						type="button"
 						aria-label={`Go to ${slide.name}`}

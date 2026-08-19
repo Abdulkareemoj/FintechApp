@@ -325,7 +325,7 @@ function RouteComponent() {
 											render={({ field }) => (
 												<>
 													{topUpMethods.map((method) => (
-														<button
+														<Button
 															key={method.id}
 															type="button"
 															onClick={() => field.onChange(method.id)}
@@ -351,7 +351,7 @@ function RouteComponent() {
 															<Badge variant="secondary" className="text-xs">
 																{method.badge}
 															</Badge>
-														</button>
+														</Button>
 													))}
 												</>
 											)}

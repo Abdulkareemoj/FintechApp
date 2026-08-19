@@ -1,24 +1,14 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute } from "@tanstack/react-router";
-import {
-	AlertCircle,
-	CheckCircle2,
-	Clock,
-	FileText,
-	LifeBuoy,
-	Mail,
-	MessageSquare,
-	Phone,
-	Search,
-	Send,
-} from "lucide-react";
+import { LifeBuoy, MessageSquare, Plus, Send } from "lucide-react";
 import { motion } from "motion/react";
-import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { ChatList } from "@/components/messages/ChatList";
+import { ConversationView } from "@/components/messages/ConversationView";
+import type { Chat, Message } from "@/components/messages/types";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -27,8 +17,22 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+	Empty,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyTitle,
+} from "@/components/ui/empty";
+import { Field, FieldContent, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
 	Select,
 	SelectContent,
@@ -36,77 +40,141 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
+import { useIsMobile } from "@/hooks/use-mobile";
+import {
+	useCreateTicket,
+	useMyTickets,
+	useSendTicketMessage,
+	useTicketMessages,
+} from "@/hooks/useSupport";
 import DashboardLayout from "@/layout/DashboardLayout";
+import type { SupportMessage, SupportTicket } from "@/lib/api/support";
 
-const tickets = [
-	{
-		id: "#1029",
-		subject: "Transfer failed",
-		status: "pending",
-		date: "2024-07-20",
-	},
-	{
-		id: "#1025",
-		subject: "Question about fees",
-		status: "closed",
-		date: "2024-07-18",
-	},
-	{
-		id: "#1021",
-		subject: "Account verification issue",
-		status: "in-progress",
-		date: "2024-07-15",
-	},
+const categories = [
+	{ value: "Transaction", label: "Transaction Issue" },
+	{ value: "Account", label: "Account Problem" },
+	{ value: "Card", label: "Card Issue" },
+	{ value: "Security", label: "Security Concern" },
+	{ value: "Other", label: "Other" },
 ];
 
-const faqs = [
-	{
-		question: "How do I reset my password?",
-		answer:
-			"Go to Settings > Security > Change Password. Enter your current password and set a new one.",
-	},
-	{
-		question: "What are the transfer limits?",
-		answer:
-			"Daily transfer limits are $10,000 for verified accounts. You can request higher limits through support.",
-	},
-	{
-		question: "How long do transfers take?",
-		answer:
-			"Internal transfers are instant. Bank transfers typically take 1-3 business days.",
-	},
-	{
-		question: "How do I add a new bank account?",
-		answer:
-			"Navigate to Accounts > Add New Account and follow the verification steps to link your bank.",
-	},
-];
+const ticketSchema = z.object({
+	category: z.string().min(1, "Select a category"),
+	subject: z.string().min(3, "Subject is too short"),
+	description: z.string().min(10, "Describe your issue in a bit more detail"),
+});
 
-const statusVariants: Record<string, { color: string; label: string }> = {
-	pending: {
-		color: "bg-warning/10 text-warning border-warning/20",
-		label: "Pending Review",
-	},
-	"in-progress": {
-		color: "bg-primary/10 text-primary border-primary/20",
-		label: "In Progress",
-	},
-	closed: {
-		color: "bg-success/10 text-success border-success/20",
-		label: "Closed",
-	},
+type FormInput = z.input<typeof ticketSchema>;
+type FormOutput = z.output<typeof ticketSchema>;
+type TicketForm = {
+	category: string;
+	subject: string;
+	description: string;
 };
+
+const statusMap: Record<string, Chat["status"]> = {
+	Open: "open",
+	InProgress: "progress",
+	Resolved: "resolved",
+	Closed: "closed",
+};
+
+function initialsOf(name: string) {
+	return name
+		.split(/\s+/)
+		.slice(0, 2)
+		.map((w) => w[0]?.toUpperCase() ?? "")
+		.join("");
+}
+
+function toChat(ticket: SupportTicket): Chat {
+	return {
+		id: ticket.id,
+		name: ticket.subject,
+		initials: initialsOf(ticket.subject),
+		category: ticket.category,
+		status: statusMap[ticket.status] ?? "open",
+		lastMessage: ticket.lastMessage ?? ticket.description,
+		timestamp: new Date(ticket.updatedAt).toLocaleDateString(),
+	};
+}
+
+function toMessage(m: SupportMessage): Message {
+	return {
+		id: m.id,
+		direction: m.isFromUser ? "outgoing" : "incoming",
+		text: m.body,
+		time: new Date(m.createdAt).toLocaleString(undefined, {
+			hour: "numeric",
+			minute: "2-digit",
+		}),
+		read: true,
+	};
+}
 
 export const Route = createFileRoute("/(dashboard)/dashboard/support")({
 	component: SupportPage,
 });
 
 function SupportPage() {
+	const isMobile = useIsMobile();
+	const { data: tickets, isPending, isError, refetch } = useMyTickets();
+	const createTicket = useCreateTicket();
+
+	const [activeId, setActiveId] = useState<string | null>(null);
+	const [dialogOpen, setDialogOpen] = useState(false);
+
+	const activeTicket = (tickets ?? []).find((t) => t.id === activeId) ?? null;
+	const { data: messages, isPending: messagesPending } = useTicketMessages(
+		activeTicket?.id ?? null,
+	);
+	const sendMessage = useSendTicketMessage(activeTicket?.id ?? null);
+
+	const chats = (tickets ?? []).map(toChat);
+
+	const {
+		register,
+		handleSubmit,
+		control,
+		reset,
+		formState: { errors, isSubmitting },
+	} = useForm<FormInput, undefined, FormOutput>({
+		resolver: zodResolver(ticketSchema),
+		defaultValues: {
+			category: "",
+			subject: "",
+			description: "",
+		},
+	});
+
+	const onSubmit = async (values: TicketForm) => {
+		try {
+			const ticket = await createTicket.mutateAsync(values);
+			toast.success("Ticket submitted — we'll get back to you soon");
+			reset();
+			setDialogOpen(false);
+			setActiveId(ticket.id);
+		} catch (err) {
+			toast.error(
+				err instanceof Error ? err.message : "Failed to submit ticket",
+			);
+		}
+	};
+
+	const handleSend = async (text: string) => {
+		if (!activeTicket) return;
+		try {
+			await sendMessage.mutateAsync(text);
+		} catch (err) {
+			toast.error(err instanceof Error ? err.message : "Failed to send");
+		}
+	};
+
 	return (
 		<DashboardLayout>
 			<div className="min-h-screen bg-background">
-				{/* Main Content */}
 				<main className="mx-auto space-y-6 px-6 py-8">
 					<motion.div
 						animate={{ opacity: 1, y: 0 }}
@@ -121,242 +189,232 @@ function SupportPage() {
 								Get help with your account and transactions
 							</p>
 						</div>
-						<Button variant="outline">
-							<LifeBuoy className="mr-2 h-4 w-4" />
-							Help Center
-						</Button>
+						<div className="flex items-center gap-2">
+							<a href="/dashboard/help">
+								<Button variant="outline">
+									<LifeBuoy className="mr-2 h-4 w-4" />
+									Help Center
+								</Button>
+							</a>
+							<Dialog onOpenChange={setDialogOpen} open={dialogOpen}>
+								<DialogTrigger asChild>
+									<Button className="bg-primary-gradient">
+										<Plus className="mr-2 h-4 w-4" />
+										New Ticket
+									</Button>
+								</DialogTrigger>
+								<DialogContent className="sm:max-w-lg">
+									<DialogHeader>
+										<DialogTitle>New Support Ticket</DialogTitle>
+										<DialogDescription>
+											Describe your issue and we'll get back to you soon
+										</DialogDescription>
+									</DialogHeader>
+									<form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+										<div className="space-y-2">
+											<Field>
+												<FieldContent>
+													<Controller
+														control={control}
+														name="category"
+														render={({ field }) => (
+															<Select
+																onValueChange={field.onChange}
+																value={field.value || undefined}
+															>
+																<SelectTrigger className="bg-muted/50">
+																	<SelectValue placeholder="Select a category" />
+																</SelectTrigger>
+																<SelectContent>
+																	{categories.map((c) => (
+																		<SelectItem key={c.value} value={c.value}>
+																			{c.label}
+																		</SelectItem>
+																	))}
+																</SelectContent>
+															</Select>
+														)}
+													/>
+												</FieldContent>
+												{errors.category && (
+													<FieldError>{errors.category.message}</FieldError>
+												)}
+											</Field>
+										</div>
+
+										<div className="space-y-2">
+											<Field>
+												<FieldContent>
+													<Input
+														className="bg-muted/50"
+														placeholder="Brief description of your issue"
+														{...register("subject")}
+													/>
+												</FieldContent>
+												{errors.subject && (
+													<FieldError>{errors.subject.message}</FieldError>
+												)}
+											</Field>
+										</div>
+
+										<div className="space-y-2">
+											<Field>
+												<FieldContent>
+													<Textarea
+														className="resize-none bg-muted/50"
+														placeholder="Please provide as much detail as possible..."
+														rows={6}
+														{...register("description")}
+													/>
+												</FieldContent>
+												{errors.description && (
+													<FieldError>{errors.description.message}</FieldError>
+												)}
+											</Field>
+										</div>
+
+										<Button
+											className="w-full bg-primary-gradient"
+											disabled={isSubmitting}
+											type="submit"
+										>
+											<Send className="mr-2 h-4 w-4" />
+											{isSubmitting ? "Submitting..." : "Submit Ticket"}
+										</Button>
+									</form>
+								</DialogContent>
+							</Dialog>
+						</div>
 					</motion.div>
 
-					{/* Quick Contact Options */}
 					<motion.div
 						animate={{ opacity: 1, y: 0 }}
-						className="grid gap-4 md:grid-cols-3"
 						initial={{ opacity: 0, y: 20 }}
 						transition={{ delay: 0.1 }}
 					>
-						{[
-							{
-								icon: MessageSquare,
-								label: "Live Chat",
-								description: "Chat with our support team",
-								action: "Start Chat",
-								color: "bg-primary/10 text-primary",
-							},
-							{
-								icon: Phone,
-								label: "Phone Support",
-								description: "Call us 24/7",
-								action: "1-800-FINPAY",
-								color: "bg-success/10 text-success",
-							},
-							{
-								icon: Mail,
-								label: "Email Support",
-								description: "We'll respond within 24h",
-								action: "support@finpay.com",
-								color: "bg-warning/10 text-warning",
-							},
-						].map((item) => (
-							<Card
-								className="group cursor-pointer border-border/50 bg-card-gradient shadow-card transition-all duration-300 hover:shadow-elevated"
-								key={item.label}
-							>
-								<CardContent className="flex items-center gap-4 p-6">
-									<div
-										className={`rounded-xl p-3 ${item.color} transition-transform group-hover:scale-110`}
-									>
-										<item.icon className="h-6 w-6" />
+						<Card className="overflow-hidden border-border/50 bg-card-gradient shadow-card">
+							{isPending ? (
+								<div className="flex h-64 items-center justify-center">
+									<Spinner />
+								</div>
+							) : isError ? (
+								<Empty>
+									<EmptyHeader>
+										<EmptyTitle>Couldn't load tickets</EmptyTitle>
+										<EmptyDescription>
+											<Button
+												onClick={() => refetch()}
+												size="sm"
+												variant="outline"
+											>
+												Retry
+											</Button>
+										</EmptyDescription>
+									</EmptyHeader>
+								</Empty>
+							) : (tickets ?? []).length === 0 ? (
+								<Empty>
+									<EmptyHeader>
+										<EmptyTitle>No tickets yet</EmptyTitle>
+										<EmptyDescription>
+											Create a ticket to start a conversation with our support
+											team.
+										</EmptyDescription>
+									</EmptyHeader>
+								</Empty>
+							) : isMobile ? (
+								activeTicket ? (
+									<ConversationView
+										chat={toChat(activeTicket)}
+										messages={(messages ?? []).map(toMessage)}
+										onBack={() => setActiveId(null)}
+										onSend={handleSend}
+										showBack
+										sending={sendMessage.isPending}
+									/>
+								) : (
+									<div className="h-[70vh]">
+										<ChatList
+											activeId={activeId ?? undefined}
+											chats={chats}
+											onNew={() => setDialogOpen(true)}
+											onSelect={(c) => setActiveId(c.id)}
+										/>
 									</div>
-									<div>
-										<p className="font-semibold">{item.label}</p>
-										<p className="text-muted-foreground text-sm">
-											{item.description}
-										</p>
-										<p className="mt-1 font-medium text-primary text-sm">
-											{item.action}
-										</p>
+								)
+							) : (
+								<div className="grid h-[70vh] grid-cols-[340px_1fr]">
+									<div className="border-r border-border">
+										<ChatList
+											activeId={activeId ?? undefined}
+											chats={chats}
+											onNew={() => setDialogOpen(true)}
+											onSelect={(c) => setActiveId(c.id)}
+										/>
 									</div>
-								</CardContent>
-							</Card>
-						))}
+									<div className="min-w-0">
+										{activeTicket ? (
+											messagesPending ? (
+												<div className="flex h-full items-center justify-center">
+													<Spinner />
+												</div>
+											) : (
+												<ConversationView
+													chat={toChat(activeTicket)}
+													messages={(messages ?? []).map(toMessage)}
+													onSend={handleSend}
+													sending={sendMessage.isPending}
+												/>
+											)
+										) : (
+											<div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+												Select a ticket to view the conversation
+											</div>
+										)}
+									</div>
+								</div>
+							)}
+						</Card>
 					</motion.div>
 
-					<div className="grid gap-6 lg:grid-cols-3">
-						{/* New Ticket Form */}
-						<motion.div
-							animate={{ opacity: 1, y: 0 }}
-							className="lg:col-span-2"
-							initial={{ opacity: 0, y: 20 }}
-							transition={{ delay: 0.2 }}
-						>
-							<Card className="border-border/50 bg-card-gradient shadow-card">
-								<CardHeader>
-									<CardTitle className="flex items-center gap-2">
-										<MessageSquare className="h-5 w-5 text-primary" />
-										New Support Ticket
-									</CardTitle>
-									<CardDescription>
-										Describe your issue and we'll get back to you soon
-									</CardDescription>
-								</CardHeader>
-								<CardContent className="space-y-4">
-									<div className="space-y-2">
-										<Label>Category</Label>
-										<Select>
-											<SelectTrigger className="bg-muted/50">
-												<SelectValue placeholder="Select a category" />
-											</SelectTrigger>
-											<SelectContent>
-												<SelectItem value="transaction">
-													Transaction Issue
-												</SelectItem>
-												<SelectItem value="account">Account Problem</SelectItem>
-												<SelectItem value="card">Card Issue</SelectItem>
-												<SelectItem value="security">
-													Security Concern
-												</SelectItem>
-												<SelectItem value="billing">
-													Billing Question
-												</SelectItem>
-												<SelectItem value="other">Other</SelectItem>
-											</SelectContent>
-										</Select>
-									</div>
-
-									<div className="space-y-2">
-										<Label htmlFor="subject">Subject</Label>
-										<Input
-											className="bg-muted/50"
-											id="subject"
-											placeholder="Brief description of your issue"
-										/>
-									</div>
-
-									<div className="space-y-2">
-										<Label htmlFor="description">Description</Label>
-										<Textarea
-											className="resize-none bg-muted/50"
-											id="description"
-											placeholder="Please provide as much detail as possible..."
-											rows={6}
-										/>
-									</div>
-
-									<div className="space-y-2">
-										<Label>Attachments (Optional)</Label>
-										<div className="cursor-pointer rounded-lg border-2 border-border border-dashed p-6 text-center transition-colors hover:border-primary/50">
-											<FileText className="mx-auto mb-2 h-8 w-8 text-muted-foreground" />
-											<p className="text-muted-foreground text-sm">
-												Drag and drop files or click to upload
-											</p>
-											<p className="mt-1 text-muted-foreground text-xs">
-												PNG, JPG, PDF up to 10MB
-											</p>
-										</div>
-									</div>
-
-									<Button className="w-full bg-primary-gradient">
-										<Send className="mr-2 h-4 w-4" />
-										Submit Ticket
-									</Button>
-								</CardContent>
-							</Card>
-						</motion.div>
-
-						{/* Recent Tickets */}
-						<motion.div
-							animate={{ opacity: 1, y: 0 }}
-							initial={{ opacity: 0, y: 20 }}
-							transition={{ delay: 0.3 }}
-						>
-							<Card className="border-border/50 bg-card-gradient shadow-card">
-								<CardHeader>
-									<CardTitle className="flex items-center gap-2">
-										<Clock className="h-5 w-5 text-muted-foreground" />
-										Your Tickets
-									</CardTitle>
-								</CardHeader>
-								<CardContent className="space-y-4">
-									{tickets.map((ticket) => {
-										const status = statusVariants[ticket.status];
-										return (
-											<div
-												className="flex cursor-pointer items-start justify-between rounded-xl bg-accent/30 p-4 transition-colors hover:bg-accent/50"
-												key={ticket.id}
-											>
-												<div className="space-y-1">
-													<div className="flex items-center gap-2">
-														<p className="font-medium text-sm">
-															{ticket.subject}
-														</p>
-														<span className="text-muted-foreground text-xs">
-															{ticket.id}
-														</span>
-													</div>
-													<Badge
-														className={`text-xs ${status.color}`}
-														variant="outline"
-													>
-														{status.label}
-													</Badge>
-												</div>
-												<p className="text-muted-foreground text-xs">
-													{new Date(ticket.date).toLocaleDateString()}
-												</p>
-											</div>
-										);
-									})}
-									<Button className="w-full text-primary" variant="ghost">
-										View All Tickets
-									</Button>
-								</CardContent>
-							</Card>
-						</motion.div>
-					</div>
-
-					{/* FAQs */}
 					<motion.div
 						animate={{ opacity: 1, y: 0 }}
 						initial={{ opacity: 0, y: 20 }}
-						transition={{ delay: 0.4 }}
+						transition={{ delay: 0.2 }}
 					>
 						<Card className="border-border/50 bg-card-gradient shadow-card">
 							<CardHeader>
-								<div className="flex items-center justify-between">
-									<div>
-										<CardTitle>Frequently Asked Questions</CardTitle>
-										<CardDescription>
-											Quick answers to common questions
-										</CardDescription>
+								<CardTitle className="flex items-center gap-2">
+									<MessageSquare className="h-5 w-5 text-primary" />
+									Other ways to reach us
+								</CardTitle>
+								<CardDescription>
+									Prefer a different channel? We're available around the clock.
+								</CardDescription>
+							</CardHeader>
+							<CardContent className="grid gap-3 sm:grid-cols-2">
+								<div className="flex items-center gap-3 rounded-xl bg-accent/30 p-4">
+									<div className="rounded-lg bg-primary/10 p-2.5 text-primary">
+										<Send className="h-5 w-5" />
 									</div>
-									<div className="relative hidden w-64 md:block">
-										<Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-muted-foreground" />
-										<Input
-											className="bg-muted/50 pl-10"
-											placeholder="Search FAQs..."
-										/>
+									<div>
+										<p className="font-medium text-sm">Email</p>
+										<p className="text-muted-foreground text-sm">
+											support@finpay.com
+										</p>
 									</div>
 								</div>
-							</CardHeader>
-							<CardContent>
-								<Accordion className="space-y-2" collapsible type="single">
-									{faqs.map((faq, index) => (
-										<AccordionItem
-											className="rounded-lg border-border/50 bg-accent/20 px-4"
-											key={index}
-											value={`faq-${index}`}
-										>
-											<AccordionTrigger className="py-4 hover:no-underline">
-												<span className="text-left font-medium">
-													{faq.question}
-												</span>
-											</AccordionTrigger>
-											<AccordionContent className="pb-4 text-muted-foreground">
-												{faq.answer}
-											</AccordionContent>
-										</AccordionItem>
-									))}
-								</Accordion>
+								<div className="flex items-center gap-3 rounded-xl bg-accent/30 p-4">
+									<div className="rounded-lg bg-primary/10 p-2.5 text-primary">
+										<MessageSquare className="h-5 w-5" />
+									</div>
+									<div>
+										<p className="font-medium text-sm">Live Chat</p>
+										<p className="text-muted-foreground text-sm">
+											24/7 instant messaging
+										</p>
+									</div>
+								</div>
 							</CardContent>
 						</Card>
 					</motion.div>
