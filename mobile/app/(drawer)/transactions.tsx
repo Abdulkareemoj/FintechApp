@@ -1,47 +1,96 @@
 import { router } from "expo-router";
 import React from "react";
-import { ScrollView, View } from "react-native";
+import { ActivityIndicator, ScrollView, View } from "react-native";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
+import { useTransactions } from "@/hooks/useTransactions";
+import type { Transaction } from "@/lib/api/transactions";
 
-const transactions = [
-  {
-    id: "tx_1",
-    title: "Transfer to Ada",
-    subtitle: "P2P Transfer",
-    amount: -50.0,
-    currency: "USD",
-    date: "2024-01-20",
-    status: "completed",
-  },
-  {
-    id: "tx_2",
-    title: "Card funding",
-    subtitle: "Top up",
-    amount: 200.0,
-    currency: "USD",
-    date: "2024-01-19",
-    status: "completed",
-  },
-  {
-    id: "tx_3",
-    title: "Merchant payment",
-    subtitle: "Coffee Shop",
-    amount: -12.5,
-    currency: "USD",
-    date: "2024-01-19",
-    status: "pending",
-  },
-];
-
-function formatAmount(amount: number, currency: string) {
-  const sign = amount < 0 ? "-" : "+";
+function formatAmount(amount: number, currency: string, direction: string) {
+  const sign = direction === "incoming" ? "+" : "-";
   const abs = Math.abs(amount);
-  return `${sign} ${currency} ${abs.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return `${sign} ${currency} ${abs.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+}
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function humanize(value: string) {
+  return value
+    .toLowerCase()
+    .split(/[\s_-]+/)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+function statusClass(status: string) {
+  switch (status.toLowerCase()) {
+    case "completed":
+    case "paid":
+      return "text-emerald-600";
+    case "pending":
+    case "processing":
+      return "text-amber-500";
+    default:
+      return "text-destructive";
+  }
+}
+
+function TransactionRow({ tx }: { tx: Transaction }) {
+  return (
+    <Button
+      className="items-start"
+      onPress={() =>
+        router.push({
+          pathname: "/(drawer)/transactions/[id]",
+          params: { id: tx.id },
+        } as any)
+      }
+      variant="outline"
+    >
+      <View className="w-full flex-row items-start justify-between">
+        <View className="flex-1 pr-3">
+          <Text className="font-medium">
+            {tx.description || humanize(tx.type)}
+          </Text>
+          <Text className="text-muted-foreground text-sm">
+            {humanize(tx.type)} · {formatDate(tx.createdAt)}
+          </Text>
+          <Text className={`text-xs ${statusClass(tx.status)}`}>
+            {humanize(tx.status)}
+          </Text>
+        </View>
+        <Text
+          className={
+            tx.direction === "incoming"
+              ? "text-emerald-600"
+              : "text-destructive"
+          }
+        >
+          {formatAmount(tx.amount, tx.currency, tx.direction)}
+        </Text>
+      </View>
+    </Button>
+  );
 }
 
 export default function TransactionsScreen() {
+  const { data, isLoading, isError, refetch } = useTransactions({
+    page: 1,
+    pageSize: 50,
+  });
+
+  const items = (data as any)?.items ?? [];
+
   return (
     <ScrollView className="flex-1 p-6" contentContainerClassName="gap-4">
       <View className="gap-1">
@@ -54,35 +103,26 @@ export default function TransactionsScreen() {
           <CardTitle>History</CardTitle>
         </CardHeader>
         <CardContent className="gap-3">
-          {transactions.map((tx) => (
-            <Button
-              className="items-start"
-              key={tx.id}
-              onPress={() =>
-                router.push({
-                  pathname: "/(drawer)/transactions/[id]",
-                  params: { id: tx.id },
-                } as any)
-              }
-              variant="outline"
-            >
-              <View className="w-full flex-row items-start justify-between">
-                <View className="flex-1 pr-3">
-                  <Text className="font-medium">{tx.title}</Text>
-                  <Text className="text-muted-foreground text-sm">
-                    {tx.subtitle} · {tx.date} · {tx.status}
-                  </Text>
-                </View>
-                <Text
-                  className={
-                    tx.amount < 0 ? "text-destructive" : "text-emerald-600"
-                  }
-                >
-                  {formatAmount(tx.amount, tx.currency)}
-                </Text>
-              </View>
-            </Button>
-          ))}
+          {isLoading ? (
+            <ActivityIndicator className="py-8 text-primary" />
+          ) : isError ? (
+            <View className="gap-3 py-4">
+              <Text className="text-muted-foreground text-center">
+                Couldn't load transactions.
+              </Text>
+              <Button variant="outline" onPress={() => refetch()}>
+                <Text>Retry</Text>
+              </Button>
+            </View>
+          ) : items.length === 0 ? (
+            <Text className="py-8 text-center text-muted-foreground">
+              No transactions yet.
+            </Text>
+          ) : (
+            items.map((tx: Transaction) => (
+              <TransactionRow key={tx.id} tx={tx} />
+            ))
+          )}
         </CardContent>
       </Card>
     </ScrollView>

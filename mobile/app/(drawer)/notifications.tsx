@@ -1,79 +1,67 @@
 import React from "react";
-import { ScrollView, View, TouchableOpacity } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, AlertTriangle, Bell, CreditCard, DollarSign, ArrowRight } from "lucide-react-native";
+import { CheckCircle, AlertTriangle, Bell, CreditCard, DollarSign } from "lucide-react-native";
 import { Icon } from "@/components/ui/icon";
-
-const notifications = [
-  {
-    id: "1",
-    title: "Payment Received",
-    description: "You've received $1,250.00 from Sarah Smith",
-    time: "5 min ago",
-    type: "payment",
-    read: false,
-  },
-  {
-    id: "2",
-    title: "Security Alert",
-    description: "New login from Chrome on Windows 11 · San Francisco, CA",
-    time: "1 hr ago",
-    type: "alert",
-    read: false,
-  },
-  {
-    id: "3",
-    title: "Card Transaction",
-    description: "Your card ending in 4521 was charged $45.00 at Starbucks",
-    time: "2 hrs ago",
-    type: "card",
-    read: true,
-  },
-  {
-    id: "4",
-    title: "Bill Payment Due",
-    description: "Your electricity bill of $124.50 is due in 3 days",
-    time: "1 day ago",
-    type: "bill",
-    read: true,
-  },
-  {
-    id: "5",
-    title: "Account Updated",
-    description: "Your profile information has been successfully updated",
-    time: "2 days ago",
-    type: "system",
-    read: true,
-  },
-  {
-    id: "6",
-    title: "Transfer Completed",
-    description: "Wire transfer of $3,000.00 to account ending in 4521 completed",
-    time: "3 days ago",
-    type: "payment",
-    read: true,
-  },
-  {
-    id: "7",
-    title: "Monthly Statement",
-    description: "Your February 2026 statement is now available for download",
-    time: "5 days ago",
-    type: "system",
-    read: true,
-  },
-];
+import {
+  useMarkAllNotificationsRead,
+  useMarkNotificationRead,
+  useNotifications,
+  useNotificationsUnreadCount,
+} from "@/hooks/useNotifications";
 
 const typeIcons: Record<string, typeof Bell> = {
-  payment: DollarSign,
-  alert: AlertTriangle,
-  card: CreditCard,
-  bill: Bell,
-  system: CheckCircle,
+  Payment: DollarSign,
+  Security: AlertTriangle,
+  Card: CreditCard,
+  Bill: Bell,
+  System: CheckCircle,
 };
 
+const typeColors: Record<string, string> = {
+  Security: "bg-red-500/10",
+  Payment: "bg-emerald-500/10",
+  Card: "bg-primary/10",
+  Bill: "bg-warning/10",
+  System: "bg-muted",
+};
+
+function timeAgo(value: string) {
+  const diff = Date.now() - new Date(value).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+}
+
 export default function NotificationsScreen() {
+  const { data: notifications, isLoading, isError, refetch } = useNotifications();
+  const { data: unreadData } = useNotificationsUnreadCount();
+  const markRead = useMarkNotificationRead();
+  const markAllRead = useMarkAllNotificationsRead();
+
+  const unreadCount = unreadData?.count ?? 0;
+  const hasUnread = (notifications ?? []).some((n) => !n.isRead);
+
+  const handleMarkAll = async () => {
+    try {
+      await markAllRead.mutateAsync();
+    } catch (err) {
+      Alert.alert("Failed", err instanceof Error ? err.message : "Please try again");
+    }
+  };
+
   return (
     <ScrollView className="flex-1 p-6" contentContainerClassName="gap-4">
       <View className="gap-1">
@@ -85,46 +73,77 @@ export default function NotificationsScreen() {
         <CardHeader className="pb-2">
           <View className="flex-row items-center justify-between">
             <CardTitle>Recent</CardTitle>
-            {notifications.some((n) => !n.read) && (
-              <TouchableOpacity>
-                <Text className="text-primary text-sm font-medium">Mark all read</Text>
-              </TouchableOpacity>
-            )}
+            <View className="flex-row items-center gap-2">
+              {unreadCount > 0 && (
+                <Badge>
+                  <Text className="text-xs text-white">{unreadCount} new</Text>
+                </Badge>
+              )}
+              {hasUnread && (
+                <TouchableOpacity onPress={handleMarkAll}>
+                  <Text className="text-primary text-sm font-medium">Mark all read</Text>
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
         </CardHeader>
         <CardContent className="p-0">
-          {notifications.map((n, i) => {
-            const IconComponent = typeIcons[n.type] || Bell;
-            return (
-              <TouchableOpacity
-                key={n.id}
-                activeOpacity={0.7}
-                className={`flex-row items-start gap-3 px-4 py-3.5 ${i < notifications.length - 1 ? "border-b border-border" : ""}`}
-              >
-                <View
-                  className={`rounded-full p-2 ${n.type === "alert" ? "bg-red-500/10" : n.type === "payment" ? "bg-emerald-500/10" : "bg-muted"}`}
-                >
-                  <Icon
-                    as={IconComponent}
-                    size={16}
-                    className={n.type === "alert" ? "text-red-500" : n.type === "payment" ? "text-emerald-500" : "text-muted-foreground"}
-                  />
-                </View>
-                <View className="flex-1">
-                  <View className="flex-row items-center justify-between">
-                    <Text className={`text-sm ${!n.read ? "font-semibold text-foreground" : "text-foreground"}`}>
-                      {n.title}
-                    </Text>
-                    <Text className="text-muted-foreground text-xs">{n.time}</Text>
-                  </View>
-                  <Text className="text-muted-foreground text-sm mt-0.5" numberOfLines={2}>
-                    {n.description}
-                  </Text>
-                </View>
-                {!n.read && <View className="mt-1.5 h-2 w-2 rounded-full bg-primary" />}
-              </TouchableOpacity>
-            );
-          })}
+          {isLoading ? (
+            <View className="items-center py-8">
+              <ActivityIndicator size="large" className="text-primary" />
+              <Text className="mt-3 text-sm text-muted-foreground">Loading notifications...</Text>
+            </View>
+          ) : isError ? (
+            <View className="items-center gap-3 py-6">
+              <Text className="text-sm text-muted-foreground">Couldn't load notifications.</Text>
+              <Button variant="outline" onPress={() => refetch()}>
+                <Text>Retry</Text>
+              </Button>
+            </View>
+          ) : (notifications ?? []).length === 0 ? (
+            <View className="py-6">
+              <Text className="text-center text-sm text-muted-foreground">
+                No notifications yet.
+              </Text>
+            </View>
+          ) : (
+            (notifications as { id: string; title: string; body: string; type: string; isRead: boolean; createdAt: string }[]).map(
+              (n, i) => {
+                const IconComponent = typeIcons[n.type] || Bell;
+                const color = typeColors[n.type] || "bg-muted";
+                return (
+                  <TouchableOpacity
+                    key={n.id}
+                    activeOpacity={0.7}
+                    className={`flex-row items-start gap-3 px-4 py-3.5 ${i < (notifications ?? []).length - 1 ? "border-b border-border" : ""} ${!n.isRead ? "bg-accent/30" : ""}`}
+                    onPress={() => {
+                      if (!n.isRead) markRead.mutate(n.id);
+                    }}
+                  >
+                    <View className={`rounded-full p-2 ${color}`}>
+                      <Icon
+                        as={IconComponent}
+                        size={16}
+                        className={n.type === "Security" ? "text-red-500" : n.type === "Payment" ? "text-emerald-500" : "text-muted-foreground"}
+                      />
+                    </View>
+                    <View className="flex-1">
+                      <View className="flex-row items-center justify-between">
+                        <Text className={`text-sm flex-1 mr-2 ${!n.isRead ? "font-semibold text-foreground" : "text-foreground"}`}>
+                          {n.title}
+                        </Text>
+                        <Text className="text-muted-foreground text-xs">{timeAgo(n.createdAt)}</Text>
+                      </View>
+                      <Text className="text-muted-foreground text-sm mt-0.5" numberOfLines={2}>
+                        {n.body}
+                      </Text>
+                    </View>
+                    {!n.isRead && <View className="mt-1.5 h-2 w-2 rounded-full bg-primary" />}
+                  </TouchableOpacity>
+                );
+              }
+            )
+          )}
         </CardContent>
       </Card>
     </ScrollView>

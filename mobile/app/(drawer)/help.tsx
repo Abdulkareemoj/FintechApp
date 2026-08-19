@@ -1,23 +1,24 @@
 import React from "react";
-import { ScrollView, View, TouchableOpacity } from "react-native";
+import { ActivityIndicator, ScrollView, TouchableOpacity, View } from "react-native";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Text } from "@/components/ui/text";
-import { Separator } from "@/components/ui/separator";
-import { Search, MessageSquare, BookOpen, Phone, ChevronRight, HelpCircle } from "lucide-react-native";
+import { ChevronRight, Search } from "lucide-react-native";
 import { Icon } from "@/components/ui/icon";
-
-const faqs = [
-  { q: "How do I reset my password?", a: "Go to Settings > Security and tap 'Change Password'. You'll need your current password." },
-  { q: "Why was my card declined?", a: "Common reasons: insufficient funds, daily limit reached, or security freeze enabled." },
-  { q: "How long do transfers take?", a: "Domestic transfers: instant-2 hrs. International: 1-5 business days." },
-  { q: "How do I dispute a transaction?", a: "Tap the transaction in your history and select 'Dispute Transaction'." },
-];
+import { useHelpArticles } from "@/hooks/useHelp";
 
 export default function HelpScreen() {
+  const { data: articles, isLoading, isError, refetch } = useHelpArticles();
   const [searchQuery, setSearchQuery] = React.useState("");
+  const [openId, setOpenId] = React.useState<string | null>(null);
+
+  const filtered = (articles ?? []).filter(
+    (a) =>
+      !searchQuery ||
+      a.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      a.answer.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <ScrollView className="flex-1 p-6" contentContainerClassName="gap-4">
@@ -36,65 +37,55 @@ export default function HelpScreen() {
         <Icon as={Search} size={18} className="text-muted-foreground absolute left-3 top-3" />
       </View>
 
-      <View className="flex-row gap-3">
-        <Card className="flex-1">
-          <CardContent className="items-center py-4">
-            <Icon as={BookOpen} size={24} className="text-primary mb-2" />
-            <Text className="text-foreground text-sm font-medium">Guides</Text>
-          </CardContent>
-        </Card>
-        <Card className="flex-1">
-          <CardContent className="items-center py-4">
-            <Icon as={MessageSquare} size={24} className="text-primary mb-2" />
-            <Text className="text-foreground text-sm font-medium">Chat</Text>
-          </CardContent>
-        </Card>
-        <Card className="flex-1">
-          <CardContent className="items-center py-4">
-            <Icon as={Phone} size={24} className="text-primary mb-2" />
-            <Text className="text-foreground text-sm font-medium">Call</Text>
-          </CardContent>
-        </Card>
-      </View>
-
       <Card>
         <CardHeader>
           <CardTitle>Frequently Asked</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          {faqs.map((faq, i) => (
-            <TouchableOpacity
-              key={faq.q}
-              activeOpacity={0.7}
-              className={`px-4 py-3.5 ${i < faqs.length - 1 ? "border-b border-border" : ""}`}
-            >
-              <View className="flex-row items-center justify-between">
-                <Text className="text-foreground text-sm flex-1 mr-2">{faq.q}</Text>
-                <Icon as={ChevronRight} size={16} className="text-muted-foreground" />
-              </View>
-            </TouchableOpacity>
-          ))}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Contact Us</CardTitle>
-        </CardHeader>
-        <CardContent className="gap-3">
-          <Button variant="outline" className="flex-row gap-2">
-            <Icon as={MessageSquare} size={18} className="text-foreground" />
-            <Text>Start live chat</Text>
-          </Button>
-          <Button variant="outline" className="flex-row gap-2">
-            <Icon as={Phone} size={18} className="text-foreground" />
-            <Text>Call support</Text>
-          </Button>
-          <View className="rounded-lg bg-muted p-3">
-            <Text className="text-muted-foreground text-xs text-center">
-              Available Mon-Fri 8AM-8PM EST
-            </Text>
-          </View>
+          {isLoading ? (
+            <View className="items-center py-8">
+              <ActivityIndicator size="large" className="text-primary" />
+              <Text className="mt-3 text-sm text-muted-foreground">Loading articles...</Text>
+            </View>
+          ) : isError ? (
+            <View className="items-center gap-3 py-6">
+              <Text className="text-sm text-muted-foreground">Couldn't load articles.</Text>
+              <Button variant="outline" onPress={() => refetch()}>
+                <Text>Retry</Text>
+              </Button>
+            </View>
+          ) : filtered.length === 0 ? (
+            <View className="py-6">
+              <Text className="text-center text-sm text-muted-foreground">
+                No articles found.
+              </Text>
+            </View>
+          ) : (
+            filtered.map((article, i) => {
+              const isOpen = openId === article.id;
+              return (
+                <View key={article.id}>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    className={`px-4 py-3.5 ${i < filtered.length - 1 ? "border-b border-border" : ""}`}
+                    onPress={() => setOpenId(isOpen ? null : article.id)}
+                  >
+                    <View className="flex-row items-center justify-between">
+                      <Text className="text-sm text-foreground flex-1 mr-2">
+                        {article.question}
+                      </Text>
+                      <Icon as={ChevronRight} size={16} className="text-muted-foreground" />
+                    </View>
+                  </TouchableOpacity>
+                  {isOpen && (
+                    <View className="border-b border-border bg-muted/30 px-4 py-3">
+                      <Text className="text-sm text-muted-foreground">{article.answer}</Text>
+                    </View>
+                  )}
+                </View>
+              );
+            })
+          )}
         </CardContent>
       </Card>
     </ScrollView>
