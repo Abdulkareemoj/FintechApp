@@ -2,13 +2,14 @@ import { Link } from "@tanstack/react-router";
 import {
 	ArrowLeftRight,
 	BarChart3,
+	Bell,
+	BellRing,
 	CreditCard,
 	DownloadIcon,
 	HelpCircle,
 	HouseWifi,
 	LayoutDashboard,
 	Receipt,
-	SearchCheck,
 	Send,
 	Settings2,
 	TrendingUp,
@@ -24,14 +25,13 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useAuthStore } from "@/lib/authStore";
 import { NavUser } from "../shared/nav-user";
 import { NavMain } from "./nav-main";
 import { NavSecondary } from "./nav-secondary";
-import { useAuthStore } from "@/lib/authStore";
 
 // Updated navigation data to match your backend controllers
 const data = {
-
 	navMain: [
 		{ icon: LayoutDashboard, title: "Overview", url: "/dashboard" },
 		{ icon: Wallet, title: "Accounts", url: "/dashboard/accounts" },
@@ -49,6 +49,16 @@ const data = {
 	],
 	navSecondary: [
 		{
+			title: "Inbox",
+			url: "/dashboard/inbox",
+			icon: Bell,
+		},
+		{
+			title: "Notifications",
+			url: "/dashboard/notifications",
+			icon: BellRing,
+		},
+		{
 			title: "Settings",
 			url: "/dashboard/settings",
 			icon: Settings2,
@@ -57,11 +67,6 @@ const data = {
 			title: "Get Help",
 			url: "/dashboard/support",
 			icon: HelpCircle,
-		},
-		{
-			title: "Search",
-			url: "#",
-			icon: SearchCheck,
 		},
 	],
 };
