@@ -19,6 +19,11 @@ namespace FinTech.Data
         public DbSet<EmailVerificationToken> EmailVerificationTokens { get; set; } = null!;
 
         public DbSet<MoneyRequest> MoneyRequests { get; set; }
+        public DbSet<SupportTicket> SupportTickets { get; set; } = null!;
+        public DbSet<SupportMessage> SupportMessages { get; set; } = null!;
+        public DbSet<HelpArticle> HelpArticles { get; set; } = null!;
+        public DbSet<InboxMessage> InboxMessages { get; set; } = null!;
+        public DbSet<Notification> Notifications { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -89,6 +94,117 @@ namespace FinTech.Data
                 entity.HasIndex(e => e.RequesterId).HasDatabaseName("idx_money_requests_requester");
                 entity.HasIndex(e => e.PayerId).HasDatabaseName("idx_money_requests_payer");
                 entity.HasIndex(e => e.Status).HasDatabaseName("idx_money_requests_status");
+            });
+
+            modelBuilder.Entity<SupportTicket>(entity =>
+            {
+                entity.ToTable("support_tickets");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id").HasDefaultValueSql("NEWID()");
+                entity.Property(e => e.UserId).HasColumnName("user_id").IsRequired();
+                entity.Property(e => e.Category).HasColumnName("category").HasMaxLength(50).IsRequired();
+                entity.Property(e => e.Subject).HasColumnName("subject").HasMaxLength(200).IsRequired();
+                entity.Property(e => e.Description).HasColumnName("description").HasMaxLength(4000).IsRequired();
+                entity.Property(e => e.Status).HasColumnName("status").HasConversion<string>().HasMaxLength(20).HasDefaultValue(Models.Enums.SupportTicketStatus.Open);
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("SYSUTCDATETIME()");
+                entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("SYSUTCDATETIME()");
+
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(e => e.Messages)
+                    .WithOne(m => m.Ticket)
+                    .HasForeignKey(m => m.TicketId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(e => e.UserId).HasDatabaseName("idx_support_tickets_user");
+                entity.HasIndex(e => e.Status).HasDatabaseName("idx_support_tickets_status");
+            });
+
+            modelBuilder.Entity<SupportMessage>(entity =>
+            {
+                entity.ToTable("support_messages");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id").HasDefaultValueSql("NEWID()");
+                entity.Property(e => e.TicketId).HasColumnName("ticket_id").IsRequired();
+                entity.Property(e => e.SenderId).HasColumnName("sender_id");
+                entity.Property(e => e.IsFromUser).HasColumnName("is_from_user").IsRequired();
+                entity.Property(e => e.Body).HasColumnName("body").HasMaxLength(4000).IsRequired();
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("SYSUTCDATETIME()");
+
+                entity.HasOne(e => e.Ticket)
+                    .WithMany(t => t.Messages)
+                    .HasForeignKey(e => e.TicketId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.Sender)
+                    .WithMany()
+                    .HasForeignKey(e => e.SenderId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(e => e.TicketId).HasDatabaseName("idx_support_messages_ticket");
+                entity.HasIndex(e => e.CreatedAt).HasDatabaseName("idx_support_messages_created");
+            });
+
+            modelBuilder.Entity<HelpArticle>(entity =>
+            {
+                entity.ToTable("help_articles");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id").HasDefaultValueSql("NEWID()");
+                entity.Property(e => e.Category).HasColumnName("category").HasMaxLength(50).IsRequired();
+                entity.Property(e => e.Question).HasColumnName("question").HasMaxLength(300).IsRequired();
+                entity.Property(e => e.Answer).HasColumnName("answer").HasMaxLength(4000).IsRequired();
+                entity.Property(e => e.SortOrder).HasColumnName("sort_order").HasDefaultValue(0);
+                entity.Property(e => e.IsPublished).HasColumnName("is_published").HasDefaultValue(true);
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("SYSUTCDATETIME()");
+                entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("SYSUTCDATETIME()");
+
+                entity.HasIndex(e => e.IsPublished).HasDatabaseName("idx_help_articles_published");
+            });
+
+            modelBuilder.Entity<InboxMessage>(entity =>
+            {
+                entity.ToTable("inbox_messages");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id").HasDefaultValueSql("NEWID()");
+                entity.Property(e => e.UserId).HasColumnName("user_id").IsRequired();
+                entity.Property(e => e.From).HasColumnName("from_name").HasMaxLength(100).IsRequired();
+                entity.Property(e => e.Subject).HasColumnName("subject").HasMaxLength(200).IsRequired();
+                entity.Property(e => e.Body).HasColumnName("body").HasMaxLength(4000).IsRequired();
+                entity.Property(e => e.Type).HasColumnName("type").HasConversion<string>().HasMaxLength(20).HasDefaultValue(Models.Enums.InboxMessageType.System);
+                entity.Property(e => e.IsRead).HasColumnName("is_read").HasDefaultValue(false);
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("SYSUTCDATETIME()");
+
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(e => e.UserId).HasDatabaseName("idx_inbox_messages_user");
+                entity.HasIndex(e => e.IsRead).HasDatabaseName("idx_inbox_messages_read");
+            });
+
+            modelBuilder.Entity<Notification>(entity =>
+            {
+                entity.ToTable("notifications");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id").HasDefaultValueSql("NEWID()");
+                entity.Property(e => e.UserId).HasColumnName("user_id").IsRequired();
+                entity.Property(e => e.Title).HasColumnName("title").HasMaxLength(200).IsRequired();
+                entity.Property(e => e.Body).HasColumnName("body").HasMaxLength(2000).IsRequired();
+                entity.Property(e => e.Type).HasColumnName("type").HasConversion<string>().HasMaxLength(20).HasDefaultValue(Models.Enums.NotificationType.System);
+                entity.Property(e => e.IsRead).HasColumnName("is_read").HasDefaultValue(false);
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("SYSUTCDATETIME()");
+
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(e => e.UserId).HasDatabaseName("idx_notifications_user");
+                entity.HasIndex(e => e.IsRead).HasDatabaseName("idx_notifications_read");
             });
 
         }
