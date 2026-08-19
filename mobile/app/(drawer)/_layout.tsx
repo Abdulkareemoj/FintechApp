@@ -7,13 +7,13 @@ import {
   CreditCard,
   HelpCircle,
   Home,
+  LifeBuoy,
   LogOut,
   MessageSquare,
   Receipt,
   Settings,
   Shield,
   Star,
-  TrendingUp,
 } from "lucide-react-native";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
@@ -22,7 +22,7 @@ import { Icon } from "@/components/ui/icon";
 import { Separator } from "@/components/ui/separator";
 import { Text } from "@/components/ui/text";
 
-// ─── Custom Drawer Content ────────────────────────────────────────────────────
+// Custom Drawer Content 
 function CustomDrawerContent(props: any) {
   const router = useRouter();
   const pathname = usePathname();
@@ -32,9 +32,9 @@ function CustomDrawerContent(props: any) {
     { label: "Transactions", icon: Receipt, route: "/transactions" },
     { label: "Messages", icon: MessageSquare, route: "/messages" },
     { label: "Notifications", icon: Bell, route: "/notifications" },
-    { label: "Investments", icon: TrendingUp, route: "/invest" },
     { label: "Security", icon: Shield, route: "/security" },
-    { label: "Help & Support", icon: HelpCircle, route: "/help" },
+    { label: "Help Center", icon: HelpCircle, route: "/help" },
+    { label: "Support Tickets", icon: LifeBuoy, route: "/support" },
     { label: "Settings", icon: Settings, route: "/settings" },
   ] as const;
 
@@ -157,7 +157,7 @@ function CustomDrawerContent(props: any) {
   );
 }
 
-// ─── Drawer Header Component ──────────────────────────────────────────────
+// Drawer Header Component 
 function DrawerHeader({ title }: { title: string }) {
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -184,7 +184,7 @@ function DrawerHeader({ title }: { title: string }) {
   );
 }
 
-// ─── Root Drawer Layout ───────────────────────────────────────────────────────
+// Root Drawer Layout 
 export default function AppLayout() {
   return (
     <Drawer
@@ -240,14 +240,6 @@ export default function AppLayout() {
         }}
       />
       <Drawer.Screen
-        name="invest"
-        options={{
-          headerShown: true,
-          drawerLabel: "Investments",
-          title: "Investment Portfolio",
-        }}
-      />
-      <Drawer.Screen
         name="security"
         options={{
           headerShown: true,
@@ -259,8 +251,16 @@ export default function AppLayout() {
         name="help"
         options={{
           headerShown: true,
-          drawerLabel: "Help & Support",
+          drawerLabel: "Help Center",
           title: "Help Center",
+        }}
+      />
+      <Drawer.Screen
+        name="support"
+        options={{
+          headerShown: true,
+          drawerLabel: "Support Tickets",
+          title: "Support Tickets",
         }}
       />
       <Drawer.Screen
@@ -269,14 +269,6 @@ export default function AppLayout() {
           headerShown: true,
           drawerLabel: "Settings",
           title: "App Settings",
-        }}
-      />
-      <Drawer.Screen
-        name="search"
-        options={{
-          headerShown: true,
-          drawerLabel: "Search",
-          title: "Search Transactions",
         }}
       />
     </Drawer>
