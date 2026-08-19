@@ -17,7 +17,7 @@ export function MessageBubble({ message }: Props) {
 			)}
 		>
 			{!isOutgoing && (
-				<button
+				<Button
 					aria-label="Message options"
 					className="mt-3 text-muted-foreground/60 hover:text-muted-foreground"
 					type="button"
@@ -51,7 +51,7 @@ export function MessageBubble({ message }: Props) {
 			</div>
 
 			{isOutgoing && (
-				<button
+				<Button
 					aria-label="Message options"
 					className="mt-3 text-muted-foreground/60 hover:text-muted-foreground"
 					type="button"

@@ -18,7 +18,7 @@ const statusLabel: Record<Chat["status"], string> = {
 
 export function ChatListItem({ chat, active, onClick }: Props) {
 	return (
-		<button
+		<Button
 			className={cn(
 				"flex w-full items-start gap-3 px-4 py-3 text-left transition-colors border-b border-border/60 hover:bg-muted/60",
 				active && "bg-muted",

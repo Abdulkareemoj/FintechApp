@@ -50,7 +50,7 @@ export function BalanceCard({
 										"••••••••"
 									)}
 								</h2>
-								<button
+								<Button
 									type="button"
 									className="rounded-lg p-2 transition-colors hover:bg-primary-foreground/10"
 									onClick={() => setIsVisible(!isVisible)}
