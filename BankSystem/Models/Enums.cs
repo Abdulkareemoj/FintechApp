@@ -65,5 +65,31 @@ namespace FinTech.Models.Enums
         Cancelled,
         Expired
     }
+
+    public enum SupportTicketStatus
+    {
+        Open,
+        InProgress,
+        Resolved,
+        Closed
+    }
+
+    public enum InboxMessageType
+    {
+        System,
+        Support,
+        Statement,
+        Security,
+        Promotion
+    }
+
+    public enum NotificationType
+    {
+        Payment,
+        Security,
+        Card,
+        Bill,
+        System
+    }
 }
 
