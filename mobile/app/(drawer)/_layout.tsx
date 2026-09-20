@@ -1,276 +1,229 @@
-import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import { usePathname, useRouter } from "expo-router";
+import type { Href } from "expo-router";
+import { useNavigation, usePathname, useRouter } from "expo-router";
 import { Drawer } from "expo-router/drawer";
+import type { LucideIcon } from "lucide-react-native";
 import {
-  ArrowLeft,
   Bell,
+  ChartNoAxesCombined,
+  CircleHelp,
   CreditCard,
-  HelpCircle,
-  Home,
+  FileText,
+  House,
   LifeBuoy,
   LogOut,
   MessageSquare,
-  Receipt,
+  ReceiptText,
   Settings,
-  Shield,
-  Star,
+  ShieldCheck,
+  WalletCards,
 } from "lucide-react-native";
 import React from "react";
-import { TouchableOpacity, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Button } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
-import { Separator } from "@/components/ui/separator";
 import { Text } from "@/components/ui/text";
+import { useAuthStore } from "@/lib/authStore";
+import { cn } from "@/lib/utils";
 
-// Custom Drawer Content 
-function CustomDrawerContent(props: any) {
+interface NavItem {
+  label: string;
+  icon: LucideIcon;
+  route: string;
+}
+
+const primaryItems: NavItem[] = [
+  { label: "Dashboard", icon: House, route: "/(drawer)/(tabs)/home" },
+  { label: "Cards", icon: CreditCard, route: "/(drawer)/(tabs)/cards" },
+  { label: "Transfers", icon: WalletCards, route: "/(drawer)/(tabs)/transfers" },
+];
+
+const moneyItems: NavItem[] = [
+  { label: "Transactions", icon: ReceiptText, route: "/(drawer)/transactions" },
+  { label: "Statements", icon: FileText, route: "/(drawer)/statements" },
+  { label: "Analytics", icon: ChartNoAxesCombined, route: "/(drawer)/analytics" },
+];
+
+const supportItems: NavItem[] = [
+  { label: "Notifications", icon: Bell, route: "/(drawer)/notifications" },
+  { label: "Messages", icon: MessageSquare, route: "/(drawer)/messages" },
+  { label: "Support", icon: LifeBuoy, route: "/(drawer)/support" },
+];
+
+const accountItems: NavItem[] = [
+  { label: "Security", icon: ShieldCheck, route: "/(drawer)/security" },
+  { label: "Settings", icon: Settings, route: "/(drawer)/settings" },
+  { label: "Help Center", icon: CircleHelp, route: "/(drawer)/help" },
+];
+
+function CustomDrawerContent() {
   const router = useRouter();
   const pathname = usePathname();
+  const user = useAuthStore((state) => state.user);
+  const clearAuth = useAuthStore((state) => state.clearAuth);
+  const displayName = user
+    ? `${user.firstName} ${user.lastName}`.trim()
+    : "Your account";
+  const initials = user
+    ? `${user.firstName[0] ?? ""}${user.lastName[0] ?? ""}`.toUpperCase()
+    : "FT";
 
-  const navItems = [
-    { label: "Cards", icon: CreditCard, route: "/(drawer)/(tabs)/cards" },
-    { label: "Transactions", icon: Receipt, route: "/transactions" },
-    { label: "Messages", icon: MessageSquare, route: "/messages" },
-    { label: "Notifications", icon: Bell, route: "/notifications" },
-    { label: "Security", icon: Shield, route: "/security" },
-    { label: "Help Center", icon: HelpCircle, route: "/help" },
-    { label: "Support Tickets", icon: LifeBuoy, route: "/support" },
-    { label: "Settings", icon: Settings, route: "/settings" },
-  ] as const;
+  const isActive = (route: string) => {
+    const normalizedRoute = route.replace(/\/$/, "");
+    const normalizedPath = pathname.replace(/\/$/, "");
+    return (
+      normalizedPath === normalizedRoute ||
+      normalizedPath.startsWith(`${normalizedRoute}/`)
+    );
+  };
+
+  const renderSection = (label: string, items: NavItem[]) => (
+    <View className="mt-6 px-3" key={label}>
+      <Text className="mb-2 px-3 font-semibold text-[10px] text-slate-500 uppercase tracking-[2px]">
+        {label}
+      </Text>
+      {items.map((item) => (
+        <NavRow
+          key={item.route}
+          {...item}
+          active={isActive(item.route)}
+          onPress={() => router.push(item.route as Href)}
+        />
+      ))}
+    </View>
+  );
 
   return (
-    <DrawerContentScrollView
-      {...props}
-      className="bg-zinc-950"
-      contentContainerStyle={{ flex: 1 }}
-      scrollEnabled={false}
+    <ScrollView
+      className="flex-1 bg-slate-950"
+      contentContainerClassName="pb-8"
+      showsVerticalScrollIndicator={false}
     >
-      {/* ── Profile Header ── */}
-      <View className="border-zinc-900 px-5 pt-9 pb-5">
-        {/* Avatar */}
-        <View className="mb-3 h-[60px] w-[60px] items-center justify-center rounded-full bg-blue-500">
-          <Text className="font-bold text-[22px] text-white">JD</Text>
+      <View className="border-slate-800 border-b px-5 pt-12 pb-6">
+        <View className="mb-4 flex-row items-center justify-between">
+          <View className="h-14 w-14 items-center justify-center rounded-2xl bg-teal-400">
+            <Text className="font-bold text-slate-950 text-xl">{initials}</Text>
+          </View>
+          <View className="rounded-full border border-teal-400/30 bg-teal-400/10 px-3 py-1.5">
+            <Text className="font-semibold text-[10px] text-teal-300 uppercase tracking-widest">
+              Secure
+            </Text>
+          </View>
         </View>
-
-        <Text
-          className="font-semibold text-[17px] text-white tracking-tight"
-          numberOfLines={1}
-        >
-          John Doe
+        <Text className="font-semibold text-slate-100 text-lg" numberOfLines={1}>
+          {displayName}
         </Text>
-        <Text className="mt-0.5 text-[13px] text-zinc-500" numberOfLines={1}>
-          john.doe@bank.com
+        <Text className="mt-1 text-slate-400 text-xs" numberOfLines={1}>
+          {user?.email ?? "Manage your FinTech account"}
         </Text>
-
-        {/* Premium badge */}
-        <View className="mt-2.5 flex-row items-center gap-1.5 self-start rounded-full bg-blue-500/10 px-2.5 py-1">
-          <Icon as={Star} className="text-blue-400" size={11} />
-          <Text className="font-semibold text-[11px] text-blue-400">
-            Premium
-          </Text>
-        </View>
-      </View>
-      <Separator className="my-4" />
-
-      {/* ── Nav Items ── */}
-      <View className="flex-1 px-2 pt-2">
-        <DrawerItem
-          icon={({ size }) => (
-            <Icon
-              as={Home}
-              className={
-                pathname === "/(drawer)/(tabs)/home" || pathname === "/"
-                  ? "text-blue-400"
-                  : "text-zinc-500"
-              }
-              size={size}
-            />
-          )}
-          label="Dashboard"
-          labelStyle={{
-            color:
-              pathname === "/(drawer)/(tabs)/home" || pathname === "/"
-                ? "#3E6AE1"
-                : "#5C5E62",
-            fontWeight:
-              pathname === "/(drawer)/(tabs)/home" || pathname === "/"
-                ? "600"
-                : "400",
-            fontSize: 14,
-            marginLeft: 8,
-          }}
-          onPress={() => router.push("/(drawer)/(tabs)/home")}
-          style={{
-            borderRadius: 10,
-            backgroundColor:
-              pathname === "/(drawer)/(tabs)/home" || pathname === "/"
-                ? "rgba(62,106,225,0.08)"
-                : "transparent",
-            marginBottom: 2,
-          }}
-        />
-
-        {navItems.map((item) => {
-          const isActive = pathname.includes(item.route.split("/").pop() || "");
-          return (
-            <DrawerItem
-              icon={({ size }) => (
-                <Icon
-                  as={item.icon}
-                  className={isActive ? "text-blue-400" : "text-zinc-500"}
-                  size={size}
-                />
-              )}
-              key={item.route}
-              label={item.label}
-              labelStyle={{
-                color: isActive ? "#3E6AE1" : "#5C5E62",
-                fontWeight: isActive ? "600" : "400",
-                fontSize: 14,
-                marginLeft: 12,
-              }}
-              onPress={() => router.push(item.route)}
-              style={{
-                borderRadius: 10,
-                backgroundColor: isActive
-                  ? "rgba(62,106,225,0.08)"
-                  : "transparent",
-                marginBottom: 2,
-              }}
-            />
-          );
-        })}
       </View>
 
-      {/* ── Sign Out ── */}
-      <View className="border-zinc-900 border-t px-5 pt-4 pb-9">
-        <TouchableOpacity
-          activeOpacity={0.7}
-          className="flex-row items-center gap-2.5"
-          onPress={() => router.replace("/(auth)/sign-in")}
+      {renderSection("Overview", primaryItems)}
+      {renderSection("Money", moneyItems)}
+      {renderSection("Stay Informed", supportItems)}
+      {renderSection("Account", accountItems)}
+
+      <View className="mt-8 border-slate-800 border-t px-3 pt-4">
+        <Button
+          variant="ghost"
+          className="flex-row items-center justify-start gap-3"
+          onPress={() => {
+            clearAuth();
+            router.replace("/(auth)/sign-in" as Href);
+          }}
         >
-          <Icon as={LogOut} className="text-red-500" size={19} />
-          <Text className="font-medium text-red-400 text-sm">Sign Out</Text>
-        </TouchableOpacity>
+          <Icon as={LogOut} className="size-5 text-rose-400" />
+          <Text className="font-medium text-rose-300 text-sm">Sign out</Text>
+        </Button>
       </View>
-    </DrawerContentScrollView>
+    </ScrollView>
   );
 }
 
-// Drawer Header Component 
+function NavRow({
+  icon: IconComponent,
+  label,
+  active,
+  onPress,
+}: NavItem & { active: boolean; onPress: () => void }) {
+  return (
+    <Button
+      variant="ghost"
+      onPress={onPress}
+      className={cn(
+        "flex-row items-center justify-start gap-3 rounded-xl px-3",
+        active ? "bg-teal-400/12" : "",
+      )}
+    >
+      <Icon
+        as={IconComponent}
+        className={cn("size-5", active ? "text-teal-300" : "text-slate-500")}
+      />
+      <Text
+        className={cn(
+          "text-sm",
+          active ? "font-semibold text-slate-100" : "text-slate-300",
+        )}
+      >
+        {label}
+      </Text>
+    </Button>
+  );
+}
+
 function DrawerHeader({ title }: { title: string }) {
-  const router = useRouter();
+  const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+  const toggleDrawer = () => {
+    (navigation as unknown as { toggleDrawer: () => void }).toggleDrawer();
+  };
 
   return (
     <View
-      className="flex-row items-center border-zinc-900 border-b bg-zinc-950 px-4 pb-3"
       style={{ paddingTop: insets.top }}
+      className="flex-row items-center border-slate-800 border-b bg-slate-950 px-4 pb-3"
     >
-      <TouchableOpacity
-        activeOpacity={0.7}
-        className="mr-3 h-10 w-10 items-center justify-center rounded-xl bg-zinc-900"
-        onPress={() => router.back()}
+      <Button
+        variant="ghost"
+        size="icon"
+        onPress={toggleDrawer}
+        className="mr-3 h-11 w-11 rounded-xl bg-slate-900"
+        accessibilityLabel="Open navigation menu"
       >
-        <Icon as={ArrowLeft} className="text-zinc-200" size={20} />
-      </TouchableOpacity>
-      <Text
-        className="font-bold text-lg text-white tracking-tight"
-        numberOfLines={1}
-      >
+        <Icon as={WalletCards} className="text-teal-300" size={20} />
+      </Button>
+      <Text className="font-semibold text-lg text-slate-100" numberOfLines={1}>
         {title}
       </Text>
     </View>
   );
 }
 
-// Root Drawer Layout 
-export default function AppLayout() {
+export default function DrawerLayout() {
   return (
     <Drawer
-      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      drawerContent={CustomDrawerContent}
       screenOptions={{
-        headerShown: true,
         header: ({ options }) => (
-          <DrawerHeader
-            title={
-              (options.title || options.drawerLabel || "Untitled") as string
-            }
-          />
+          <DrawerHeader title={(options.title ?? "FinTech") as string} />
         ),
-        drawerStyle: { backgroundColor: "#171A20", width: 285 },
+        drawerStyle: { backgroundColor: "#020617", width: 296 },
         drawerType: "slide",
-        overlayColor: "rgba(0,0,0,0.55)",
-        swipeEdgeWidth: 50,
-        sceneStyle: { backgroundColor: "#171A20" },
+        overlayColor: "rgba(2, 6, 23, 0.68)",
+        swipeEdgeWidth: 48,
+        sceneStyle: { backgroundColor: "#020617" },
       }}
     >
-      {/* Tabs are the main shell - No header here as Tabs has its own */}
-      <Drawer.Screen
-        name="(tabs)"
-        options={{
-          headerShown: false,
-          drawerLabel: "Dashboard",
-          title: "Dashboard",
-        }}
-      />
-
-      <Drawer.Screen
-        name="transactions"
-        options={{
-          headerShown: true,
-          drawerLabel: "Transactions",
-          title: "Transaction History",
-        }}
-      />
-      <Drawer.Screen
-        name="messages"
-        options={{
-          headerShown: true,
-          drawerLabel: "Messages",
-          title: "Bank Messages",
-        }}
-      />
-      <Drawer.Screen
-        name="notifications"
-        options={{
-          headerShown: true,
-          drawerLabel: "Notifications",
-          title: "Alerts & Updates",
-        }}
-      />
-      <Drawer.Screen
-        name="security"
-        options={{
-          headerShown: true,
-          drawerLabel: "Security",
-          title: "Security Settings",
-        }}
-      />
-      <Drawer.Screen
-        name="help"
-        options={{
-          headerShown: true,
-          drawerLabel: "Help Center",
-          title: "Help Center",
-        }}
-      />
-      <Drawer.Screen
-        name="support"
-        options={{
-          headerShown: true,
-          drawerLabel: "Support Tickets",
-          title: "Support Tickets",
-        }}
-      />
-      <Drawer.Screen
-        name="settings"
-        options={{
-          headerShown: true,
-          drawerLabel: "Settings",
-          title: "App Settings",
-        }}
-      />
+      <Drawer.Screen name="(tabs)" options={{ headerShown: false, title: "Dashboard" }} />
+      <Drawer.Screen name="transactions" options={{ title: "Transactions" }} />
+      <Drawer.Screen name="statements" options={{ title: "Statements" }} />
+      <Drawer.Screen name="analytics" options={{ title: "Analytics" }} />
+      <Drawer.Screen name="notifications" options={{ title: "Notifications" }} />
+      <Drawer.Screen name="messages" options={{ title: "Messages" }} />
+      <Drawer.Screen name="support" options={{ title: "Support" }} />
+      <Drawer.Screen name="security" options={{ title: "Security" }} />
+      <Drawer.Screen name="settings" options={{ title: "Settings" }} />
+      <Drawer.Screen name="help" options={{ title: "Help Center" }} />
     </Drawer>
   );
 }

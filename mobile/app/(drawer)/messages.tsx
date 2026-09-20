@@ -1,178 +1,34 @@
 import React from "react";
-import {
-  ActivityIndicator,
-  Alert,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ActivityIndicator, View } from "react-native";
+import { ChatList } from "@/components/messages/ChatList";
+import { ConversationView } from "@/components/messages/ConversationView";
+import type { Chat, Message } from "@/components/messages/types";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
-import { Badge } from "@/components/ui/badge";
-import { MessageSquare, CreditCard, Shield, Bell, Trash2, ChevronRight } from "lucide-react-native";
-import { Icon } from "@/components/ui/icon";
-import {
-  useDeleteMessage,
-  useInboxMessages,
-  useInboxUnreadCount,
-  useMarkAllMessagesRead,
-  useMarkMessageRead,
-} from "@/hooks/useInbox";
+import { useInboxMessages, useInboxUnreadCount, useMarkAllMessagesRead, useMarkMessageRead } from "@/hooks/useInbox";
 import type { InboxMessage } from "@/lib/api/inbox";
 
-const typeIcons: Record<string, typeof MessageSquare> = {
-  System: MessageSquare,
-  Support: MessageSquare,
-  Statement: Bell,
-  Security: Shield,
-  Promotion: CreditCard,
-};
+function toChat(message: InboxMessage): Chat {
+  return { id: message.id, name: message.from, initials: message.from.slice(0, 2).toUpperCase(), category: message.type, status: "closed", lastMessage: message.subject, timestamp: new Date(message.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric" }), unread: message.isRead ? undefined : 1 };
+}
 
-function timeAgo(value: string) {
-  const diff = Date.now() - new Date(value).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 60) return `${mins}m ago`;
-  const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.floor(hours / 24);
-  return `${days}d ago`;
+function toMessage(message: InboxMessage): Message {
+  return { id: message.id, direction: "incoming", text: message.body, time: new Date(message.createdAt).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" }) };
 }
 
 export default function MessagesScreen() {
   const { data: messages, isLoading, isError, refetch } = useInboxMessages();
-  const { data: unreadData } = useInboxUnreadCount();
+  const { data: unread } = useInboxUnreadCount();
   const markRead = useMarkMessageRead();
   const markAllRead = useMarkAllMessagesRead();
-  const deleteMessage = useDeleteMessage();
-  const [openId, setOpenId] = React.useState<string | null>(null);
+  const [activeId, setActiveId] = React.useState<string | null>(null);
+  const inbox = messages ?? [];
+  const activeMessage = inbox.find((message) => message.id === activeId) ?? null;
+  const select = (chat: Chat) => { setActiveId(chat.id); const message = inbox.find((item) => item.id === chat.id); if (message && !message.isRead) markRead.mutate(message.id); };
 
-  const unreadCount = unreadData?.count ?? 0;
-  const hasUnread = ((messages ?? []) as InboxMessage[]).some((m) => !m.isRead);
+  if (isLoading) return <View className="flex-1 items-center justify-center"><ActivityIndicator size="large" /><Text className="mt-3 text-muted-foreground">Loading messages...</Text></View>;
+  if (isError) return <View className="flex-1 items-center justify-center gap-3"><Text className="text-muted-foreground">Couldn't load messages.</Text><Button onPress={() => refetch()} variant="outline"><Text>Retry</Text></Button></View>;
+  if (activeMessage) return <ConversationView chat={toChat(activeMessage)} messages={[toMessage(activeMessage)]} onBack={() => setActiveId(null)} readOnly showBack />;
 
-  const handleOpen = (message: InboxMessage) => {
-    setOpenId(openId === message.id ? null : message.id);
-    if (!message.isRead) {
-      markRead.mutate(message.id);
-    }
-  };
-
-  const handleMarkAll = async () => {
-    try {
-      await markAllRead.mutateAsync();
-    } catch (err) {
-      Alert.alert("Failed", err instanceof Error ? err.message : "Please try again");
-    }
-  };
-
-  const handleDelete = (message: InboxMessage) => {
-    Alert.alert("Delete message", `Delete "${message.subject}"?`, [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: () =>
-          deleteMessage.mutate(message.id, {
-            onError: (err) =>
-              Alert.alert("Failed", err instanceof Error ? err.message : "Please try again"),
-          }),
-      },
-    ]);
-  };
-
-  return (
-    <ScrollView className="flex-1 p-6" contentContainerClassName="gap-4">
-      <View className="gap-1">
-        <Text className="font-bold text-3xl text-foreground">Messages</Text>
-        <Text className="text-muted-foreground">Bank communications and updates.</Text>
-      </View>
-
-      <Card>
-        <CardHeader className="pb-2">
-          <View className="flex-row items-center justify-between">
-            <CardTitle>Inbox</CardTitle>
-            <View className="flex-row items-center gap-2">
-              {unreadCount > 0 && (
-                <Badge>
-                  <Text className="text-xs text-white">{unreadCount} new</Text>
-                </Badge>
-              )}
-              {hasUnread && (
-                <TouchableOpacity onPress={handleMarkAll}>
-                  <Text className="text-primary text-sm font-medium">Mark all read</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          </View>
-        </CardHeader>
-        <CardContent className="p-0">
-          {isLoading ? (
-            <View className="items-center py-8">
-              <ActivityIndicator size="large" className="text-primary" />
-              <Text className="mt-3 text-sm text-muted-foreground">Loading messages...</Text>
-            </View>
-          ) : isError ? (
-            <View className="items-center gap-3 py-6">
-              <Text className="text-sm text-muted-foreground">Couldn't load messages.</Text>
-              <Button variant="outline" onPress={() => refetch()}>
-                <Text>Retry</Text>
-              </Button>
-            </View>
-          ) : (messages ?? []).length === 0 ? (
-            <View className="py-6">
-              <Text className="text-center text-sm text-muted-foreground">
-                No messages yet.
-              </Text>
-            </View>
-          ) : (
-            (messages as InboxMessage[]).map((c, i) => {
-              const IconComponent = typeIcons[c.type] || MessageSquare;
-              const isOpen = openId === c.id;
-              return (
-                <View key={c.id}>
-                  <TouchableOpacity
-                    activeOpacity={0.7}
-                    className={`flex-row items-center gap-3 px-4 py-3.5 ${i < (messages ?? []).length - 1 ? "border-b border-border" : ""} ${!c.isRead ? "bg-accent/30" : ""}`}
-                    onPress={() => handleOpen(c)}
-                  >
-                    <View className={`rounded-full p-2 ${c.isRead ? "bg-muted" : "bg-primary/10"}`}>
-                      <Icon
-                        as={IconComponent}
-                        size={18}
-                        className={c.isRead ? "text-muted-foreground" : "text-primary"}
-                      />
-                    </View>
-                    <View className="flex-1">
-                      <View className="flex-row items-center justify-between">
-                        <Text className={`text-sm flex-1 mr-2 ${!c.isRead ? "font-semibold text-foreground" : "text-foreground"}`}>
-                          {c.subject}
-                        </Text>
-                        <Text className="text-muted-foreground text-xs">{timeAgo(c.createdAt)}</Text>
-                      </View>
-                      <Text className="text-muted-foreground text-sm mt-0.5" numberOfLines={1}>
-                        {c.from} · {c.body}
-                      </Text>
-                    </View>
-                    {!c.isRead && <View className="h-2 w-2 rounded-full bg-primary" />}
-                  </TouchableOpacity>
-                  {isOpen && (
-                    <View className="border-b border-border bg-muted/30 px-4 py-3">
-                      <Text className="text-sm text-muted-foreground">{c.body}</Text>
-                      <TouchableOpacity
-                        className="mt-3 flex-row items-center gap-1.5"
-                        onPress={() => handleDelete(c)}
-                      >
-                        <Icon as={Trash2} size={16} className="text-destructive" />
-                        <Text className="text-destructive text-sm font-medium">Delete</Text>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                </View>
-              );
-            })
-          )}
-        </CardContent>
-      </Card>
-    </ScrollView>
-  );
+  return <View className="flex-1 bg-background"><View className="flex-row items-center justify-between px-4 pt-4"><Text className="text-muted-foreground">Bank communications and account updates</Text>{(unread?.count ?? 0) > 0 ? <Button onPress={() => markAllRead.mutate()} size="sm" variant="ghost"><Text>Mark all read</Text></Button> : null}</View><ChatList chats={inbox.map(toChat)} onSelect={select} searchPlaceholder="Search messages..." title="Chats" /></View>;
 }

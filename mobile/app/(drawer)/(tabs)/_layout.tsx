@@ -1,5 +1,4 @@
-import { DrawerActions, useNavigation } from "@react-navigation/native";
-import { Tabs, usePathname, useRouter } from "expo-router";
+import { Tabs, useNavigation, usePathname, useRouter } from "expo-router";
 import {
   ArrowUpDown,
   Bell,
@@ -37,7 +36,13 @@ function TabHeader({ title }: { title: string }) {
       <TouchableOpacity
         activeOpacity={0.7}
         className="h-10 w-10 items-center justify-center rounded-xl bg-zinc-900"
-        onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+        onPress={() =>
+          (
+            navigation as unknown as {
+              getParent: () => { toggleDrawer: () => void } | undefined;
+            }
+          ).getParent()?.toggleDrawer()
+        }
       >
         <Icon as={Menu} className="text-zinc-200" size={20} />
       </TouchableOpacity>

@@ -1,7 +1,6 @@
-import { ThemeProvider } from "@react-navigation/native";
 import { PortalHost } from "@rn-primitives/portal";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { router, Stack, useSegments } from "expo-router";
+import { router, Stack, ThemeProvider, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useRef } from "react";
 import { Platform } from "react-native";
