@@ -282,7 +282,7 @@ function AdminSupport() {
 									<CardContent className="p-0">
 										<div className="divide-y">
 											{filtered.map((ticket) => (
-												<button
+												<Button
 													key={ticket.id}
 													type="button"
 													onClick={() => setSelectedTicket(ticket)}
@@ -333,7 +333,7 @@ function AdminSupport() {
 															</span>
 														</div>
 													</div>
-												</button>
+												</Button>
 											))}
 										</div>
 									</CardContent>

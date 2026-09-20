@@ -190,7 +190,7 @@ function SupportUserLookup() {
 									<CardContent className="p-0">
 										<div className="divide-y">
 											{filtered.map((user) => (
-												<button
+												<Button
 													key={user.id}
 													type="button"
 													onClick={() => setSelectedUser(user)}
@@ -215,7 +215,7 @@ function SupportUserLookup() {
 													<Badge variant={statusConfig[user.status].variant}>
 														{statusConfig[user.status].label}
 													</Badge>
-												</button>
+												</Button>
 											))}
 										</div>
 									</CardContent>

@@ -66,7 +66,7 @@ export function BalanceCard({
 											<EyeOff className="size-5 text-primary-foreground/70" />
 										</span>
 									</span>
-								</button>
+								</Button>
 							</div>
 						</div>
 					</div>

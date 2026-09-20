@@ -216,7 +216,7 @@ function SupportChat() {
 								<CardContent className="p-0">
 									<div className="divide-y">
 										{filtered.map((chat) => (
-											<button
+											<Button
 												key={chat.id}
 												type="button"
 												onClick={() => setActiveChat(chat)}
@@ -258,7 +258,7 @@ function SupportChat() {
 														{chat.lastMessage}
 													</p>
 												</div>
-											</button>
+											</Button>
 										))}
 									</div>
 								</CardContent>
