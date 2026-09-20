@@ -6,6 +6,7 @@ export interface Chat {
   status: "open" | "progress" | "resolved" | "closed";
   lastMessage: string;
   timestamp: string;
+  unread?: number;
 }
 
 export interface Message {

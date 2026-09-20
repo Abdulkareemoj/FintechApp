@@ -12,10 +12,12 @@ interface Props {
   chats: Chat[];
   activeId?: string;
   onSelect: (chat: Chat) => void;
-  onNew: () => void;
+  onNew?: () => void;
+  title?: string;
+  searchPlaceholder?: string;
 }
 
-export function ChatList({ chats, activeId, onSelect, onNew }: Props) {
+export function ChatList({ chats, activeId, onSelect, onNew, title = "Chats", searchPlaceholder = "Search chats..." }: Props) {
   const [query, setQuery] = useState("");
 
   const filtered = chats.filter(
@@ -28,10 +30,8 @@ export function ChatList({ chats, activeId, onSelect, onNew }: Props) {
     <View className="flex h-full flex-col bg-background">
       <View className="gap-4 p-4">
         <View className="flex-row items-center justify-between">
-          <Text className="text-2xl font-bold text-foreground">Tickets</Text>
-          <Button className="h-9 w-9 rounded-full" onPress={onNew} size="icon" variant="outline">
-            <Icon as={Plus} className="text-foreground size-4" />
-          </Button>
+          <Text className="text-2xl font-bold text-foreground">{title}</Text>
+          {onNew ? <Button className="h-9 w-9 rounded-full" onPress={onNew} size="icon" variant="ghost"><Icon as={Plus} className="text-foreground size-4" /></Button> : null}
         </View>
         <View className="relative">
           <View className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2">
@@ -40,7 +40,7 @@ export function ChatList({ chats, activeId, onSelect, onNew }: Props) {
           <Input
             className="pl-9"
             onChangeText={setQuery}
-            placeholder="Search tickets..."
+            placeholder={searchPlaceholder}
             value={query}
           />
         </View>
@@ -58,7 +58,7 @@ export function ChatList({ chats, activeId, onSelect, onNew }: Props) {
           ))}
           {filtered.length === 0 && (
             <Text className="px-4 py-8 text-center text-sm text-muted-foreground">
-              No tickets found.
+            No conversations found.
             </Text>
           )}
         </View>
