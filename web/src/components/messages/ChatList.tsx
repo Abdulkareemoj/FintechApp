@@ -10,10 +10,19 @@ interface Props {
 	chats: Chat[];
 	activeId?: string;
 	onSelect: (chat: Chat) => void;
-	onNew: () => void;
+	onNew?: () => void;
+	title?: string;
+	searchPlaceholder?: string;
 }
 
-export function ChatList({ chats, activeId, onSelect, onNew }: Props) {
+export function ChatList({
+	chats,
+	activeId,
+	onSelect,
+	onNew,
+	title = "Chats",
+	searchPlaceholder = "Search chats...",
+}: Props) {
 	const [query, setQuery] = useState("");
 	const filtered = useMemo(
 		() =>
@@ -26,25 +35,22 @@ export function ChatList({ chats, activeId, onSelect, onNew }: Props) {
 	);
 
 	return (
-		<div className="flex h-full flex-col bg-background">
-			<div className="space-y-4 p-4">
+		<div className="flex h-full flex-col bg-card">
+			<div className="space-y-3 border-b border-border/70 p-4">
 				<div className="flex items-center justify-between">
-					<h1 className="text-2xl font-bold text-foreground">Tickets</h1>
-					<Button
-						className="h-9 w-9 rounded-full"
-						onClick={onNew}
-						size="icon"
-						variant="outline"
-					>
-						<Plus className="h-4 w-4" />
-					</Button>
+					<h1 className="font-bold text-2xl text-foreground">{title}</h1>
+					{onNew ? (
+						<Button className="h-9 w-9 rounded-full" onClick={onNew} size="icon" variant="ghost">
+							<Plus className="h-5 w-5" />
+						</Button>
+					) : null}
 				</div>
 				<div className="relative">
 					<Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 					<Input
 						className="pl-9"
 						onChange={(e) => setQuery(e.target.value)}
-						placeholder="Search tickets..."
+						placeholder={searchPlaceholder}
 						value={query}
 					/>
 				</div>
@@ -62,7 +68,7 @@ export function ChatList({ chats, activeId, onSelect, onNew }: Props) {
 					))}
 					{filtered.length === 0 && (
 						<p className="px-4 py-8 text-center text-sm text-muted-foreground">
-							No tickets found.
+							No conversations found.
 						</p>
 					)}
 				</div>

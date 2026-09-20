@@ -11,6 +11,7 @@ interface Props {
 	onBack?: () => void;
 	onSend?: (text: string) => void;
 	sending?: boolean;
+	readOnly?: boolean;
 }
 
 export function ConversationView({
@@ -20,6 +21,7 @@ export function ConversationView({
 	onBack,
 	onSend,
 	sending,
+	readOnly,
 }: Props) {
 	return (
 		<div className="flex h-full flex-col bg-background">
@@ -33,11 +35,13 @@ export function ConversationView({
 				</div>
 			</ScrollArea>
 
-			<MessageComposer
-				disabled={sending}
-				onSend={onSend}
-				placeholder="Type a reply..."
-			/>
+			{!readOnly ? (
+				<MessageComposer
+					disabled={sending}
+					onSend={onSend}
+					placeholder="Enter message..."
+				/>
+			) : null}
 		</div>
 	);
 }

@@ -1,6 +1,7 @@
 import { CheckCheck, MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Message } from "./types";
+import { Button } from "../ui/button";
 
 interface Props {
 	message: Message;
@@ -23,7 +24,7 @@ export function MessageBubble({ message }: Props) {
 					type="button"
 				>
 					<MoreHorizontal className="h-4 w-4" />
-				</button>
+				</Button>
 			)}
 
 			<div
@@ -57,7 +58,7 @@ export function MessageBubble({ message }: Props) {
 					type="button"
 				>
 					<MoreHorizontal className="h-4 w-4" />
-				</button>
+				</Button>
 			)}
 		</div>
 	);

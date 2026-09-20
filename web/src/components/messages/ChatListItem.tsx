@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { Chat } from "./types";
+import { Button } from "../ui/button";
 
 interface Props {
 	chat: Chat;
@@ -9,22 +9,16 @@ interface Props {
 	onClick?: () => void;
 }
 
-const statusLabel: Record<Chat["status"], string> = {
-	open: "Open",
-	progress: "In Progress",
-	resolved: "Resolved",
-	closed: "Closed",
-};
-
 export function ChatListItem({ chat, active, onClick }: Props) {
 	return (
 		<Button
 			className={cn(
-				"flex w-full items-start gap-3 px-4 py-3 text-left transition-colors border-b border-border/60 hover:bg-muted/60",
-				active && "bg-muted",
+				"relative h-auto min-h-[76px] w-full justify-start rounded-none border-border/60 border-b px-4 py-3 text-left transition-colors hover:bg-muted/60",
+				active && "bg-primary/10 before:absolute before:inset-y-0 before:left-0 before:w-1 before:bg-primary",
 			)}
 			onClick={onClick}
 			type="button"
+			variant="ghost"
 		>
 			<div className="relative shrink-0">
 				<Avatar className="h-10 w-10">
@@ -44,18 +38,17 @@ export function ChatListItem({ chat, active, onClick }: Props) {
 						{chat.timestamp}
 					</span>
 				</div>
-				<div className="mt-1 flex items-center justify-between gap-2">
-					<p className="truncate text-xs text-muted-foreground">
+				<div className="mt-1 flex items-center gap-2">
+					<p className="min-w-0 flex-1 truncate text-xs text-muted-foreground">
 						{chat.lastMessage}
 					</p>
-					<Badge
-						className="shrink-0 text-[10px]"
-						variant={chat.status === "closed" ? "secondary" : "outline"}
-					>
-						{statusLabel[chat.status]}
-					</Badge>
+					{chat.unread ? (
+						<span className="flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-foreground">
+							{chat.unread}
+						</span>
+					) : null}
 				</div>
 			</div>
-		</button>
+		</Button>
 	);
 }

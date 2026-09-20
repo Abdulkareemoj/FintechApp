@@ -46,6 +46,9 @@ import { Route as dashboardDashboardSupportRouteImport } from './routes/(dashboa
 import { Route as dashboardDashboardSettingsRouteImport } from './routes/(dashboard)/dashboard/settings'
 import { Route as dashboardDashboardSendMoneyRouteImport } from './routes/(dashboard)/dashboard/send-money'
 import { Route as dashboardDashboardReportsRouteImport } from './routes/(dashboard)/dashboard/reports'
+import { Route as dashboardDashboardNotificationsRouteImport } from './routes/(dashboard)/dashboard/notifications'
+import { Route as dashboardDashboardInboxRouteImport } from './routes/(dashboard)/dashboard/inbox'
+import { Route as dashboardDashboardHelpRouteImport } from './routes/(dashboard)/dashboard/help'
 import { Route as dashboardDashboardCardsRouteImport } from './routes/(dashboard)/dashboard/cards'
 import { Route as dashboardDashboardBillsRouteImport } from './routes/(dashboard)/dashboard/bills'
 import { Route as dashboardDashboardAnalyticsRouteImport } from './routes/(dashboard)/dashboard/analytics'
@@ -263,6 +266,22 @@ const dashboardDashboardReportsRoute =
     path: '/dashboard/reports',
     getParentRoute: () => rootRouteImport,
   } as any)
+const dashboardDashboardNotificationsRoute =
+  dashboardDashboardNotificationsRouteImport.update({
+    id: '/(dashboard)/dashboard/notifications',
+    path: '/dashboard/notifications',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardDashboardInboxRoute = dashboardDashboardInboxRouteImport.update({
+  id: '/(dashboard)/dashboard/inbox',
+  path: '/dashboard/inbox',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardDashboardHelpRoute = dashboardDashboardHelpRouteImport.update({
+  id: '/(dashboard)/dashboard/help',
+  path: '/dashboard/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const dashboardDashboardCardsRoute = dashboardDashboardCardsRouteImport.update({
   id: '/(dashboard)/dashboard/cards',
   path: '/dashboard/cards',
@@ -368,6 +387,9 @@ export interface FileRoutesByFullPath {
   '/dashboard/analytics': typeof dashboardDashboardAnalyticsRoute
   '/dashboard/bills': typeof dashboardDashboardBillsRoute
   '/dashboard/cards': typeof dashboardDashboardCardsRoute
+  '/dashboard/help': typeof dashboardDashboardHelpRoute
+  '/dashboard/inbox': typeof dashboardDashboardInboxRoute
+  '/dashboard/notifications': typeof dashboardDashboardNotificationsRoute
   '/dashboard/reports': typeof dashboardDashboardReportsRoute
   '/dashboard/send-money': typeof dashboardDashboardSendMoneyRoute
   '/dashboard/settings': typeof dashboardDashboardSettingsRoute
@@ -421,6 +443,9 @@ export interface FileRoutesByTo {
   '/dashboard/analytics': typeof dashboardDashboardAnalyticsRoute
   '/dashboard/bills': typeof dashboardDashboardBillsRoute
   '/dashboard/cards': typeof dashboardDashboardCardsRoute
+  '/dashboard/help': typeof dashboardDashboardHelpRoute
+  '/dashboard/inbox': typeof dashboardDashboardInboxRoute
+  '/dashboard/notifications': typeof dashboardDashboardNotificationsRoute
   '/dashboard/reports': typeof dashboardDashboardReportsRoute
   '/dashboard/send-money': typeof dashboardDashboardSendMoneyRoute
   '/dashboard/settings': typeof dashboardDashboardSettingsRoute
@@ -475,6 +500,9 @@ export interface FileRoutesById {
   '/(dashboard)/dashboard/analytics': typeof dashboardDashboardAnalyticsRoute
   '/(dashboard)/dashboard/bills': typeof dashboardDashboardBillsRoute
   '/(dashboard)/dashboard/cards': typeof dashboardDashboardCardsRoute
+  '/(dashboard)/dashboard/help': typeof dashboardDashboardHelpRoute
+  '/(dashboard)/dashboard/inbox': typeof dashboardDashboardInboxRoute
+  '/(dashboard)/dashboard/notifications': typeof dashboardDashboardNotificationsRoute
   '/(dashboard)/dashboard/reports': typeof dashboardDashboardReportsRoute
   '/(dashboard)/dashboard/send-money': typeof dashboardDashboardSendMoneyRoute
   '/(dashboard)/dashboard/settings': typeof dashboardDashboardSettingsRoute
@@ -530,6 +558,9 @@ export interface FileRouteTypes {
     | '/dashboard/analytics'
     | '/dashboard/bills'
     | '/dashboard/cards'
+    | '/dashboard/help'
+    | '/dashboard/inbox'
+    | '/dashboard/notifications'
     | '/dashboard/reports'
     | '/dashboard/send-money'
     | '/dashboard/settings'
@@ -583,6 +614,9 @@ export interface FileRouteTypes {
     | '/dashboard/analytics'
     | '/dashboard/bills'
     | '/dashboard/cards'
+    | '/dashboard/help'
+    | '/dashboard/inbox'
+    | '/dashboard/notifications'
     | '/dashboard/reports'
     | '/dashboard/send-money'
     | '/dashboard/settings'
@@ -636,6 +670,9 @@ export interface FileRouteTypes {
     | '/(dashboard)/dashboard/analytics'
     | '/(dashboard)/dashboard/bills'
     | '/(dashboard)/dashboard/cards'
+    | '/(dashboard)/dashboard/help'
+    | '/(dashboard)/dashboard/inbox'
+    | '/(dashboard)/dashboard/notifications'
     | '/(dashboard)/dashboard/reports'
     | '/(dashboard)/dashboard/send-money'
     | '/(dashboard)/dashboard/settings'
@@ -690,6 +727,9 @@ export interface RootRouteChildren {
   dashboardDashboardAnalyticsRoute: typeof dashboardDashboardAnalyticsRoute
   dashboardDashboardBillsRoute: typeof dashboardDashboardBillsRoute
   dashboardDashboardCardsRoute: typeof dashboardDashboardCardsRoute
+  dashboardDashboardHelpRoute: typeof dashboardDashboardHelpRoute
+  dashboardDashboardInboxRoute: typeof dashboardDashboardInboxRoute
+  dashboardDashboardNotificationsRoute: typeof dashboardDashboardNotificationsRoute
   dashboardDashboardReportsRoute: typeof dashboardDashboardReportsRoute
   dashboardDashboardSendMoneyRoute: typeof dashboardDashboardSendMoneyRoute
   dashboardDashboardSettingsRoute: typeof dashboardDashboardSettingsRoute
@@ -978,6 +1018,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardDashboardReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(dashboard)/dashboard/notifications': {
+      id: '/(dashboard)/dashboard/notifications'
+      path: '/dashboard/notifications'
+      fullPath: '/dashboard/notifications'
+      preLoaderRoute: typeof dashboardDashboardNotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/dashboard/inbox': {
+      id: '/(dashboard)/dashboard/inbox'
+      path: '/dashboard/inbox'
+      fullPath: '/dashboard/inbox'
+      preLoaderRoute: typeof dashboardDashboardInboxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/dashboard/help': {
+      id: '/(dashboard)/dashboard/help'
+      path: '/dashboard/help'
+      fullPath: '/dashboard/help'
+      preLoaderRoute: typeof dashboardDashboardHelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(dashboard)/dashboard/cards': {
       id: '/(dashboard)/dashboard/cards'
       path: '/dashboard/cards'
@@ -1106,6 +1167,9 @@ const rootRouteChildren: RootRouteChildren = {
   dashboardDashboardAnalyticsRoute: dashboardDashboardAnalyticsRoute,
   dashboardDashboardBillsRoute: dashboardDashboardBillsRoute,
   dashboardDashboardCardsRoute: dashboardDashboardCardsRoute,
+  dashboardDashboardHelpRoute: dashboardDashboardHelpRoute,
+  dashboardDashboardInboxRoute: dashboardDashboardInboxRoute,
+  dashboardDashboardNotificationsRoute: dashboardDashboardNotificationsRoute,
   dashboardDashboardReportsRoute: dashboardDashboardReportsRoute,
   dashboardDashboardSendMoneyRoute: dashboardDashboardSendMoneyRoute,
   dashboardDashboardSettingsRoute: dashboardDashboardSettingsRoute,

@@ -6,6 +6,7 @@ import {
   useRouter,
 } from '@tanstack/react-router'
 import type { ErrorComponentProps } from '@tanstack/react-router'
+import { Button } from './ui/button'
 
 export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
   const router = useRouter()
@@ -27,7 +28,7 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
           className={`px-2 py-1 bg-gray-600 dark:bg-gray-700 rounded-sm text-white uppercase font-extrabold`}
         >
           Try Again
-        </button>
+        </Button>
         {isRoot ? (
           <Link
             to="/"
