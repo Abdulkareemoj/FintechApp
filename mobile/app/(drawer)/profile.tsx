@@ -10,6 +10,7 @@ import { Icon } from "@/components/ui/icon";
 export default function ProfileScreen() {
   return (
     <ScrollView className="flex-1 p-6" contentContainerClassName="gap-4">
+		<Text className="font-medium text-amber-500 text-xs">Preview — profile and verification details are not connected yet.</Text>
       <View className="items-center py-6">
         <View className="relative mb-4">
           <View className="h-20 w-20 items-center justify-center rounded-full bg-blue-500">
