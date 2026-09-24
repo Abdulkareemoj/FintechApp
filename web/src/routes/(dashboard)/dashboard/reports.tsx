@@ -9,6 +9,7 @@ import {
 	TrendingUp,
 } from "lucide-react";
 import { motion } from "motion/react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -83,12 +84,11 @@ function ReportsPage() {
 						initial={{ opacity: 0, y: 10 }}
 					>
 						<div>
-							<h1 className="font-bold text-3xl tracking-tight">
-								Financial Reports
-							</h1>
+							<div className="flex items-center gap-3"><h1 className="font-bold text-3xl tracking-tight">Financial Reports</h1><Badge variant="outline">Preview</Badge></div>
 							<p className="mt-1 text-muted-foreground">
 								Generate and download detailed financial reports
 							</p>
+							<p className="mt-1 text-amber-600 text-sm">Reports use sample data and cannot be generated yet.</p>
 						</div>
 						<Button variant="outline">
 							<Download className="mr-2 h-4 w-4" />
