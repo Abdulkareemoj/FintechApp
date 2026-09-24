@@ -42,13 +42,12 @@ import { Route as dashboardMerchantOverviewRouteImport } from './routes/(dashboa
 import { Route as dashboardMerchantApiKeysRouteImport } from './routes/(dashboard)/merchant/api-keys'
 import { Route as dashboardMerchantAnalyticsRouteImport } from './routes/(dashboard)/merchant/analytics'
 import { Route as dashboardDashboardTopUpRouteImport } from './routes/(dashboard)/dashboard/top-up'
-import { Route as dashboardDashboardSupportRouteImport } from './routes/(dashboard)/dashboard/support'
+import { Route as dashboardDashboardStatementsRouteImport } from './routes/(dashboard)/dashboard/statements'
 import { Route as dashboardDashboardSettingsRouteImport } from './routes/(dashboard)/dashboard/settings'
 import { Route as dashboardDashboardSendMoneyRouteImport } from './routes/(dashboard)/dashboard/send-money'
 import { Route as dashboardDashboardReportsRouteImport } from './routes/(dashboard)/dashboard/reports'
+import { Route as dashboardDashboardProfileRouteImport } from './routes/(dashboard)/dashboard/profile'
 import { Route as dashboardDashboardNotificationsRouteImport } from './routes/(dashboard)/dashboard/notifications'
-import { Route as dashboardDashboardInboxRouteImport } from './routes/(dashboard)/dashboard/inbox'
-import { Route as dashboardDashboardHelpRouteImport } from './routes/(dashboard)/dashboard/help'
 import { Route as dashboardDashboardCardsRouteImport } from './routes/(dashboard)/dashboard/cards'
 import { Route as dashboardDashboardBillsRouteImport } from './routes/(dashboard)/dashboard/bills'
 import { Route as dashboardDashboardAnalyticsRouteImport } from './routes/(dashboard)/dashboard/analytics'
@@ -62,7 +61,10 @@ import { Route as dashboardAdminOverviewRouteImport } from './routes/(dashboard)
 import { Route as dashboardAdminComplianceRouteImport } from './routes/(dashboard)/admin/compliance'
 import { Route as dashboardAdminAuditTrailsRouteImport } from './routes/(dashboard)/admin/audit-trails'
 import { Route as dashboardDashboardTransactionsIndexRouteImport } from './routes/(dashboard)/dashboard/transactions/index'
+import { Route as dashboardDashboardSupportIndexRouteImport } from './routes/(dashboard)/dashboard/support/index'
 import { Route as dashboardDashboardTransactionsIdRouteImport } from './routes/(dashboard)/dashboard/transactions/$id'
+import { Route as dashboardDashboardSupportMessagesRouteImport } from './routes/(dashboard)/dashboard/support/messages'
+import { Route as dashboardDashboardSupportHelpRouteImport } from './routes/(dashboard)/dashboard/support/help'
 
 const landingIndexRoute = landingIndexRouteImport.update({
   id: '/(landing)/',
@@ -242,10 +244,10 @@ const dashboardDashboardTopUpRoute = dashboardDashboardTopUpRouteImport.update({
   path: '/dashboard/top-up',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardDashboardSupportRoute =
-  dashboardDashboardSupportRouteImport.update({
-    id: '/(dashboard)/dashboard/support',
-    path: '/dashboard/support',
+const dashboardDashboardStatementsRoute =
+  dashboardDashboardStatementsRouteImport.update({
+    id: '/(dashboard)/dashboard/statements',
+    path: '/dashboard/statements',
     getParentRoute: () => rootRouteImport,
   } as any)
 const dashboardDashboardSettingsRoute =
@@ -266,22 +268,18 @@ const dashboardDashboardReportsRoute =
     path: '/dashboard/reports',
     getParentRoute: () => rootRouteImport,
   } as any)
+const dashboardDashboardProfileRoute =
+  dashboardDashboardProfileRouteImport.update({
+    id: '/(dashboard)/dashboard/profile',
+    path: '/dashboard/profile',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const dashboardDashboardNotificationsRoute =
   dashboardDashboardNotificationsRouteImport.update({
     id: '/(dashboard)/dashboard/notifications',
     path: '/dashboard/notifications',
     getParentRoute: () => rootRouteImport,
   } as any)
-const dashboardDashboardInboxRoute = dashboardDashboardInboxRouteImport.update({
-  id: '/(dashboard)/dashboard/inbox',
-  path: '/dashboard/inbox',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardDashboardHelpRoute = dashboardDashboardHelpRouteImport.update({
-  id: '/(dashboard)/dashboard/help',
-  path: '/dashboard/help',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const dashboardDashboardCardsRoute = dashboardDashboardCardsRouteImport.update({
   id: '/(dashboard)/dashboard/cards',
   path: '/dashboard/cards',
@@ -353,10 +351,28 @@ const dashboardDashboardTransactionsIndexRoute =
     path: '/dashboard/transactions/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const dashboardDashboardSupportIndexRoute =
+  dashboardDashboardSupportIndexRouteImport.update({
+    id: '/(dashboard)/dashboard/support/',
+    path: '/dashboard/support/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const dashboardDashboardTransactionsIdRoute =
   dashboardDashboardTransactionsIdRouteImport.update({
     id: '/(dashboard)/dashboard/transactions/$id',
     path: '/dashboard/transactions/$id',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardDashboardSupportMessagesRoute =
+  dashboardDashboardSupportMessagesRouteImport.update({
+    id: '/(dashboard)/dashboard/support/messages',
+    path: '/dashboard/support/messages',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardDashboardSupportHelpRoute =
+  dashboardDashboardSupportHelpRouteImport.update({
+    id: '/(dashboard)/dashboard/support/help',
+    path: '/dashboard/support/help',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -387,13 +403,12 @@ export interface FileRoutesByFullPath {
   '/dashboard/analytics': typeof dashboardDashboardAnalyticsRoute
   '/dashboard/bills': typeof dashboardDashboardBillsRoute
   '/dashboard/cards': typeof dashboardDashboardCardsRoute
-  '/dashboard/help': typeof dashboardDashboardHelpRoute
-  '/dashboard/inbox': typeof dashboardDashboardInboxRoute
   '/dashboard/notifications': typeof dashboardDashboardNotificationsRoute
+  '/dashboard/profile': typeof dashboardDashboardProfileRoute
   '/dashboard/reports': typeof dashboardDashboardReportsRoute
   '/dashboard/send-money': typeof dashboardDashboardSendMoneyRoute
   '/dashboard/settings': typeof dashboardDashboardSettingsRoute
-  '/dashboard/support': typeof dashboardDashboardSupportRoute
+  '/dashboard/statements': typeof dashboardDashboardStatementsRoute
   '/dashboard/top-up': typeof dashboardDashboardTopUpRoute
   '/merchant/analytics': typeof dashboardMerchantAnalyticsRoute
   '/merchant/api-keys': typeof dashboardMerchantApiKeysRoute
@@ -413,7 +428,10 @@ export interface FileRoutesByFullPath {
   '/support/tickets': typeof dashboardSupportTicketsRoute
   '/support/users': typeof dashboardSupportUsersRoute
   '/dashboard/': typeof dashboardDashboardIndexRoute
+  '/dashboard/support/help': typeof dashboardDashboardSupportHelpRoute
+  '/dashboard/support/messages': typeof dashboardDashboardSupportMessagesRoute
   '/dashboard/transactions/$id': typeof dashboardDashboardTransactionsIdRoute
+  '/dashboard/support/': typeof dashboardDashboardSupportIndexRoute
   '/dashboard/transactions/': typeof dashboardDashboardTransactionsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -443,13 +461,12 @@ export interface FileRoutesByTo {
   '/dashboard/analytics': typeof dashboardDashboardAnalyticsRoute
   '/dashboard/bills': typeof dashboardDashboardBillsRoute
   '/dashboard/cards': typeof dashboardDashboardCardsRoute
-  '/dashboard/help': typeof dashboardDashboardHelpRoute
-  '/dashboard/inbox': typeof dashboardDashboardInboxRoute
   '/dashboard/notifications': typeof dashboardDashboardNotificationsRoute
+  '/dashboard/profile': typeof dashboardDashboardProfileRoute
   '/dashboard/reports': typeof dashboardDashboardReportsRoute
   '/dashboard/send-money': typeof dashboardDashboardSendMoneyRoute
   '/dashboard/settings': typeof dashboardDashboardSettingsRoute
-  '/dashboard/support': typeof dashboardDashboardSupportRoute
+  '/dashboard/statements': typeof dashboardDashboardStatementsRoute
   '/dashboard/top-up': typeof dashboardDashboardTopUpRoute
   '/merchant/analytics': typeof dashboardMerchantAnalyticsRoute
   '/merchant/api-keys': typeof dashboardMerchantApiKeysRoute
@@ -469,7 +486,10 @@ export interface FileRoutesByTo {
   '/support/tickets': typeof dashboardSupportTicketsRoute
   '/support/users': typeof dashboardSupportUsersRoute
   '/dashboard': typeof dashboardDashboardIndexRoute
+  '/dashboard/support/help': typeof dashboardDashboardSupportHelpRoute
+  '/dashboard/support/messages': typeof dashboardDashboardSupportMessagesRoute
   '/dashboard/transactions/$id': typeof dashboardDashboardTransactionsIdRoute
+  '/dashboard/support': typeof dashboardDashboardSupportIndexRoute
   '/dashboard/transactions': typeof dashboardDashboardTransactionsIndexRoute
 }
 export interface FileRoutesById {
@@ -500,13 +520,12 @@ export interface FileRoutesById {
   '/(dashboard)/dashboard/analytics': typeof dashboardDashboardAnalyticsRoute
   '/(dashboard)/dashboard/bills': typeof dashboardDashboardBillsRoute
   '/(dashboard)/dashboard/cards': typeof dashboardDashboardCardsRoute
-  '/(dashboard)/dashboard/help': typeof dashboardDashboardHelpRoute
-  '/(dashboard)/dashboard/inbox': typeof dashboardDashboardInboxRoute
   '/(dashboard)/dashboard/notifications': typeof dashboardDashboardNotificationsRoute
+  '/(dashboard)/dashboard/profile': typeof dashboardDashboardProfileRoute
   '/(dashboard)/dashboard/reports': typeof dashboardDashboardReportsRoute
   '/(dashboard)/dashboard/send-money': typeof dashboardDashboardSendMoneyRoute
   '/(dashboard)/dashboard/settings': typeof dashboardDashboardSettingsRoute
-  '/(dashboard)/dashboard/support': typeof dashboardDashboardSupportRoute
+  '/(dashboard)/dashboard/statements': typeof dashboardDashboardStatementsRoute
   '/(dashboard)/dashboard/top-up': typeof dashboardDashboardTopUpRoute
   '/(dashboard)/merchant/analytics': typeof dashboardMerchantAnalyticsRoute
   '/(dashboard)/merchant/api-keys': typeof dashboardMerchantApiKeysRoute
@@ -526,7 +545,10 @@ export interface FileRoutesById {
   '/(dashboard)/support/tickets': typeof dashboardSupportTicketsRoute
   '/(dashboard)/support/users': typeof dashboardSupportUsersRoute
   '/(dashboard)/dashboard/': typeof dashboardDashboardIndexRoute
+  '/(dashboard)/dashboard/support/help': typeof dashboardDashboardSupportHelpRoute
+  '/(dashboard)/dashboard/support/messages': typeof dashboardDashboardSupportMessagesRoute
   '/(dashboard)/dashboard/transactions/$id': typeof dashboardDashboardTransactionsIdRoute
+  '/(dashboard)/dashboard/support/': typeof dashboardDashboardSupportIndexRoute
   '/(dashboard)/dashboard/transactions/': typeof dashboardDashboardTransactionsIndexRoute
 }
 export interface FileRouteTypes {
@@ -558,13 +580,12 @@ export interface FileRouteTypes {
     | '/dashboard/analytics'
     | '/dashboard/bills'
     | '/dashboard/cards'
-    | '/dashboard/help'
-    | '/dashboard/inbox'
     | '/dashboard/notifications'
+    | '/dashboard/profile'
     | '/dashboard/reports'
     | '/dashboard/send-money'
     | '/dashboard/settings'
-    | '/dashboard/support'
+    | '/dashboard/statements'
     | '/dashboard/top-up'
     | '/merchant/analytics'
     | '/merchant/api-keys'
@@ -584,7 +605,10 @@ export interface FileRouteTypes {
     | '/support/tickets'
     | '/support/users'
     | '/dashboard/'
+    | '/dashboard/support/help'
+    | '/dashboard/support/messages'
     | '/dashboard/transactions/$id'
+    | '/dashboard/support/'
     | '/dashboard/transactions/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -614,13 +638,12 @@ export interface FileRouteTypes {
     | '/dashboard/analytics'
     | '/dashboard/bills'
     | '/dashboard/cards'
-    | '/dashboard/help'
-    | '/dashboard/inbox'
     | '/dashboard/notifications'
+    | '/dashboard/profile'
     | '/dashboard/reports'
     | '/dashboard/send-money'
     | '/dashboard/settings'
-    | '/dashboard/support'
+    | '/dashboard/statements'
     | '/dashboard/top-up'
     | '/merchant/analytics'
     | '/merchant/api-keys'
@@ -640,7 +663,10 @@ export interface FileRouteTypes {
     | '/support/tickets'
     | '/support/users'
     | '/dashboard'
+    | '/dashboard/support/help'
+    | '/dashboard/support/messages'
     | '/dashboard/transactions/$id'
+    | '/dashboard/support'
     | '/dashboard/transactions'
   id:
     | '__root__'
@@ -670,13 +696,12 @@ export interface FileRouteTypes {
     | '/(dashboard)/dashboard/analytics'
     | '/(dashboard)/dashboard/bills'
     | '/(dashboard)/dashboard/cards'
-    | '/(dashboard)/dashboard/help'
-    | '/(dashboard)/dashboard/inbox'
     | '/(dashboard)/dashboard/notifications'
+    | '/(dashboard)/dashboard/profile'
     | '/(dashboard)/dashboard/reports'
     | '/(dashboard)/dashboard/send-money'
     | '/(dashboard)/dashboard/settings'
-    | '/(dashboard)/dashboard/support'
+    | '/(dashboard)/dashboard/statements'
     | '/(dashboard)/dashboard/top-up'
     | '/(dashboard)/merchant/analytics'
     | '/(dashboard)/merchant/api-keys'
@@ -696,7 +721,10 @@ export interface FileRouteTypes {
     | '/(dashboard)/support/tickets'
     | '/(dashboard)/support/users'
     | '/(dashboard)/dashboard/'
+    | '/(dashboard)/dashboard/support/help'
+    | '/(dashboard)/dashboard/support/messages'
     | '/(dashboard)/dashboard/transactions/$id'
+    | '/(dashboard)/dashboard/support/'
     | '/(dashboard)/dashboard/transactions/'
   fileRoutesById: FileRoutesById
 }
@@ -727,13 +755,12 @@ export interface RootRouteChildren {
   dashboardDashboardAnalyticsRoute: typeof dashboardDashboardAnalyticsRoute
   dashboardDashboardBillsRoute: typeof dashboardDashboardBillsRoute
   dashboardDashboardCardsRoute: typeof dashboardDashboardCardsRoute
-  dashboardDashboardHelpRoute: typeof dashboardDashboardHelpRoute
-  dashboardDashboardInboxRoute: typeof dashboardDashboardInboxRoute
   dashboardDashboardNotificationsRoute: typeof dashboardDashboardNotificationsRoute
+  dashboardDashboardProfileRoute: typeof dashboardDashboardProfileRoute
   dashboardDashboardReportsRoute: typeof dashboardDashboardReportsRoute
   dashboardDashboardSendMoneyRoute: typeof dashboardDashboardSendMoneyRoute
   dashboardDashboardSettingsRoute: typeof dashboardDashboardSettingsRoute
-  dashboardDashboardSupportRoute: typeof dashboardDashboardSupportRoute
+  dashboardDashboardStatementsRoute: typeof dashboardDashboardStatementsRoute
   dashboardDashboardTopUpRoute: typeof dashboardDashboardTopUpRoute
   dashboardMerchantAnalyticsRoute: typeof dashboardMerchantAnalyticsRoute
   dashboardMerchantApiKeysRoute: typeof dashboardMerchantApiKeysRoute
@@ -753,7 +780,10 @@ export interface RootRouteChildren {
   dashboardSupportTicketsRoute: typeof dashboardSupportTicketsRoute
   dashboardSupportUsersRoute: typeof dashboardSupportUsersRoute
   dashboardDashboardIndexRoute: typeof dashboardDashboardIndexRoute
+  dashboardDashboardSupportHelpRoute: typeof dashboardDashboardSupportHelpRoute
+  dashboardDashboardSupportMessagesRoute: typeof dashboardDashboardSupportMessagesRoute
   dashboardDashboardTransactionsIdRoute: typeof dashboardDashboardTransactionsIdRoute
+  dashboardDashboardSupportIndexRoute: typeof dashboardDashboardSupportIndexRoute
   dashboardDashboardTransactionsIndexRoute: typeof dashboardDashboardTransactionsIndexRoute
 }
 
@@ -990,11 +1020,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardDashboardTopUpRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/dashboard/support': {
-      id: '/(dashboard)/dashboard/support'
-      path: '/dashboard/support'
-      fullPath: '/dashboard/support'
-      preLoaderRoute: typeof dashboardDashboardSupportRouteImport
+    '/(dashboard)/dashboard/statements': {
+      id: '/(dashboard)/dashboard/statements'
+      path: '/dashboard/statements'
+      fullPath: '/dashboard/statements'
+      preLoaderRoute: typeof dashboardDashboardStatementsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(dashboard)/dashboard/settings': {
@@ -1018,25 +1048,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardDashboardReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(dashboard)/dashboard/profile': {
+      id: '/(dashboard)/dashboard/profile'
+      path: '/dashboard/profile'
+      fullPath: '/dashboard/profile'
+      preLoaderRoute: typeof dashboardDashboardProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(dashboard)/dashboard/notifications': {
       id: '/(dashboard)/dashboard/notifications'
       path: '/dashboard/notifications'
       fullPath: '/dashboard/notifications'
       preLoaderRoute: typeof dashboardDashboardNotificationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/dashboard/inbox': {
-      id: '/(dashboard)/dashboard/inbox'
-      path: '/dashboard/inbox'
-      fullPath: '/dashboard/inbox'
-      preLoaderRoute: typeof dashboardDashboardInboxRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/dashboard/help': {
-      id: '/(dashboard)/dashboard/help'
-      path: '/dashboard/help'
-      fullPath: '/dashboard/help'
-      preLoaderRoute: typeof dashboardDashboardHelpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(dashboard)/dashboard/cards': {
@@ -1130,11 +1153,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardDashboardTransactionsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(dashboard)/dashboard/support/': {
+      id: '/(dashboard)/dashboard/support/'
+      path: '/dashboard/support'
+      fullPath: '/dashboard/support/'
+      preLoaderRoute: typeof dashboardDashboardSupportIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(dashboard)/dashboard/transactions/$id': {
       id: '/(dashboard)/dashboard/transactions/$id'
       path: '/dashboard/transactions/$id'
       fullPath: '/dashboard/transactions/$id'
       preLoaderRoute: typeof dashboardDashboardTransactionsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/dashboard/support/messages': {
+      id: '/(dashboard)/dashboard/support/messages'
+      path: '/dashboard/support/messages'
+      fullPath: '/dashboard/support/messages'
+      preLoaderRoute: typeof dashboardDashboardSupportMessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/dashboard/support/help': {
+      id: '/(dashboard)/dashboard/support/help'
+      path: '/dashboard/support/help'
+      fullPath: '/dashboard/support/help'
+      preLoaderRoute: typeof dashboardDashboardSupportHelpRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -1167,13 +1211,12 @@ const rootRouteChildren: RootRouteChildren = {
   dashboardDashboardAnalyticsRoute: dashboardDashboardAnalyticsRoute,
   dashboardDashboardBillsRoute: dashboardDashboardBillsRoute,
   dashboardDashboardCardsRoute: dashboardDashboardCardsRoute,
-  dashboardDashboardHelpRoute: dashboardDashboardHelpRoute,
-  dashboardDashboardInboxRoute: dashboardDashboardInboxRoute,
   dashboardDashboardNotificationsRoute: dashboardDashboardNotificationsRoute,
+  dashboardDashboardProfileRoute: dashboardDashboardProfileRoute,
   dashboardDashboardReportsRoute: dashboardDashboardReportsRoute,
   dashboardDashboardSendMoneyRoute: dashboardDashboardSendMoneyRoute,
   dashboardDashboardSettingsRoute: dashboardDashboardSettingsRoute,
-  dashboardDashboardSupportRoute: dashboardDashboardSupportRoute,
+  dashboardDashboardStatementsRoute: dashboardDashboardStatementsRoute,
   dashboardDashboardTopUpRoute: dashboardDashboardTopUpRoute,
   dashboardMerchantAnalyticsRoute: dashboardMerchantAnalyticsRoute,
   dashboardMerchantApiKeysRoute: dashboardMerchantApiKeysRoute,
@@ -1193,7 +1236,11 @@ const rootRouteChildren: RootRouteChildren = {
   dashboardSupportTicketsRoute: dashboardSupportTicketsRoute,
   dashboardSupportUsersRoute: dashboardSupportUsersRoute,
   dashboardDashboardIndexRoute: dashboardDashboardIndexRoute,
+  dashboardDashboardSupportHelpRoute: dashboardDashboardSupportHelpRoute,
+  dashboardDashboardSupportMessagesRoute:
+    dashboardDashboardSupportMessagesRoute,
   dashboardDashboardTransactionsIdRoute: dashboardDashboardTransactionsIdRoute,
+  dashboardDashboardSupportIndexRoute: dashboardDashboardSupportIndexRoute,
   dashboardDashboardTransactionsIndexRoute:
     dashboardDashboardTransactionsIndexRoute,
 }
