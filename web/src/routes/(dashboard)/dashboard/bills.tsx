@@ -110,9 +110,7 @@ function BillsPage() {
 						className="gap-4 pb-4 md:flex-row md:items-center"
 						initial={{ opacity: 0, y: 10 }}
 					>
-						<h1 className="font-bold text-3xl tracking-tight">
-							Bills & Utilities
-						</h1>
+						<div className="flex items-center gap-3"><h1 className="font-bold text-3xl tracking-tight">Bills & Utilities</h1><Badge variant="outline">Preview</Badge></div>
 						<p className="mt-1 text-muted-foreground">
 							Pay your bills and manage recurring payments
 						</p>

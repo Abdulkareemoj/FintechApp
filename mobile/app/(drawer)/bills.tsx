@@ -17,6 +17,7 @@ export default function BillsScreen() {
       <View className="gap-1">
         <Text className="font-bold text-3xl text-foreground">Bills</Text>
         <Text className="text-muted-foreground">Pay common bills quickly.</Text>
+		<Text className="font-medium text-amber-500 text-xs">Preview — bill payments are not connected yet.</Text>
       </View>
 
       <Card>
