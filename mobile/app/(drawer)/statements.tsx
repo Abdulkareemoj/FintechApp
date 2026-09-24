@@ -18,6 +18,7 @@ export default function StatementsScreen() {
         <Text className="text-muted-foreground">
           Download account statements.
         </Text>
+		<Text className="font-medium text-amber-500 text-xs">Preview — statements are sample data.</Text>
       </View>
 
       <Card>
