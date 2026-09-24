@@ -12,7 +12,6 @@
     "dev:web": "turbo -F web dev"
   },
   "dependencies": {
-    "@react-navigation/drawer": "^7.12.3",
     "turbo": "^2.9.18"
   },
   "devDependencies": {

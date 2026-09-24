@@ -12,12 +12,10 @@ This is a digital fintech service similar to PayPal, Eversend, Grey, or OPay - f
 | Layer                        | Technology                                   | Notes                                     |
 | ---------------------------- | -------------------------------------------- | ----------------------------------------- |
 | **Backend**                  | ASP.NET Core Web API                         | Core payment logic, REST endpoints        |
-| **Database**                 | PostgreSQL                                   | Transaction ledger, user data, compliance |
+| **Database**                 | MSSQL                                        | Transaction ledger, user data, compliance |
 | **Frontend (Web + Desktop)** | TanStack Start + ShadCN + Tailwind v4        | Unified dashboards across platforms       |
 | **Frontend (Mobile)**        | React Native + Expo + React Native Reusables | User mobile app with native features      |
-| **Desktop App**              | Tauri                                        | Cross-platform desktop application        |
 | **Build Tooling**            | Turborepo                                    | Monorepo orchestration                    |
-| **Shared Packages**          | TypeScript, UI, Utils                        | Common logic and components               |
 
 ## 🎯 User Roles & Dashboards
 
@@ -87,20 +85,6 @@ Regulatory monitoring and reporting
   - Audit trail management
   - Policy enforcement
 
-## 🌍 Public Website Structure
-
-| Section                  | Description                                                        |
-| ------------------------ | ------------------------------------------------------------------ |
-| **Hero Section**         | "Send Money Instantly" with clear CTAs                             |
-| **Features Overview**    | Instant transfers, multi-currency, virtual cards, low fees         |
-| **How It Works**         | Sign up → Verify ID → Start sending                                |
-| **Pricing Tiers**        | Personal (free), Business (2.9%), Enterprise (custom)              |
-| **Security Section**     | Bank-level encryption, compliance certifications, fraud protection |
-| **Mobile App Promotion** | App store links, feature highlights                                |
-| **Business Solutions**   | Merchant services, API access, bulk payments                       |
-| **Help Center**          | FAQs, tutorials, contact support                                   |
-| **Login Portal**         | User, Admin, and Support access points                             |
-
 ## 🗂️ Simplified Monorepo Structure
 
 ```bash
@@ -111,14 +95,17 @@ apps/
 │   │   ├── page.tsx                  # Landing page
 │   │   │
 │   │   ├── (auth)/                   # Authentication routes
-│   │   │   ├── login/
-│   │   │   ├── register/
+│   │   │   ├── signin/
+│   │   │   ├── signup/
+│   │   │   ├── reset-password/
+│   │   │   ├── forgot-password/
+│   │   │   ├── unauthorized/
 │   │   │   └── verify/
 │   │   │
 │   │   ├── dashboard/                # 👤 User dashboard
 │   │   │   ├── layout.tsx
 │   │   │   ├── page.tsx              # Overview
-│   │   │   ├── wallet/
+│   │   │   ├── accounts/
 │   │   │   ├── send/
 │   │   │   ├── request/
 │   │   │   ├── cards/
@@ -163,7 +150,7 @@ apps/
 │   │   │   ├── send.tsx              # Send money
 │   │   │   ├── request.tsx           # Request money
 │   │   │   ├── cards.tsx             # Virtual cards
-│   │   │   └── profile.tsx           # Settings
+│   │   │   └── profile.tsx           # Profile page
 │   │   └── auth/
 │   ├── components/
 │   └── package.json
@@ -184,12 +171,6 @@ apps/
     ├── Models/
     ├── Data/
     └── Program.cs
-
-packages/
-├── ui/                               # 🧱 Shared UI components
-├── api-client/                       # 📡 API client library
-├── types/                            # 📝 TypeScript definitions
-└── utils/                            # 🔧 Shared utilities
 ```
 
 ## 🔐 Security & Compliance
