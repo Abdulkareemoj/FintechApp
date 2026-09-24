@@ -14,7 +14,6 @@ import {
   MessageSquare,
   ReceiptText,
   Settings,
-  ShieldCheck,
   WalletCards,
 } from "lucide-react-native";
 import React from "react";
@@ -39,21 +38,25 @@ const primaryItems: NavItem[] = [
 ];
 
 const moneyItems: NavItem[] = [
-  { label: "Transactions", icon: ReceiptText, route: "/(drawer)/transactions" },
-  { label: "Statements", icon: FileText, route: "/(drawer)/statements" },
-  { label: "Analytics", icon: ChartNoAxesCombined, route: "/(drawer)/analytics" },
+	{ label: "Accounts", icon: WalletCards, route: "/(drawer)/accounts" },
+	{ label: "Transactions", icon: ReceiptText, route: "/(drawer)/transactions" },
+	{ label: "Top Up", icon: WalletCards, route: "/(drawer)/top-up" },
+	{ label: "Bills", icon: ReceiptText, route: "/(drawer)/bills" },
+	{ label: "Statements", icon: FileText, route: "/(drawer)/statements" },
+	{ label: "Analytics", icon: ChartNoAxesCombined, route: "/(drawer)/analytics" },
+	{ label: "Reports", icon: FileText, route: "/(drawer)/reports" },
 ];
 
 const supportItems: NavItem[] = [
-  { label: "Notifications", icon: Bell, route: "/(drawer)/notifications" },
-  { label: "Messages", icon: MessageSquare, route: "/(drawer)/messages" },
-  { label: "Support", icon: LifeBuoy, route: "/(drawer)/support" },
+	{ label: "Support tickets", icon: LifeBuoy, route: "/(drawer)/support" },
+	{ label: "Help Center", icon: CircleHelp, route: "/(drawer)/support/help" },
+	{ label: "Messages", icon: MessageSquare, route: "/(drawer)/support/messages" },
+	{ label: "Notifications", icon: Bell, route: "/(drawer)/notifications" },
 ];
 
 const accountItems: NavItem[] = [
-  { label: "Security", icon: ShieldCheck, route: "/(drawer)/security" },
-  { label: "Settings", icon: Settings, route: "/(drawer)/settings" },
-  { label: "Help Center", icon: CircleHelp, route: "/(drawer)/help" },
+	{ label: "Profile", icon: WalletCards, route: "/(drawer)/profile" },
+	{ label: "Settings", icon: Settings, route: "/(drawer)/settings" },
 ];
 
 function CustomDrawerContent() {
@@ -69,12 +72,12 @@ function CustomDrawerContent() {
     : "FT";
 
   const isActive = (route: string) => {
-    const normalizedRoute = route.replace(/\/$/, "");
-    const normalizedPath = pathname.replace(/\/$/, "");
-    return (
-      normalizedPath === normalizedRoute ||
-      normalizedPath.startsWith(`${normalizedRoute}/`)
-    );
+    const stripGroups = (path: string) =>
+      path
+        .replace(/\([^)]*\)/g, "")
+        .replace(/\/+/g, "/")
+        .replace(/\/$/, "");
+    return stripGroups(pathname) === stripGroups(route);
   };
 
   const renderSection = (label: string, items: NavItem[]) => (
@@ -215,15 +218,19 @@ export default function DrawerLayout() {
       }}
     >
       <Drawer.Screen name="(tabs)" options={{ headerShown: false, title: "Dashboard" }} />
+		<Drawer.Screen name="accounts" options={{ title: "Accounts" }} />
       <Drawer.Screen name="transactions" options={{ title: "Transactions" }} />
+		<Drawer.Screen name="top-up" options={{ title: "Top Up" }} />
+		<Drawer.Screen name="bills" options={{ title: "Bills" }} />
       <Drawer.Screen name="statements" options={{ title: "Statements" }} />
       <Drawer.Screen name="analytics" options={{ title: "Analytics" }} />
+		<Drawer.Screen name="reports" options={{ title: "Reports" }} />
       <Drawer.Screen name="notifications" options={{ title: "Notifications" }} />
-      <Drawer.Screen name="messages" options={{ title: "Messages" }} />
-      <Drawer.Screen name="support" options={{ title: "Support" }} />
-      <Drawer.Screen name="security" options={{ title: "Security" }} />
+		<Drawer.Screen name="support" options={{ title: "Support" }} />
+		<Drawer.Screen name="support/help" options={{ title: "Help Center" }} />
+		<Drawer.Screen name="support/messages" options={{ title: "Messages" }} />
+		<Drawer.Screen name="profile" options={{ title: "Profile & verification" }} />
       <Drawer.Screen name="settings" options={{ title: "Settings" }} />
-      <Drawer.Screen name="help" options={{ title: "Help Center" }} />
     </Drawer>
   );
 }

@@ -6,6 +6,7 @@ import {
 	BellRing,
 	CreditCard,
 	DownloadIcon,
+	FileText,
 	HelpCircle,
 	HouseWifi,
 	LayoutDashboard,
@@ -13,6 +14,7 @@ import {
 	Send,
 	Settings2,
 	TrendingUp,
+	UserRound,
 	Wallet,
 } from "lucide-react";
 import type * as React from "react";
@@ -46,11 +48,23 @@ const data = {
 		{ icon: Receipt, title: "Bills", url: "/dashboard/bills" },
 		{ icon: TrendingUp, title: "Analytics", url: "/dashboard/analytics" },
 		{ icon: BarChart3, title: "Reports", url: "/dashboard/reports" },
+		{ icon: FileText, title: "Statements", url: "/dashboard/statements" },
+		{ icon: UserRound, title: "Profile", url: "/dashboard/profile" },
 	],
 	navSecondary: [
 		{
-			title: "Inbox",
-			url: "/dashboard/inbox",
+			title: "Support tickets",
+			url: "/dashboard/support",
+			icon: HelpCircle,
+		},
+		{
+			title: "Help Center",
+			url: "/dashboard/support/help",
+			icon: HelpCircle,
+		},
+		{
+			title: "Messages",
+			url: "/dashboard/support/messages",
 			icon: Bell,
 		},
 		{
@@ -62,11 +76,6 @@ const data = {
 			title: "Settings",
 			url: "/dashboard/settings",
 			icon: Settings2,
-		},
-		{
-			title: "Get Help",
-			url: "/dashboard/support",
-			icon: HelpCircle,
 		},
 	],
 };
@@ -99,7 +108,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			</SidebarHeader>
 			<SidebarContent>
 				<NavMain items={data.navMain} />
-				<NavSecondary items={data.navSecondary} className="mt-auto" />
+				<NavSecondary
+					items={data.navSecondary}
+					label="Support"
+					className="mt-auto"
+				/>
 			</SidebarContent>
 			<SidebarFooter>
 				<NavUser user={navUser} />

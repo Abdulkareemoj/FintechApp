@@ -6,23 +6,24 @@ import type * as React from "react";
 import {
 	SidebarGroup,
 	SidebarGroupContent,
+	SidebarGroupLabel,
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-export function NavSecondary({
-	items,
-	...props
-}: {
+export function NavSecondary(props: {
 	items: {
 		title: string;
 		url: string;
 		icon: LucideIcon;
 	}[];
+	label?: string;
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
+	const { label, items, ...groupProps } = props;
 	return (
-		<SidebarGroup {...props}>
+		<SidebarGroup {...groupProps}>
+			{label ? <SidebarGroupLabel>{label}</SidebarGroupLabel> : null}
 			<SidebarGroupContent>
 				<SidebarMenu>
 					{items.map((item) => (
