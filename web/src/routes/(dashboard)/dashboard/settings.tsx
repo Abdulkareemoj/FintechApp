@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -46,10 +47,11 @@ function SettingsPage() {
 						animate={{ opacity: 1, y: 0 }}
 						initial={{ opacity: 0, y: 10 }}
 					>
-						<h1 className="font-bold text-3xl tracking-tight">Settings</h1>
+						<div className="flex items-center gap-3"><h1 className="font-bold text-3xl tracking-tight">Settings</h1><Badge variant="outline">Preview</Badge></div>
 						<p className="mt-1 text-muted-foreground">
 							Manage your account preferences and security
 						</p>
+						<p className="mt-1 text-amber-600 text-sm">Preference changes are not saved to your account yet.</p>
 					</motion.div>
 
 					<motion.div

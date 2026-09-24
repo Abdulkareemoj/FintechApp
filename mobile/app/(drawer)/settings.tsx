@@ -9,6 +9,8 @@ export default function SettingsScreen() {
   const [txAlertsEnabled, setTxAlertsEnabled] = React.useState(true);
   const [biometricEnabled, setBiometricEnabled] = React.useState(false);
   const [pinOnSendEnabled, setPinOnSendEnabled] = React.useState(true);
+	const [twoFactorEnabled, setTwoFactorEnabled] = React.useState(false);
+	const [loginAlertsEnabled, setLoginAlertsEnabled] = React.useState(true);
 
   return (
     <ScrollView className="flex-1 p-6">
@@ -18,6 +20,7 @@ export default function SettingsScreen() {
           <Text className="text-muted-foreground">
             Manage preferences and security settings.
           </Text>
+			<Text className="font-medium text-amber-500 text-xs">Preview — changes are stored only on this device.</Text>
         </View>
 
         <Card>
@@ -58,6 +61,14 @@ export default function SettingsScreen() {
                 onCheckedChange={setPinOnSendEnabled}
               />
             </View>
+			<View className="flex-row items-center justify-between">
+				<Text>Two-factor authentication</Text>
+				<Switch checked={twoFactorEnabled} onCheckedChange={setTwoFactorEnabled} />
+			</View>
+			<View className="flex-row items-center justify-between">
+				<Text>Login alerts</Text>
+				<Switch checked={loginAlertsEnabled} onCheckedChange={setLoginAlertsEnabled} />
+			</View>
           </CardContent>
         </Card>
       </View>
