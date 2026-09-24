@@ -114,7 +114,7 @@ function toMessage(m: SupportMessage): Message {
 	};
 }
 
-export const Route = createFileRoute("/(dashboard)/dashboard/support")({
+export const Route = createFileRoute("/(dashboard)/dashboard/support/")({
 	component: SupportPage,
 });
 
@@ -190,7 +190,7 @@ function SupportPage() {
 							</p>
 						</div>
 						<div className="flex items-center gap-2">
-							<a href="/dashboard/help">
+							<a href="/dashboard/support/help">
 								<Button variant="outline">
 									<LifeBuoy className="mr-2 h-4 w-4" />
 									Help Center

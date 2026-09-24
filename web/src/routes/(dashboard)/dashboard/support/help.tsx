@@ -28,7 +28,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { useHelpArticles } from "@/hooks/useHelp";
 import DashboardLayout from "@/layout/DashboardLayout";
 
-export const Route = createFileRoute("/(dashboard)/dashboard/help")({
+export const Route = createFileRoute("/(dashboard)/dashboard/support/help")({
 	component: HelpCenterPage,
 });
 
