@@ -24,6 +24,7 @@ import {
 	YAxis,
 } from "recharts";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import DashboardLayout from "@/layout/DashboardLayout";
@@ -85,10 +86,11 @@ function AnalyticsPage() {
 						initial={{ opacity: 0, y: 10 }}
 					>
 						<div>
-							<h1 className="font-bold text-3xl tracking-tight">Analytics</h1>
+							<div className="flex items-center gap-3"><h1 className="font-bold text-3xl tracking-tight">Analytics</h1><Badge variant="outline">Preview</Badge></div>
 							<p className="mt-1 text-muted-foreground">
 								Track your spending patterns and insights
 							</p>
+							<p className="mt-1 text-amber-600 text-sm">Charts use sample data.</p>
 						</div>
 						<Button className="gap-2" variant="outline">
 							<Calendar className="h-4 w-4" />

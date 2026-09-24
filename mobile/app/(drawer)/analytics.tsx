@@ -28,6 +28,7 @@ export default function AnalyticsScreen() {
       <View className="gap-1">
         <Text className="font-bold text-3xl text-foreground">Analytics</Text>
         <Text className="text-muted-foreground">Track your spending and income trends.</Text>
+		<Text className="font-medium text-amber-500 text-xs">Preview — charts use sample data.</Text>
       </View>
 
       <Card>
