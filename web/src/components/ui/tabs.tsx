@@ -3,6 +3,7 @@
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
+import { useEffect, useRef } from "react"
 
 function Tabs({
   className,
@@ -131,5 +132,16 @@ function SlidingTabsList({
 		};
 	}, []);
 
+  return (
+    <TabsPrimitive.List ref={listRef} className={cn("relative", className)} {...props}>
+      <span
+        ref={pillRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 left-0 rounded-md bg-background shadow-sm transition-[transform,width] duration-200"
+      />
+      {children}
+    </TabsPrimitive.List>
+  );
+}
 
 export { Tabs, TabsList, TabsTrigger, TabsContent, SlidingTabsList ,tabsListVariants }

@@ -9,121 +9,66 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as landingIndexRouteImport } from './routes/(landing)/index'
-import { Route as landingTermsOfServiceRouteImport } from './routes/(landing)/terms-of-service'
-import { Route as landingSecurityRouteImport } from './routes/(landing)/security'
-import { Route as landingPrivacyPolicyRouteImport } from './routes/(landing)/privacy-policy'
-import { Route as landingHowItWorksRouteImport } from './routes/(landing)/how-it-works'
-import { Route as landingFeaturesRouteImport } from './routes/(landing)/features'
-import { Route as landingContactRouteImport } from './routes/(landing)/contact'
-import { Route as landingAboutRouteImport } from './routes/(landing)/about'
-import { Route as authVerifyRouteImport } from './routes/(auth)/verify'
-import { Route as authUnauthorizedRouteImport } from './routes/(auth)/unauthorized'
-import { Route as authSignupRouteImport } from './routes/(auth)/signup'
-import { Route as authSigninRouteImport } from './routes/(auth)/signin'
-import { Route as authResetPasswordRouteImport } from './routes/(auth)/reset-password'
 import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
-import { Route as dashboardDashboardIndexRouteImport } from './routes/(dashboard)/dashboard/index'
-import { Route as dashboardSupportUsersRouteImport } from './routes/(dashboard)/support/users'
-import { Route as dashboardSupportTicketsRouteImport } from './routes/(dashboard)/support/tickets'
-import { Route as dashboardSupportSupportRouteImport } from './routes/(dashboard)/support/support'
-import { Route as dashboardSupportStatementsRouteImport } from './routes/(dashboard)/support/statements'
-import { Route as dashboardSupportSettingsRouteImport } from './routes/(dashboard)/support/settings'
-import { Route as dashboardSupportPaymentsRouteImport } from './routes/(dashboard)/support/payments'
-import { Route as dashboardSupportOverviewRouteImport } from './routes/(dashboard)/support/overview'
-import { Route as dashboardSupportKnowledgeRouteImport } from './routes/(dashboard)/support/knowledge'
-import { Route as dashboardSupportChatRouteImport } from './routes/(dashboard)/support/chat'
-import { Route as dashboardMerchantWebhooksRouteImport } from './routes/(dashboard)/merchant/webhooks'
-import { Route as dashboardMerchantSupportRouteImport } from './routes/(dashboard)/merchant/support'
-import { Route as dashboardMerchantSettlementsRouteImport } from './routes/(dashboard)/merchant/settlements'
-import { Route as dashboardMerchantSettingsRouteImport } from './routes/(dashboard)/merchant/settings'
-import { Route as dashboardMerchantPaymentsRouteImport } from './routes/(dashboard)/merchant/payments'
-import { Route as dashboardMerchantOverviewRouteImport } from './routes/(dashboard)/merchant/overview'
-import { Route as dashboardMerchantApiKeysRouteImport } from './routes/(dashboard)/merchant/api-keys'
-import { Route as dashboardMerchantAnalyticsRouteImport } from './routes/(dashboard)/merchant/analytics'
-import { Route as dashboardDashboardTopUpRouteImport } from './routes/(dashboard)/dashboard/top-up'
-import { Route as dashboardDashboardStatementsRouteImport } from './routes/(dashboard)/dashboard/statements'
-import { Route as dashboardDashboardSettingsRouteImport } from './routes/(dashboard)/dashboard/settings'
-import { Route as dashboardDashboardSendMoneyRouteImport } from './routes/(dashboard)/dashboard/send-money'
-import { Route as dashboardDashboardReportsRouteImport } from './routes/(dashboard)/dashboard/reports'
-import { Route as dashboardDashboardProfileRouteImport } from './routes/(dashboard)/dashboard/profile'
-import { Route as dashboardDashboardNotificationsRouteImport } from './routes/(dashboard)/dashboard/notifications'
-import { Route as dashboardDashboardCardsRouteImport } from './routes/(dashboard)/dashboard/cards'
-import { Route as dashboardDashboardBillsRouteImport } from './routes/(dashboard)/dashboard/bills'
-import { Route as dashboardDashboardAnalyticsRouteImport } from './routes/(dashboard)/dashboard/analytics'
-import { Route as dashboardDashboardAccountsRouteImport } from './routes/(dashboard)/dashboard/accounts'
-import { Route as dashboardAdminUsersRouteImport } from './routes/(dashboard)/admin/users'
-import { Route as dashboardAdminTransactionsRouteImport } from './routes/(dashboard)/admin/transactions'
-import { Route as dashboardAdminSupportRouteImport } from './routes/(dashboard)/admin/support'
-import { Route as dashboardAdminSettingsRouteImport } from './routes/(dashboard)/admin/settings'
-import { Route as dashboardAdminReportsRouteImport } from './routes/(dashboard)/admin/reports'
-import { Route as dashboardAdminOverviewRouteImport } from './routes/(dashboard)/admin/overview'
-import { Route as dashboardAdminComplianceRouteImport } from './routes/(dashboard)/admin/compliance'
+import { Route as authResetPasswordRouteImport } from './routes/(auth)/reset-password'
+import { Route as authSigninRouteImport } from './routes/(auth)/signin'
+import { Route as authSignupRouteImport } from './routes/(auth)/signup'
+import { Route as authUnauthorizedRouteImport } from './routes/(auth)/unauthorized'
+import { Route as authVerifyRouteImport } from './routes/(auth)/verify'
+import { Route as landingIndexRouteImport } from './routes/(landing)/index'
+import { Route as landingAboutRouteImport } from './routes/(landing)/about'
+import { Route as landingContactRouteImport } from './routes/(landing)/contact'
+import { Route as landingFeaturesRouteImport } from './routes/(landing)/features'
+import { Route as landingHowItWorksRouteImport } from './routes/(landing)/how-it-works'
+import { Route as landingPrivacyPolicyRouteImport } from './routes/(landing)/privacy-policy'
+import { Route as landingSecurityRouteImport } from './routes/(landing)/security'
+import { Route as landingTermsOfServiceRouteImport } from './routes/(landing)/terms-of-service'
 import { Route as dashboardAdminAuditTrailsRouteImport } from './routes/(dashboard)/admin/audit-trails'
-import { Route as dashboardDashboardTransactionsIndexRouteImport } from './routes/(dashboard)/dashboard/transactions/index'
+import { Route as dashboardAdminComplianceRouteImport } from './routes/(dashboard)/admin/compliance'
+import { Route as dashboardAdminOverviewRouteImport } from './routes/(dashboard)/admin/overview'
+import { Route as dashboardAdminReportsRouteImport } from './routes/(dashboard)/admin/reports'
+import { Route as dashboardAdminSettingsRouteImport } from './routes/(dashboard)/admin/settings'
+import { Route as dashboardAdminSupportRouteImport } from './routes/(dashboard)/admin/support'
+import { Route as dashboardAdminTransactionsRouteImport } from './routes/(dashboard)/admin/transactions'
+import { Route as dashboardAdminUsersRouteImport } from './routes/(dashboard)/admin/users'
+import { Route as dashboardDashboardIndexRouteImport } from './routes/(dashboard)/dashboard/index'
+import { Route as dashboardDashboardAccountsRouteImport } from './routes/(dashboard)/dashboard/accounts'
+import { Route as dashboardDashboardAnalyticsRouteImport } from './routes/(dashboard)/dashboard/analytics'
+import { Route as dashboardDashboardBillsRouteImport } from './routes/(dashboard)/dashboard/bills'
+import { Route as dashboardDashboardCardsRouteImport } from './routes/(dashboard)/dashboard/cards'
+import { Route as dashboardDashboardNotificationsRouteImport } from './routes/(dashboard)/dashboard/notifications'
+import { Route as dashboardDashboardProfileRouteImport } from './routes/(dashboard)/dashboard/profile'
+import { Route as dashboardDashboardReportsRouteImport } from './routes/(dashboard)/dashboard/reports'
+import { Route as dashboardDashboardSendMoneyRouteImport } from './routes/(dashboard)/dashboard/send-money'
+import { Route as dashboardDashboardSettingsRouteImport } from './routes/(dashboard)/dashboard/settings'
+import { Route as dashboardDashboardStatementsRouteImport } from './routes/(dashboard)/dashboard/statements'
+import { Route as dashboardDashboardTopUpRouteImport } from './routes/(dashboard)/dashboard/top-up'
+import { Route as dashboardMerchantAnalyticsRouteImport } from './routes/(dashboard)/merchant/analytics'
+import { Route as dashboardMerchantApiKeysRouteImport } from './routes/(dashboard)/merchant/api-keys'
+import { Route as dashboardMerchantOverviewRouteImport } from './routes/(dashboard)/merchant/overview'
+import { Route as dashboardMerchantPaymentsRouteImport } from './routes/(dashboard)/merchant/payments'
+import { Route as dashboardMerchantSettingsRouteImport } from './routes/(dashboard)/merchant/settings'
+import { Route as dashboardMerchantSettlementsRouteImport } from './routes/(dashboard)/merchant/settlements'
+import { Route as dashboardMerchantSupportRouteImport } from './routes/(dashboard)/merchant/support'
+import { Route as dashboardMerchantWebhooksRouteImport } from './routes/(dashboard)/merchant/webhooks'
+import { Route as dashboardSupportChatRouteImport } from './routes/(dashboard)/support/chat'
+import { Route as dashboardSupportKnowledgeRouteImport } from './routes/(dashboard)/support/knowledge'
+import { Route as dashboardSupportOverviewRouteImport } from './routes/(dashboard)/support/overview'
+import { Route as dashboardSupportPaymentsRouteImport } from './routes/(dashboard)/support/payments'
+import { Route as dashboardSupportSettingsRouteImport } from './routes/(dashboard)/support/settings'
+import { Route as dashboardSupportStatementsRouteImport } from './routes/(dashboard)/support/statements'
+import { Route as dashboardSupportSupportRouteImport } from './routes/(dashboard)/support/support'
+import { Route as dashboardSupportTicketsRouteImport } from './routes/(dashboard)/support/tickets'
+import { Route as dashboardSupportUsersRouteImport } from './routes/(dashboard)/support/users'
 import { Route as dashboardDashboardSupportIndexRouteImport } from './routes/(dashboard)/dashboard/support/index'
-import { Route as dashboardDashboardTransactionsIdRouteImport } from './routes/(dashboard)/dashboard/transactions/$id'
-import { Route as dashboardDashboardSupportMessagesRouteImport } from './routes/(dashboard)/dashboard/support/messages'
 import { Route as dashboardDashboardSupportHelpRouteImport } from './routes/(dashboard)/dashboard/support/help'
+import { Route as dashboardDashboardSupportMessagesRouteImport } from './routes/(dashboard)/dashboard/support/messages'
+import { Route as dashboardDashboardTransactionsIndexRouteImport } from './routes/(dashboard)/dashboard/transactions/index'
+import { Route as dashboardDashboardTransactionsIdRouteImport } from './routes/(dashboard)/dashboard/transactions/$id'
 
-const landingIndexRoute = landingIndexRouteImport.update({
-  id: '/(landing)/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const landingTermsOfServiceRoute = landingTermsOfServiceRouteImport.update({
-  id: '/(landing)/terms-of-service',
-  path: '/terms-of-service',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const landingSecurityRoute = landingSecurityRouteImport.update({
-  id: '/(landing)/security',
-  path: '/security',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const landingPrivacyPolicyRoute = landingPrivacyPolicyRouteImport.update({
-  id: '/(landing)/privacy-policy',
-  path: '/privacy-policy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const landingHowItWorksRoute = landingHowItWorksRouteImport.update({
-  id: '/(landing)/how-it-works',
-  path: '/how-it-works',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const landingFeaturesRoute = landingFeaturesRouteImport.update({
-  id: '/(landing)/features',
-  path: '/features',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const landingContactRoute = landingContactRouteImport.update({
-  id: '/(landing)/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const landingAboutRoute = landingAboutRouteImport.update({
-  id: '/(landing)/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const authVerifyRoute = authVerifyRouteImport.update({
-  id: '/(auth)/verify',
-  path: '/verify',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const authUnauthorizedRoute = authUnauthorizedRouteImport.update({
-  id: '/(auth)/unauthorized',
-  path: '/unauthorized',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const authSignupRoute = authSignupRouteImport.update({
-  id: '/(auth)/signup',
-  path: '/signup',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const authSigninRoute = authSigninRouteImport.update({
-  id: '/(auth)/signin',
-  path: '/signin',
+const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
+  id: '/(auth)/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const authResetPasswordRoute = authResetPasswordRouteImport.update({
@@ -131,180 +76,96 @@ const authResetPasswordRoute = authResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
-const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
-  id: '/(auth)/forgot-password',
-  path: '/forgot-password',
+const authSigninRoute = authSigninRouteImport.update({
+  id: '/(auth)/signin',
+  path: '/signin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardDashboardIndexRoute = dashboardDashboardIndexRouteImport.update({
-  id: '/(dashboard)/dashboard/',
-  path: '/dashboard/',
+const authSignupRoute = authSignupRouteImport.update({
+  id: '/(auth)/signup',
+  path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardSupportUsersRoute = dashboardSupportUsersRouteImport.update({
-  id: '/(dashboard)/support/users',
-  path: '/support/users',
+const authUnauthorizedRoute = authUnauthorizedRouteImport.update({
+  id: '/(auth)/unauthorized',
+  path: '/unauthorized',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardSupportTicketsRoute = dashboardSupportTicketsRouteImport.update({
-  id: '/(dashboard)/support/tickets',
-  path: '/support/tickets',
+const authVerifyRoute = authVerifyRouteImport.update({
+  id: '/(auth)/verify',
+  path: '/verify',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardSupportSupportRoute = dashboardSupportSupportRouteImport.update({
-  id: '/(dashboard)/support/support',
-  path: '/support/support',
+const landingIndexRoute = landingIndexRouteImport.update({
+  id: '/(landing)/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardSupportStatementsRoute =
-  dashboardSupportStatementsRouteImport.update({
-    id: '/(dashboard)/support/statements',
-    path: '/support/statements',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardSupportSettingsRoute =
-  dashboardSupportSettingsRouteImport.update({
-    id: '/(dashboard)/support/settings',
-    path: '/support/settings',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardSupportPaymentsRoute =
-  dashboardSupportPaymentsRouteImport.update({
-    id: '/(dashboard)/support/payments',
-    path: '/support/payments',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardSupportOverviewRoute =
-  dashboardSupportOverviewRouteImport.update({
-    id: '/(dashboard)/support/overview',
-    path: '/support/overview',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardSupportKnowledgeRoute =
-  dashboardSupportKnowledgeRouteImport.update({
-    id: '/(dashboard)/support/knowledge',
-    path: '/support/knowledge',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardSupportChatRoute = dashboardSupportChatRouteImport.update({
-  id: '/(dashboard)/support/chat',
-  path: '/support/chat',
+const landingAboutRoute = landingAboutRouteImport.update({
+  id: '/(landing)/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardMerchantWebhooksRoute =
-  dashboardMerchantWebhooksRouteImport.update({
-    id: '/(dashboard)/merchant/webhooks',
-    path: '/merchant/webhooks',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardMerchantSupportRoute =
-  dashboardMerchantSupportRouteImport.update({
-    id: '/(dashboard)/merchant/support',
-    path: '/merchant/support',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardMerchantSettlementsRoute =
-  dashboardMerchantSettlementsRouteImport.update({
-    id: '/(dashboard)/merchant/settlements',
-    path: '/merchant/settlements',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardMerchantSettingsRoute =
-  dashboardMerchantSettingsRouteImport.update({
-    id: '/(dashboard)/merchant/settings',
-    path: '/merchant/settings',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardMerchantPaymentsRoute =
-  dashboardMerchantPaymentsRouteImport.update({
-    id: '/(dashboard)/merchant/payments',
-    path: '/merchant/payments',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardMerchantOverviewRoute =
-  dashboardMerchantOverviewRouteImport.update({
-    id: '/(dashboard)/merchant/overview',
-    path: '/merchant/overview',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardMerchantApiKeysRoute =
-  dashboardMerchantApiKeysRouteImport.update({
-    id: '/(dashboard)/merchant/api-keys',
-    path: '/merchant/api-keys',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardMerchantAnalyticsRoute =
-  dashboardMerchantAnalyticsRouteImport.update({
-    id: '/(dashboard)/merchant/analytics',
-    path: '/merchant/analytics',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardDashboardTopUpRoute = dashboardDashboardTopUpRouteImport.update({
-  id: '/(dashboard)/dashboard/top-up',
-  path: '/dashboard/top-up',
+const landingContactRoute = landingContactRouteImport.update({
+  id: '/(landing)/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardDashboardStatementsRoute =
-  dashboardDashboardStatementsRouteImport.update({
-    id: '/(dashboard)/dashboard/statements',
-    path: '/dashboard/statements',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardDashboardSettingsRoute =
-  dashboardDashboardSettingsRouteImport.update({
-    id: '/(dashboard)/dashboard/settings',
-    path: '/dashboard/settings',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardDashboardSendMoneyRoute =
-  dashboardDashboardSendMoneyRouteImport.update({
-    id: '/(dashboard)/dashboard/send-money',
-    path: '/dashboard/send-money',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardDashboardReportsRoute =
-  dashboardDashboardReportsRouteImport.update({
-    id: '/(dashboard)/dashboard/reports',
-    path: '/dashboard/reports',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardDashboardProfileRoute =
-  dashboardDashboardProfileRouteImport.update({
-    id: '/(dashboard)/dashboard/profile',
-    path: '/dashboard/profile',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardDashboardNotificationsRoute =
-  dashboardDashboardNotificationsRouteImport.update({
-    id: '/(dashboard)/dashboard/notifications',
-    path: '/dashboard/notifications',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const dashboardDashboardCardsRoute = dashboardDashboardCardsRouteImport.update({
-  id: '/(dashboard)/dashboard/cards',
-  path: '/dashboard/cards',
+const landingFeaturesRoute = landingFeaturesRouteImport.update({
+  id: '/(landing)/features',
+  path: '/features',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardDashboardBillsRoute = dashboardDashboardBillsRouteImport.update({
-  id: '/(dashboard)/dashboard/bills',
-  path: '/dashboard/bills',
+const landingHowItWorksRoute = landingHowItWorksRouteImport.update({
+  id: '/(landing)/how-it-works',
+  path: '/how-it-works',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardDashboardAnalyticsRoute =
-  dashboardDashboardAnalyticsRouteImport.update({
-    id: '/(dashboard)/dashboard/analytics',
-    path: '/dashboard/analytics',
+const landingPrivacyPolicyRoute = landingPrivacyPolicyRouteImport.update({
+  id: '/(landing)/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const landingSecurityRoute = landingSecurityRouteImport.update({
+  id: '/(landing)/security',
+  path: '/security',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const landingTermsOfServiceRoute = landingTermsOfServiceRouteImport.update({
+  id: '/(landing)/terms-of-service',
+  path: '/terms-of-service',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardAdminAuditTrailsRoute =
+  dashboardAdminAuditTrailsRouteImport.update({
+    id: '/(dashboard)/admin/audit-trails',
+    path: '/admin/audit-trails',
     getParentRoute: () => rootRouteImport,
   } as any)
-const dashboardDashboardAccountsRoute =
-  dashboardDashboardAccountsRouteImport.update({
-    id: '/(dashboard)/dashboard/accounts',
-    path: '/dashboard/accounts',
+const dashboardAdminComplianceRoute =
+  dashboardAdminComplianceRouteImport.update({
+    id: '/(dashboard)/admin/compliance',
+    path: '/admin/compliance',
     getParentRoute: () => rootRouteImport,
   } as any)
-const dashboardAdminUsersRoute = dashboardAdminUsersRouteImport.update({
-  id: '/(dashboard)/admin/users',
-  path: '/admin/users',
+const dashboardAdminOverviewRoute = dashboardAdminOverviewRouteImport.update({
+  id: '/(dashboard)/admin/overview',
+  path: '/admin/overview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardAdminReportsRoute = dashboardAdminReportsRouteImport.update({
+  id: '/(dashboard)/admin/reports',
+  path: '/admin/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardAdminSettingsRoute = dashboardAdminSettingsRouteImport.update({
+  id: '/(dashboard)/admin/settings',
+  path: '/admin/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardAdminSupportRoute = dashboardAdminSupportRouteImport.update({
+  id: '/(dashboard)/admin/support',
+  path: '/admin/support',
   getParentRoute: () => rootRouteImport,
 } as any)
 const dashboardAdminTransactionsRoute =
@@ -313,54 +174,187 @@ const dashboardAdminTransactionsRoute =
     path: '/admin/transactions',
     getParentRoute: () => rootRouteImport,
   } as any)
-const dashboardAdminSupportRoute = dashboardAdminSupportRouteImport.update({
-  id: '/(dashboard)/admin/support',
-  path: '/admin/support',
+const dashboardAdminUsersRoute = dashboardAdminUsersRouteImport.update({
+  id: '/(dashboard)/admin/users',
+  path: '/admin/users',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardAdminSettingsRoute = dashboardAdminSettingsRouteImport.update({
-  id: '/(dashboard)/admin/settings',
-  path: '/admin/settings',
+const dashboardDashboardIndexRoute = dashboardDashboardIndexRouteImport.update({
+  id: '/(dashboard)/dashboard/',
+  path: '/dashboard/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const dashboardAdminReportsRoute = dashboardAdminReportsRouteImport.update({
-  id: '/(dashboard)/admin/reports',
-  path: '/admin/reports',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardAdminOverviewRoute = dashboardAdminOverviewRouteImport.update({
-  id: '/(dashboard)/admin/overview',
-  path: '/admin/overview',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const dashboardAdminComplianceRoute =
-  dashboardAdminComplianceRouteImport.update({
-    id: '/(dashboard)/admin/compliance',
-    path: '/admin/compliance',
+const dashboardDashboardAccountsRoute =
+  dashboardDashboardAccountsRouteImport.update({
+    id: '/(dashboard)/dashboard/accounts',
+    path: '/dashboard/accounts',
     getParentRoute: () => rootRouteImport,
   } as any)
-const dashboardAdminAuditTrailsRoute =
-  dashboardAdminAuditTrailsRouteImport.update({
-    id: '/(dashboard)/admin/audit-trails',
-    path: '/admin/audit-trails',
+const dashboardDashboardAnalyticsRoute =
+  dashboardDashboardAnalyticsRouteImport.update({
+    id: '/(dashboard)/dashboard/analytics',
+    path: '/dashboard/analytics',
     getParentRoute: () => rootRouteImport,
   } as any)
-const dashboardDashboardTransactionsIndexRoute =
-  dashboardDashboardTransactionsIndexRouteImport.update({
-    id: '/(dashboard)/dashboard/transactions/',
-    path: '/dashboard/transactions/',
+const dashboardDashboardBillsRoute = dashboardDashboardBillsRouteImport.update({
+  id: '/(dashboard)/dashboard/bills',
+  path: '/dashboard/bills',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardDashboardCardsRoute = dashboardDashboardCardsRouteImport.update({
+  id: '/(dashboard)/dashboard/cards',
+  path: '/dashboard/cards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardDashboardNotificationsRoute =
+  dashboardDashboardNotificationsRouteImport.update({
+    id: '/(dashboard)/dashboard/notifications',
+    path: '/dashboard/notifications',
     getParentRoute: () => rootRouteImport,
   } as any)
+const dashboardDashboardProfileRoute =
+  dashboardDashboardProfileRouteImport.update({
+    id: '/(dashboard)/dashboard/profile',
+    path: '/dashboard/profile',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardDashboardReportsRoute =
+  dashboardDashboardReportsRouteImport.update({
+    id: '/(dashboard)/dashboard/reports',
+    path: '/dashboard/reports',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardDashboardSendMoneyRoute =
+  dashboardDashboardSendMoneyRouteImport.update({
+    id: '/(dashboard)/dashboard/send-money',
+    path: '/dashboard/send-money',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardDashboardSettingsRoute =
+  dashboardDashboardSettingsRouteImport.update({
+    id: '/(dashboard)/dashboard/settings',
+    path: '/dashboard/settings',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardDashboardStatementsRoute =
+  dashboardDashboardStatementsRouteImport.update({
+    id: '/(dashboard)/dashboard/statements',
+    path: '/dashboard/statements',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardDashboardTopUpRoute = dashboardDashboardTopUpRouteImport.update({
+  id: '/(dashboard)/dashboard/top-up',
+  path: '/dashboard/top-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardMerchantAnalyticsRoute =
+  dashboardMerchantAnalyticsRouteImport.update({
+    id: '/(dashboard)/merchant/analytics',
+    path: '/merchant/analytics',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardMerchantApiKeysRoute =
+  dashboardMerchantApiKeysRouteImport.update({
+    id: '/(dashboard)/merchant/api-keys',
+    path: '/merchant/api-keys',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardMerchantOverviewRoute =
+  dashboardMerchantOverviewRouteImport.update({
+    id: '/(dashboard)/merchant/overview',
+    path: '/merchant/overview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardMerchantPaymentsRoute =
+  dashboardMerchantPaymentsRouteImport.update({
+    id: '/(dashboard)/merchant/payments',
+    path: '/merchant/payments',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardMerchantSettingsRoute =
+  dashboardMerchantSettingsRouteImport.update({
+    id: '/(dashboard)/merchant/settings',
+    path: '/merchant/settings',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardMerchantSettlementsRoute =
+  dashboardMerchantSettlementsRouteImport.update({
+    id: '/(dashboard)/merchant/settlements',
+    path: '/merchant/settlements',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardMerchantSupportRoute =
+  dashboardMerchantSupportRouteImport.update({
+    id: '/(dashboard)/merchant/support',
+    path: '/merchant/support',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardMerchantWebhooksRoute =
+  dashboardMerchantWebhooksRouteImport.update({
+    id: '/(dashboard)/merchant/webhooks',
+    path: '/merchant/webhooks',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardSupportChatRoute = dashboardSupportChatRouteImport.update({
+  id: '/(dashboard)/support/chat',
+  path: '/support/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardSupportKnowledgeRoute =
+  dashboardSupportKnowledgeRouteImport.update({
+    id: '/(dashboard)/support/knowledge',
+    path: '/support/knowledge',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardSupportOverviewRoute =
+  dashboardSupportOverviewRouteImport.update({
+    id: '/(dashboard)/support/overview',
+    path: '/support/overview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardSupportPaymentsRoute =
+  dashboardSupportPaymentsRouteImport.update({
+    id: '/(dashboard)/support/payments',
+    path: '/support/payments',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardSupportSettingsRoute =
+  dashboardSupportSettingsRouteImport.update({
+    id: '/(dashboard)/support/settings',
+    path: '/support/settings',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardSupportStatementsRoute =
+  dashboardSupportStatementsRouteImport.update({
+    id: '/(dashboard)/support/statements',
+    path: '/support/statements',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardSupportSupportRoute = dashboardSupportSupportRouteImport.update({
+  id: '/(dashboard)/support/support',
+  path: '/support/support',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardSupportTicketsRoute = dashboardSupportTicketsRouteImport.update({
+  id: '/(dashboard)/support/tickets',
+  path: '/support/tickets',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const dashboardSupportUsersRoute = dashboardSupportUsersRouteImport.update({
+  id: '/(dashboard)/support/users',
+  path: '/support/users',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const dashboardDashboardSupportIndexRoute =
   dashboardDashboardSupportIndexRouteImport.update({
     id: '/(dashboard)/dashboard/support/',
     path: '/dashboard/support/',
     getParentRoute: () => rootRouteImport,
   } as any)
-const dashboardDashboardTransactionsIdRoute =
-  dashboardDashboardTransactionsIdRouteImport.update({
-    id: '/(dashboard)/dashboard/transactions/$id',
-    path: '/dashboard/transactions/$id',
+const dashboardDashboardSupportHelpRoute =
+  dashboardDashboardSupportHelpRouteImport.update({
+    id: '/(dashboard)/dashboard/support/help',
+    path: '/dashboard/support/help',
     getParentRoute: () => rootRouteImport,
   } as any)
 const dashboardDashboardSupportMessagesRoute =
@@ -369,10 +363,16 @@ const dashboardDashboardSupportMessagesRoute =
     path: '/dashboard/support/messages',
     getParentRoute: () => rootRouteImport,
   } as any)
-const dashboardDashboardSupportHelpRoute =
-  dashboardDashboardSupportHelpRouteImport.update({
-    id: '/(dashboard)/dashboard/support/help',
-    path: '/dashboard/support/help',
+const dashboardDashboardTransactionsIndexRoute =
+  dashboardDashboardTransactionsIndexRouteImport.update({
+    id: '/(dashboard)/dashboard/transactions/',
+    path: '/dashboard/transactions/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const dashboardDashboardTransactionsIdRoute =
+  dashboardDashboardTransactionsIdRouteImport.update({
+    id: '/(dashboard)/dashboard/transactions/$id',
+    path: '/dashboard/transactions/$id',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -789,88 +789,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/(landing)/': {
-      id: '/(landing)/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof landingIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(landing)/terms-of-service': {
-      id: '/(landing)/terms-of-service'
-      path: '/terms-of-service'
-      fullPath: '/terms-of-service'
-      preLoaderRoute: typeof landingTermsOfServiceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(landing)/security': {
-      id: '/(landing)/security'
-      path: '/security'
-      fullPath: '/security'
-      preLoaderRoute: typeof landingSecurityRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(landing)/privacy-policy': {
-      id: '/(landing)/privacy-policy'
-      path: '/privacy-policy'
-      fullPath: '/privacy-policy'
-      preLoaderRoute: typeof landingPrivacyPolicyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(landing)/how-it-works': {
-      id: '/(landing)/how-it-works'
-      path: '/how-it-works'
-      fullPath: '/how-it-works'
-      preLoaderRoute: typeof landingHowItWorksRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(landing)/features': {
-      id: '/(landing)/features'
-      path: '/features'
-      fullPath: '/features'
-      preLoaderRoute: typeof landingFeaturesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(landing)/contact': {
-      id: '/(landing)/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof landingContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(landing)/about': {
-      id: '/(landing)/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof landingAboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(auth)/verify': {
-      id: '/(auth)/verify'
-      path: '/verify'
-      fullPath: '/verify'
-      preLoaderRoute: typeof authVerifyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(auth)/unauthorized': {
-      id: '/(auth)/unauthorized'
-      path: '/unauthorized'
-      fullPath: '/unauthorized'
-      preLoaderRoute: typeof authUnauthorizedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(auth)/signup': {
-      id: '/(auth)/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof authSignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(auth)/signin': {
-      id: '/(auth)/signin'
-      path: '/signin'
-      fullPath: '/signin'
-      preLoaderRoute: typeof authSigninRouteImport
+    '/(auth)/forgot-password': {
+      id: '/(auth)/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof authForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(auth)/reset-password': {
@@ -880,263 +803,88 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(auth)/forgot-password': {
-      id: '/(auth)/forgot-password'
-      path: '/forgot-password'
-      fullPath: '/forgot-password'
-      preLoaderRoute: typeof authForgotPasswordRouteImport
+    '/(auth)/signin': {
+      id: '/(auth)/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof authSigninRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/dashboard/': {
-      id: '/(dashboard)/dashboard/'
-      path: '/dashboard'
-      fullPath: '/dashboard/'
-      preLoaderRoute: typeof dashboardDashboardIndexRouteImport
+    '/(auth)/signup': {
+      id: '/(auth)/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof authSignupRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/support/users': {
-      id: '/(dashboard)/support/users'
-      path: '/support/users'
-      fullPath: '/support/users'
-      preLoaderRoute: typeof dashboardSupportUsersRouteImport
+    '/(auth)/unauthorized': {
+      id: '/(auth)/unauthorized'
+      path: '/unauthorized'
+      fullPath: '/unauthorized'
+      preLoaderRoute: typeof authUnauthorizedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/support/tickets': {
-      id: '/(dashboard)/support/tickets'
-      path: '/support/tickets'
-      fullPath: '/support/tickets'
-      preLoaderRoute: typeof dashboardSupportTicketsRouteImport
+    '/(auth)/verify': {
+      id: '/(auth)/verify'
+      path: '/verify'
+      fullPath: '/verify'
+      preLoaderRoute: typeof authVerifyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/support/support': {
-      id: '/(dashboard)/support/support'
-      path: '/support/support'
-      fullPath: '/support/support'
-      preLoaderRoute: typeof dashboardSupportSupportRouteImport
+    '/(landing)/': {
+      id: '/(landing)/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof landingIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/support/statements': {
-      id: '/(dashboard)/support/statements'
-      path: '/support/statements'
-      fullPath: '/support/statements'
-      preLoaderRoute: typeof dashboardSupportStatementsRouteImport
+    '/(landing)/about': {
+      id: '/(landing)/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof landingAboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/support/settings': {
-      id: '/(dashboard)/support/settings'
-      path: '/support/settings'
-      fullPath: '/support/settings'
-      preLoaderRoute: typeof dashboardSupportSettingsRouteImport
+    '/(landing)/contact': {
+      id: '/(landing)/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof landingContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/support/payments': {
-      id: '/(dashboard)/support/payments'
-      path: '/support/payments'
-      fullPath: '/support/payments'
-      preLoaderRoute: typeof dashboardSupportPaymentsRouteImport
+    '/(landing)/features': {
+      id: '/(landing)/features'
+      path: '/features'
+      fullPath: '/features'
+      preLoaderRoute: typeof landingFeaturesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/support/overview': {
-      id: '/(dashboard)/support/overview'
-      path: '/support/overview'
-      fullPath: '/support/overview'
-      preLoaderRoute: typeof dashboardSupportOverviewRouteImport
+    '/(landing)/how-it-works': {
+      id: '/(landing)/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof landingHowItWorksRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/support/knowledge': {
-      id: '/(dashboard)/support/knowledge'
-      path: '/support/knowledge'
-      fullPath: '/support/knowledge'
-      preLoaderRoute: typeof dashboardSupportKnowledgeRouteImport
+    '/(landing)/privacy-policy': {
+      id: '/(landing)/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof landingPrivacyPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/support/chat': {
-      id: '/(dashboard)/support/chat'
-      path: '/support/chat'
-      fullPath: '/support/chat'
-      preLoaderRoute: typeof dashboardSupportChatRouteImport
+    '/(landing)/security': {
+      id: '/(landing)/security'
+      path: '/security'
+      fullPath: '/security'
+      preLoaderRoute: typeof landingSecurityRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/merchant/webhooks': {
-      id: '/(dashboard)/merchant/webhooks'
-      path: '/merchant/webhooks'
-      fullPath: '/merchant/webhooks'
-      preLoaderRoute: typeof dashboardMerchantWebhooksRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/merchant/support': {
-      id: '/(dashboard)/merchant/support'
-      path: '/merchant/support'
-      fullPath: '/merchant/support'
-      preLoaderRoute: typeof dashboardMerchantSupportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/merchant/settlements': {
-      id: '/(dashboard)/merchant/settlements'
-      path: '/merchant/settlements'
-      fullPath: '/merchant/settlements'
-      preLoaderRoute: typeof dashboardMerchantSettlementsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/merchant/settings': {
-      id: '/(dashboard)/merchant/settings'
-      path: '/merchant/settings'
-      fullPath: '/merchant/settings'
-      preLoaderRoute: typeof dashboardMerchantSettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/merchant/payments': {
-      id: '/(dashboard)/merchant/payments'
-      path: '/merchant/payments'
-      fullPath: '/merchant/payments'
-      preLoaderRoute: typeof dashboardMerchantPaymentsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/merchant/overview': {
-      id: '/(dashboard)/merchant/overview'
-      path: '/merchant/overview'
-      fullPath: '/merchant/overview'
-      preLoaderRoute: typeof dashboardMerchantOverviewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/merchant/api-keys': {
-      id: '/(dashboard)/merchant/api-keys'
-      path: '/merchant/api-keys'
-      fullPath: '/merchant/api-keys'
-      preLoaderRoute: typeof dashboardMerchantApiKeysRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/merchant/analytics': {
-      id: '/(dashboard)/merchant/analytics'
-      path: '/merchant/analytics'
-      fullPath: '/merchant/analytics'
-      preLoaderRoute: typeof dashboardMerchantAnalyticsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/dashboard/top-up': {
-      id: '/(dashboard)/dashboard/top-up'
-      path: '/dashboard/top-up'
-      fullPath: '/dashboard/top-up'
-      preLoaderRoute: typeof dashboardDashboardTopUpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/dashboard/statements': {
-      id: '/(dashboard)/dashboard/statements'
-      path: '/dashboard/statements'
-      fullPath: '/dashboard/statements'
-      preLoaderRoute: typeof dashboardDashboardStatementsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/dashboard/settings': {
-      id: '/(dashboard)/dashboard/settings'
-      path: '/dashboard/settings'
-      fullPath: '/dashboard/settings'
-      preLoaderRoute: typeof dashboardDashboardSettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/dashboard/send-money': {
-      id: '/(dashboard)/dashboard/send-money'
-      path: '/dashboard/send-money'
-      fullPath: '/dashboard/send-money'
-      preLoaderRoute: typeof dashboardDashboardSendMoneyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/dashboard/reports': {
-      id: '/(dashboard)/dashboard/reports'
-      path: '/dashboard/reports'
-      fullPath: '/dashboard/reports'
-      preLoaderRoute: typeof dashboardDashboardReportsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/dashboard/profile': {
-      id: '/(dashboard)/dashboard/profile'
-      path: '/dashboard/profile'
-      fullPath: '/dashboard/profile'
-      preLoaderRoute: typeof dashboardDashboardProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/dashboard/notifications': {
-      id: '/(dashboard)/dashboard/notifications'
-      path: '/dashboard/notifications'
-      fullPath: '/dashboard/notifications'
-      preLoaderRoute: typeof dashboardDashboardNotificationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/dashboard/cards': {
-      id: '/(dashboard)/dashboard/cards'
-      path: '/dashboard/cards'
-      fullPath: '/dashboard/cards'
-      preLoaderRoute: typeof dashboardDashboardCardsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/dashboard/bills': {
-      id: '/(dashboard)/dashboard/bills'
-      path: '/dashboard/bills'
-      fullPath: '/dashboard/bills'
-      preLoaderRoute: typeof dashboardDashboardBillsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/dashboard/analytics': {
-      id: '/(dashboard)/dashboard/analytics'
-      path: '/dashboard/analytics'
-      fullPath: '/dashboard/analytics'
-      preLoaderRoute: typeof dashboardDashboardAnalyticsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/dashboard/accounts': {
-      id: '/(dashboard)/dashboard/accounts'
-      path: '/dashboard/accounts'
-      fullPath: '/dashboard/accounts'
-      preLoaderRoute: typeof dashboardDashboardAccountsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/admin/users': {
-      id: '/(dashboard)/admin/users'
-      path: '/admin/users'
-      fullPath: '/admin/users'
-      preLoaderRoute: typeof dashboardAdminUsersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/admin/transactions': {
-      id: '/(dashboard)/admin/transactions'
-      path: '/admin/transactions'
-      fullPath: '/admin/transactions'
-      preLoaderRoute: typeof dashboardAdminTransactionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/admin/support': {
-      id: '/(dashboard)/admin/support'
-      path: '/admin/support'
-      fullPath: '/admin/support'
-      preLoaderRoute: typeof dashboardAdminSupportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/admin/settings': {
-      id: '/(dashboard)/admin/settings'
-      path: '/admin/settings'
-      fullPath: '/admin/settings'
-      preLoaderRoute: typeof dashboardAdminSettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/admin/reports': {
-      id: '/(dashboard)/admin/reports'
-      path: '/admin/reports'
-      fullPath: '/admin/reports'
-      preLoaderRoute: typeof dashboardAdminReportsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/admin/overview': {
-      id: '/(dashboard)/admin/overview'
-      path: '/admin/overview'
-      fullPath: '/admin/overview'
-      preLoaderRoute: typeof dashboardAdminOverviewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(dashboard)/admin/compliance': {
-      id: '/(dashboard)/admin/compliance'
-      path: '/admin/compliance'
-      fullPath: '/admin/compliance'
-      preLoaderRoute: typeof dashboardAdminComplianceRouteImport
+    '/(landing)/terms-of-service': {
+      id: '/(landing)/terms-of-service'
+      path: '/terms-of-service'
+      fullPath: '/terms-of-service'
+      preLoaderRoute: typeof landingTermsOfServiceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(dashboard)/admin/audit-trails': {
@@ -1146,11 +894,256 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardAdminAuditTrailsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/dashboard/transactions/': {
-      id: '/(dashboard)/dashboard/transactions/'
-      path: '/dashboard/transactions'
-      fullPath: '/dashboard/transactions/'
-      preLoaderRoute: typeof dashboardDashboardTransactionsIndexRouteImport
+    '/(dashboard)/admin/compliance': {
+      id: '/(dashboard)/admin/compliance'
+      path: '/admin/compliance'
+      fullPath: '/admin/compliance'
+      preLoaderRoute: typeof dashboardAdminComplianceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/admin/overview': {
+      id: '/(dashboard)/admin/overview'
+      path: '/admin/overview'
+      fullPath: '/admin/overview'
+      preLoaderRoute: typeof dashboardAdminOverviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/admin/reports': {
+      id: '/(dashboard)/admin/reports'
+      path: '/admin/reports'
+      fullPath: '/admin/reports'
+      preLoaderRoute: typeof dashboardAdminReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/admin/settings': {
+      id: '/(dashboard)/admin/settings'
+      path: '/admin/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof dashboardAdminSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/admin/support': {
+      id: '/(dashboard)/admin/support'
+      path: '/admin/support'
+      fullPath: '/admin/support'
+      preLoaderRoute: typeof dashboardAdminSupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/admin/transactions': {
+      id: '/(dashboard)/admin/transactions'
+      path: '/admin/transactions'
+      fullPath: '/admin/transactions'
+      preLoaderRoute: typeof dashboardAdminTransactionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/admin/users': {
+      id: '/(dashboard)/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof dashboardAdminUsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/dashboard/': {
+      id: '/(dashboard)/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof dashboardDashboardIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/dashboard/accounts': {
+      id: '/(dashboard)/dashboard/accounts'
+      path: '/dashboard/accounts'
+      fullPath: '/dashboard/accounts'
+      preLoaderRoute: typeof dashboardDashboardAccountsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/dashboard/analytics': {
+      id: '/(dashboard)/dashboard/analytics'
+      path: '/dashboard/analytics'
+      fullPath: '/dashboard/analytics'
+      preLoaderRoute: typeof dashboardDashboardAnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/dashboard/bills': {
+      id: '/(dashboard)/dashboard/bills'
+      path: '/dashboard/bills'
+      fullPath: '/dashboard/bills'
+      preLoaderRoute: typeof dashboardDashboardBillsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/dashboard/cards': {
+      id: '/(dashboard)/dashboard/cards'
+      path: '/dashboard/cards'
+      fullPath: '/dashboard/cards'
+      preLoaderRoute: typeof dashboardDashboardCardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/dashboard/notifications': {
+      id: '/(dashboard)/dashboard/notifications'
+      path: '/dashboard/notifications'
+      fullPath: '/dashboard/notifications'
+      preLoaderRoute: typeof dashboardDashboardNotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/dashboard/profile': {
+      id: '/(dashboard)/dashboard/profile'
+      path: '/dashboard/profile'
+      fullPath: '/dashboard/profile'
+      preLoaderRoute: typeof dashboardDashboardProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/dashboard/reports': {
+      id: '/(dashboard)/dashboard/reports'
+      path: '/dashboard/reports'
+      fullPath: '/dashboard/reports'
+      preLoaderRoute: typeof dashboardDashboardReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/dashboard/send-money': {
+      id: '/(dashboard)/dashboard/send-money'
+      path: '/dashboard/send-money'
+      fullPath: '/dashboard/send-money'
+      preLoaderRoute: typeof dashboardDashboardSendMoneyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/dashboard/settings': {
+      id: '/(dashboard)/dashboard/settings'
+      path: '/dashboard/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof dashboardDashboardSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/dashboard/statements': {
+      id: '/(dashboard)/dashboard/statements'
+      path: '/dashboard/statements'
+      fullPath: '/dashboard/statements'
+      preLoaderRoute: typeof dashboardDashboardStatementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/dashboard/top-up': {
+      id: '/(dashboard)/dashboard/top-up'
+      path: '/dashboard/top-up'
+      fullPath: '/dashboard/top-up'
+      preLoaderRoute: typeof dashboardDashboardTopUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/merchant/analytics': {
+      id: '/(dashboard)/merchant/analytics'
+      path: '/merchant/analytics'
+      fullPath: '/merchant/analytics'
+      preLoaderRoute: typeof dashboardMerchantAnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/merchant/api-keys': {
+      id: '/(dashboard)/merchant/api-keys'
+      path: '/merchant/api-keys'
+      fullPath: '/merchant/api-keys'
+      preLoaderRoute: typeof dashboardMerchantApiKeysRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/merchant/overview': {
+      id: '/(dashboard)/merchant/overview'
+      path: '/merchant/overview'
+      fullPath: '/merchant/overview'
+      preLoaderRoute: typeof dashboardMerchantOverviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/merchant/payments': {
+      id: '/(dashboard)/merchant/payments'
+      path: '/merchant/payments'
+      fullPath: '/merchant/payments'
+      preLoaderRoute: typeof dashboardMerchantPaymentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/merchant/settings': {
+      id: '/(dashboard)/merchant/settings'
+      path: '/merchant/settings'
+      fullPath: '/merchant/settings'
+      preLoaderRoute: typeof dashboardMerchantSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/merchant/settlements': {
+      id: '/(dashboard)/merchant/settlements'
+      path: '/merchant/settlements'
+      fullPath: '/merchant/settlements'
+      preLoaderRoute: typeof dashboardMerchantSettlementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/merchant/support': {
+      id: '/(dashboard)/merchant/support'
+      path: '/merchant/support'
+      fullPath: '/merchant/support'
+      preLoaderRoute: typeof dashboardMerchantSupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/merchant/webhooks': {
+      id: '/(dashboard)/merchant/webhooks'
+      path: '/merchant/webhooks'
+      fullPath: '/merchant/webhooks'
+      preLoaderRoute: typeof dashboardMerchantWebhooksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/support/chat': {
+      id: '/(dashboard)/support/chat'
+      path: '/support/chat'
+      fullPath: '/support/chat'
+      preLoaderRoute: typeof dashboardSupportChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/support/knowledge': {
+      id: '/(dashboard)/support/knowledge'
+      path: '/support/knowledge'
+      fullPath: '/support/knowledge'
+      preLoaderRoute: typeof dashboardSupportKnowledgeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/support/overview': {
+      id: '/(dashboard)/support/overview'
+      path: '/support/overview'
+      fullPath: '/support/overview'
+      preLoaderRoute: typeof dashboardSupportOverviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/support/payments': {
+      id: '/(dashboard)/support/payments'
+      path: '/support/payments'
+      fullPath: '/support/payments'
+      preLoaderRoute: typeof dashboardSupportPaymentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/support/settings': {
+      id: '/(dashboard)/support/settings'
+      path: '/support/settings'
+      fullPath: '/support/settings'
+      preLoaderRoute: typeof dashboardSupportSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/support/statements': {
+      id: '/(dashboard)/support/statements'
+      path: '/support/statements'
+      fullPath: '/support/statements'
+      preLoaderRoute: typeof dashboardSupportStatementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/support/support': {
+      id: '/(dashboard)/support/support'
+      path: '/support/support'
+      fullPath: '/support/support'
+      preLoaderRoute: typeof dashboardSupportSupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/support/tickets': {
+      id: '/(dashboard)/support/tickets'
+      path: '/support/tickets'
+      fullPath: '/support/tickets'
+      preLoaderRoute: typeof dashboardSupportTicketsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/support/users': {
+      id: '/(dashboard)/support/users'
+      path: '/support/users'
+      fullPath: '/support/users'
+      preLoaderRoute: typeof dashboardSupportUsersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(dashboard)/dashboard/support/': {
@@ -1160,11 +1153,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardDashboardSupportIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/dashboard/transactions/$id': {
-      id: '/(dashboard)/dashboard/transactions/$id'
-      path: '/dashboard/transactions/$id'
-      fullPath: '/dashboard/transactions/$id'
-      preLoaderRoute: typeof dashboardDashboardTransactionsIdRouteImport
+    '/(dashboard)/dashboard/support/help': {
+      id: '/(dashboard)/dashboard/support/help'
+      path: '/dashboard/support/help'
+      fullPath: '/dashboard/support/help'
+      preLoaderRoute: typeof dashboardDashboardSupportHelpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(dashboard)/dashboard/support/messages': {
@@ -1174,11 +1167,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardDashboardSupportMessagesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(dashboard)/dashboard/support/help': {
-      id: '/(dashboard)/dashboard/support/help'
-      path: '/dashboard/support/help'
-      fullPath: '/dashboard/support/help'
-      preLoaderRoute: typeof dashboardDashboardSupportHelpRouteImport
+    '/(dashboard)/dashboard/transactions/': {
+      id: '/(dashboard)/dashboard/transactions/'
+      path: '/dashboard/transactions'
+      fullPath: '/dashboard/transactions/'
+      preLoaderRoute: typeof dashboardDashboardTransactionsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(dashboard)/dashboard/transactions/$id': {
+      id: '/(dashboard)/dashboard/transactions/$id'
+      path: '/dashboard/transactions/$id'
+      fullPath: '/dashboard/transactions/$id'
+      preLoaderRoute: typeof dashboardDashboardTransactionsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
