@@ -5,7 +5,6 @@ import {
 	BarChart3,
 	Calendar,
 	PieChart,
-	TrendingDown,
 	TrendingUp,
 } from "lucide-react";
 import { motion } from "motion/react";
@@ -23,39 +22,21 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useAnalyticsSummary } from "@/hooks/useAnalytics";
 import DashboardLayout from "@/layout/DashboardLayout";
 
-const monthlyData = [
-	{ month: "Jan", income: 4000, expenses: 2400, savings: 1600 },
-	{ month: "Feb", income: 3000, expenses: 1398, savings: 1602 },
-	{ month: "Mar", income: 5000, expenses: 3800, savings: 1200 },
-	{ month: "Apr", income: 4780, expenses: 3908, savings: 872 },
-	{ month: "May", income: 5890, expenses: 4800, savings: 1090 },
-	{ month: "Jun", income: 4390, expenses: 3800, savings: 590 },
-	{ month: "Jul", income: 6490, expenses: 4300, savings: 2190 },
-];
-
-const categoryData = [
-	{ name: "Food & Dining", value: 850, color: "hsl(160 84% 39%)" },
-	{ name: "Shopping", value: 620, color: "hsl(217 33% 55%)" },
-	{ name: "Transport", value: 380, color: "hsl(38 92% 50%)" },
-	{ name: "Entertainment", value: 290, color: "hsl(280 65% 60%)" },
-	{ name: "Utilities", value: 450, color: "hsl(200 80% 50%)" },
-	{ name: "Other", value: 210, color: "hsl(0 0% 50%)" },
-];
-
-const weeklySpending = [
-	{ day: "Mon", amount: 120 },
-	{ day: "Tue", amount: 85 },
-	{ day: "Wed", amount: 200 },
-	{ day: "Thu", amount: 45 },
-	{ day: "Fri", amount: 180 },
-	{ day: "Sat", amount: 320 },
-	{ day: "Sun", amount: 95 },
+const CATEGORY_COLORS = [
+	"hsl(160 84% 39%)",
+	"hsl(217 33% 55%)",
+	"hsl(38 92% 50%)",
+	"hsl(280 65% 60%)",
+	"hsl(200 80% 50%)",
+	"hsl(0 0% 50%)",
 ];
 
 const budgets = [
@@ -64,17 +45,101 @@ const budgets = [
 	{ category: "Transport", spent: 380, budget: 400, icon: "🚗" },
 	{ category: "Entertainment", spent: 290, budget: 300, icon: "🎬" },
 ];
+
+function pctChange(current: number, previous: number): string | null {
+	if (!previous) return null;
+	const pct = ((current - previous) / Math.abs(previous)) * 100;
+	return `${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%`;
+}
 export const Route = createFileRoute("/(dashboard)/dashboard/analytics")({
 	component: AnalyticsPage,
 });
 
 function AnalyticsPage() {
-	const totalIncome = monthlyData[monthlyData.length - 1].income;
-	const totalExpenses = monthlyData[monthlyData.length - 1].expenses;
-	const savingsRate = (
-		((totalIncome - totalExpenses) / totalIncome) *
-		100
-	).toFixed(1);
+	const { data: summary, isPending, isError, refetch } = useAnalyticsSummary();
+
+	const monthlyData = summary?.monthly ?? [];
+	const categoryData = (summary?.categories ?? []).map((c, index) => ({
+		name: c.name,
+		value: c.value,
+		color: CATEGORY_COLORS[index % CATEGORY_COLORS.length],
+	}));
+	const weeklySpending = summary?.weekly ?? [];
+
+	const lastMonth = monthlyData[monthlyData.length - 1];
+	const prevMonth = monthlyData[monthlyData.length - 2];
+
+	const totalIncome = lastMonth?.income ?? 0;
+	const totalExpenses = lastMonth?.expenses ?? 0;
+	const savingsRate =
+		totalIncome > 0
+			? (((totalIncome - totalExpenses) / totalIncome) * 100).toFixed(1)
+			: "0.0";
+	const incomeChange = pctChange(totalIncome, prevMonth?.income ?? 0);
+	const expenseChange = pctChange(totalExpenses, prevMonth?.expenses ?? 0);
+	const netChange = pctChange(
+		totalIncome - totalExpenses,
+		(prevMonth?.income ?? 0) - (prevMonth?.expenses ?? 0),
+	);
+	const rateChange =
+		prevMonth && prevMonth.income > 0
+			? pctChange(
+					totalIncome - totalExpenses,
+					prevMonth.income - prevMonth.expenses,
+				)
+			: null;
+
+	if (isPending) {
+		return (
+			<DashboardLayout>
+				<div className="min-h-screen bg-background">
+					<main className="mx-auto space-y-6 px-6 py-8">
+						<div className="space-y-2">
+							<Skeleton className="h-9 w-40" />
+							<Skeleton className="h-4 w-64" />
+						</div>
+						<div className="grid gap-4 md:grid-cols-4">
+							{["income", "expenses", "savings", "rate"].map((kpi) => (
+								<Skeleton className="h-32" key={kpi} />
+							))}
+						</div>
+						<div className="grid gap-6 lg:grid-cols-7">
+							<Skeleton className="h-[420px] lg:col-span-4" />
+							<Skeleton className="h-[420px] lg:col-span-3" />
+						</div>
+					</main>
+				</div>
+			</DashboardLayout>
+		);
+	}
+
+	if (isError) {
+		return (
+			<DashboardLayout>
+				<div className="min-h-screen bg-background">
+					<main className="mx-auto space-y-6 px-6 py-8">
+						<div>
+							<h1 className="font-bold text-3xl tracking-tight">Analytics</h1>
+							<p className="mt-1 text-muted-foreground">
+								Track your spending patterns and insights
+							</p>
+						</div>
+						<Card className="border-border/50 bg-card-gradient shadow-card">
+							<CardContent className="flex flex-col items-center gap-3 p-10">
+								<p className="text-muted-foreground text-sm">
+									Couldn&apos;t load your analytics.
+								</p>
+								<Button onClick={() => refetch()} size="sm" variant="outline">
+									Retry
+								</Button>
+							</CardContent>
+						</Card>
+					</main>
+				</div>
+			</DashboardLayout>
+		);
+	}
+
 	return (
 		<DashboardLayout>
 			<div className="min-h-screen bg-background">
@@ -86,11 +151,10 @@ function AnalyticsPage() {
 						initial={{ opacity: 0, y: 10 }}
 					>
 						<div>
-							<div className="flex items-center gap-3"><h1 className="font-bold text-3xl tracking-tight">Analytics</h1><Badge variant="outline">Preview</Badge></div>
+							<h1 className="font-bold text-3xl tracking-tight">Analytics</h1>
 							<p className="mt-1 text-muted-foreground">
 								Track your spending patterns and insights
 							</p>
-							<p className="mt-1 text-amber-600 text-sm">Charts use sample data.</p>
 						</div>
 						<Button className="gap-2" variant="outline">
 							<Calendar className="h-4 w-4" />
@@ -104,28 +168,28 @@ function AnalyticsPage() {
 							{
 								label: "Total Income",
 								value: `$${totalIncome.toLocaleString()}`,
-								change: "+12%",
+								change: incomeChange,
 								positive: true,
 								icon: ArrowDownLeft,
 							},
 							{
 								label: "Total Expenses",
 								value: `$${totalExpenses.toLocaleString()}`,
-								change: "+5%",
+								change: expenseChange,
 								positive: false,
 								icon: ArrowUpRight,
 							},
 							{
 								label: "Net Savings",
 								value: `$${(totalIncome - totalExpenses).toLocaleString()}`,
-								change: "+33%",
+								change: netChange,
 								positive: true,
 								icon: TrendingUp,
 							},
 							{
 								label: "Savings Rate",
 								value: `${savingsRate}%`,
-								change: "+8%",
+								change: rateChange,
 								positive: true,
 								icon: PieChart,
 							},
@@ -149,11 +213,17 @@ function AnalyticsPage() {
 										<p className="number-display mt-2 font-bold text-2xl">
 											{stat.value}
 										</p>
-										<p
-											className={`mt-1 text-sm ${stat.positive ? "text-success" : "text-destructive"}`}
-										>
-											{stat.change} from last month
-										</p>
+										{stat.change ? (
+											<p
+												className={`mt-1 text-sm ${stat.change.startsWith("+") === stat.positive ? "text-success" : "text-destructive"}`}
+											>
+												{stat.change} from last month
+											</p>
+										) : (
+											<p className="mt-1 text-muted-foreground text-sm">
+												No prior month data
+											</p>
+										)}
 									</CardContent>
 								</Card>
 							</motion.div>
@@ -278,45 +348,58 @@ function AnalyticsPage() {
 									</CardTitle>
 								</CardHeader>
 								<CardContent>
-									<div className="h-[200px]">
-										<ResponsiveContainer height="100%" width="100%">
-											<RechartsPie>
-												<Pie
-													cx="50%"
-													cy="50%"
-													data={categoryData}
-													dataKey="value"
-													innerRadius={60}
-													outerRadius={80}
-													paddingAngle={2}
-												>
-													{categoryData.map((entry, index) => (
-														<Cell fill={entry.color} key={`cell-${index}`} />
-													))}
-												</Pie>
-												<Tooltip
-													contentStyle={{
-														backgroundColor: "hsl(222 47% 13%)",
-														border: "1px solid hsl(217 33% 20%)",
-														borderRadius: "12px",
-													}}
-												/>
-											</RechartsPie>
-										</ResponsiveContainer>
-									</div>
-									<div className="mt-4 grid grid-cols-2 gap-2">
-										{categoryData.map((cat) => (
-											<div className="flex items-center gap-2" key={cat.name}>
-												<div
-													className="h-3 w-3 rounded-full"
-													style={{ backgroundColor: cat.color }}
-												/>
-												<span className="truncate text-muted-foreground text-xs">
-													{cat.name}
-												</span>
+									{categoryData.length === 0 ? (
+										<div className="flex h-[200px] items-center justify-center">
+											<p className="text-muted-foreground text-sm">
+												No spending recorded yet.
+											</p>
+										</div>
+									) : (
+										<>
+											<div className="h-[200px]">
+												<ResponsiveContainer height="100%" width="100%">
+													<RechartsPie>
+														<Pie
+															cx="50%"
+															cy="50%"
+															data={categoryData}
+															dataKey="value"
+															innerRadius={60}
+															outerRadius={80}
+															paddingAngle={2}
+														>
+															{categoryData.map((entry) => (
+																<Cell fill={entry.color} key={entry.name} />
+															))}
+														</Pie>
+														<Tooltip
+															contentStyle={{
+																backgroundColor: "hsl(222 47% 13%)",
+																border: "1px solid hsl(217 33% 20%)",
+																borderRadius: "12px",
+															}}
+														/>
+													</RechartsPie>
+												</ResponsiveContainer>
 											</div>
-										))}
-									</div>
+											<div className="mt-4 grid grid-cols-2 gap-2">
+												{categoryData.map((cat) => (
+													<div
+														className="flex items-center gap-2"
+														key={cat.name}
+													>
+														<div
+															className="h-3 w-3 rounded-full"
+															style={{ backgroundColor: cat.color }}
+														/>
+														<span className="truncate text-muted-foreground text-xs">
+															{cat.name}
+														</span>
+													</div>
+												))}
+											</div>
+										</>
+									)}
 								</CardContent>
 							</Card>
 						</motion.div>
@@ -380,7 +463,10 @@ function AnalyticsPage() {
 						>
 							<Card className="border-border/50 bg-card-gradient shadow-card">
 								<CardHeader>
-									<CardTitle>Budget Progress</CardTitle>
+									<CardTitle className="flex items-center gap-2">
+										Budget Progress
+										<Badge variant="outline">Preview</Badge>
+									</CardTitle>
 								</CardHeader>
 								<CardContent className="space-y-4">
 									{budgets.map((item) => {
