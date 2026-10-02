@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Caching.Memory;
 using FinTech.Data;
 using FinTech.Models;
@@ -22,6 +23,7 @@ namespace FinTech.Services.UserDashboard
         Task<PaginatedResult<TransactionDto>> GetUserTransactionsAsync(Guid userId, TransactionQueryParams queryParams);
         Task<TransactionDetailDto?> GetTransactionDetailAsync(Guid transactionId, Guid userId);
         Task<List<RecentRecipientDto>> GetRecentRecipientsAsync(Guid userId, int limit = 10);
+        Task<List<StatementRowDto>> GetStatementRowsAsync(Guid userId, StatementQueryParams queryParams);
     }
 
     public class TransactionService : ITransactionService
@@ -87,53 +89,61 @@ namespace FinTech.Services.UserDashboard
             if (currentBalance < request.Amount)
                 throw new InsufficientFundsException($"Insufficient funds. Available: {currentBalance}, Required: {request.Amount}");
 
-            // STEP 5: Process transfer atomically
-            using var dbTransaction = await _context.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
-
-            try
+            // STEP 5: Process transfer atomically.
+            // The DbContext has EnableRetryOnFailure, so an explicit
+            // transaction must be wrapped in the execution strategy —
+            // otherwise SQL Server throws "does not support
+            // user-initiated transactions".
+            var strategy = _context.Database.CreateExecutionStrategy();
+            return await strategy.ExecuteAsync(async () =>
             {
-                var transaction = new Transaction
+                using var dbTransaction = await _context.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
+
+                try
                 {
-                    Id = Guid.NewGuid(),
-                    IdempotencyKey = request.IdempotencyKey,
-                    FromWalletId = fromWallet.Id,
-                    ToWalletId = toWallet.Id,
-                    Amount = request.Amount,
-                    Currency = fromWallet.CurrencyCode,
-                    Type = TransactionType.Transfer,
-                    Status = TransactionStatus.Pending,
-                    Description = request.Description ?? "P2P Transfer",
-                    CreatedAt = DateTime.UtcNow
-                };
+                    var transaction = new Transaction
+                    {
+                        Id = Guid.NewGuid(),
+                        IdempotencyKey = request.IdempotencyKey,
+                        FromWalletId = fromWallet.Id,
+                        ToWalletId = toWallet.Id,
+                        Amount = request.Amount,
+                        Currency = fromWallet.CurrencyCode,
+                        Type = TransactionType.Transfer,
+                        Status = TransactionStatus.Pending,
+                        Description = request.Description ?? "P2P Transfer",
+                        CreatedAt = DateTime.UtcNow
+                    };
 
-                _context.Transactions.Add(transaction);
-                await _context.SaveChangesAsync();
+                    _context.Transactions.Add(transaction);
+                    await _context.SaveChangesAsync();
 
-                // Mark as completed
-                transaction.Status = TransactionStatus.Completed;
-                transaction.CompletedAt = DateTime.UtcNow;
-                await _context.SaveChangesAsync();
+                    // Mark as completed
+                    transaction.Status = TransactionStatus.Completed;
+                    transaction.CompletedAt = DateTime.UtcNow;
+                    await _context.SaveChangesAsync();
 
-                await dbTransaction.CommitAsync();
+                    await dbTransaction.CommitAsync();
 
-                // Invalidate balance cache
-                InvalidateBalanceCache(fromWallet.Id, toWallet.Id);
+                    // Invalidate balance cache
+                    InvalidateBalanceCache(fromWallet.Id, toWallet.Id);
 
-                _logger.LogInformation(
-                    "Transfer completed: {TransactionId} from {FromWallet} to {ToWallet}, Amount: {Amount} {Currency}",
-                    transaction.Id, fromWallet.Id, toWallet.Id, request.Amount, fromWallet.CurrencyCode);
+                    _logger.LogInformation(
+                        "Transfer completed: {TransactionId} from {FromWallet} to {ToWallet}, Amount: {Amount} {Currency}",
+                        transaction.Id, fromWallet.Id, toWallet.Id, request.Amount, fromWallet.CurrencyCode);
 
-                // TODO: Send notifications async (don't block response)
-                _ = Task.Run(() => SendTransferNotifications(transaction, fromWallet.User, toWallet.User));
+                    // TODO: Send notifications async (don't block response)
+                    _ = Task.Run(() => SendTransferNotifications(transaction, fromWallet.User, toWallet.User));
 
-                return MapToTransactionDto(transaction);
-            }
-            catch (Exception ex)
-            {
-                await dbTransaction.RollbackAsync();
-                _logger.LogError(ex, "Transfer failed for idempotency key: {Key}", request.IdempotencyKey);
-                throw;
-            }
+                    return MapToTransactionDto(transaction);
+                }
+                catch (Exception ex)
+                {
+                    await dbTransaction.RollbackAsync();
+                    _logger.LogError(ex, "Transfer failed for idempotency key: {Key}", request.IdempotencyKey);
+                    throw;
+                }
+            });
         }
 
         public async Task<PaginatedResult<TransactionDto>> GetUserTransactionsAsync(
@@ -195,6 +205,64 @@ namespace FinTech.Services.UserDashboard
                 PageSize = queryParams.PageSize,
                 TotalPages = (int)Math.Ceiling(totalCount / (double)queryParams.PageSize)
             };
+        }
+
+        public async Task<List<StatementRowDto>> GetStatementRowsAsync(
+            Guid userId,
+            StatementQueryParams queryParams)
+        {
+            var walletIds = await _context.Wallets
+                .Where(w => w.UserId == userId)
+                .Select(w => w.Id)
+                .ToListAsync();
+
+            if (!walletIds.Any())
+                return new List<StatementRowDto>();
+
+            var query = _context.Transactions
+                .Where(t => walletIds.Contains(t.FromWalletId.Value) ||
+                            walletIds.Contains(t.ToWalletId.Value));
+
+            if (queryParams.StartDate.HasValue)
+            {
+                var start = queryParams.StartDate.Value;
+                query = query.Where(t => t.CreatedAt >= start);
+            }
+
+            if (queryParams.EndDate.HasValue)
+            {
+                // A date-only end value (e.g. "2026-08-31") means inclusive end-of-day
+                var end = queryParams.EndDate.Value;
+                if (end.TimeOfDay == TimeSpan.Zero)
+                    end = end.AddDays(1).AddMilliseconds(-1);
+                query = query.Where(t => t.CreatedAt <= end);
+            }
+
+            var direction = queryParams.Direction?.ToLowerInvariant();
+            if (direction == "outgoing")
+                query = query.Where(t => t.FromWalletId.HasValue && walletIds.Contains(t.FromWalletId.Value));
+            else if (direction == "incoming")
+                query = query.Where(t => !t.FromWalletId.HasValue || !walletIds.Contains(t.FromWalletId.Value));
+
+            var rows = await query
+                .OrderBy(t => t.CreatedAt)
+                .Take(10000)
+                .Select(t => new StatementRowDto
+                {
+                    CreatedAt = t.CreatedAt,
+                    Type = t.Type.ToString(),
+                    Direction = t.FromWalletId.HasValue && walletIds.Contains(t.FromWalletId.Value)
+                        ? "outgoing"
+                        : "incoming",
+                    Description = t.Description,
+                    ReferenceId = t.ReferenceId,
+                    Amount = t.Amount,
+                    Currency = t.Currency,
+                    Status = t.Status.ToString()
+                })
+                .ToListAsync();
+
+            return rows;
         }
 
         public async Task<TransactionDetailDto?> GetTransactionDetailAsync(Guid transactionId, Guid userId)

@@ -327,12 +327,6 @@ function TransactionDetailPage() {
 														{formatAmount(tx.amount)}
 													</span>
 												</div>
-												<div className="flex justify-between">
-													<span className="text-muted-foreground">Fee</span>
-													<span className="number-display">
-														{formatAmount(0)}
-													</span>
-												</div>
 												<Separator />
 												<div className="flex justify-between font-semibold">
 													<span>Total</span>

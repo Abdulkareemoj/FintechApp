@@ -17,20 +17,40 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
+import {
 	Empty,
 	EmptyDescription,
 	EmptyHeader,
 	EmptyTitle,
 } from "@/components/ui/empty";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
 import {
 	useCards,
+	useCreateCard,
 	useDeleteCard,
 	useFreezeCard,
 	useUnfreezeCard,
+	useUpdateCardLimits,
 } from "@/hooks/useCards";
+import { useWallets } from "@/hooks/useWallets";
 import DashboardLayout from "@/layout/DashboardLayout";
 import type { Card as BankCard } from "@/lib/api/cards";
+import { useAuthStore } from "@/lib/authStore";
 import { cn } from "@/lib/utils";
 
 function humanize(value: string) {
@@ -60,10 +80,21 @@ export const Route = createFileRoute("/(dashboard)/dashboard/cards")({
 
 function CardPage() {
 	const { data: cards, isPending, isError, refetch } = useCards();
+	const { data: wallets } = useWallets();
 	const freezeCard = useFreezeCard();
 	const unfreezeCard = useUnfreezeCard();
 	const deleteCard = useDeleteCard();
+	const createCard = useCreateCard();
+	const updateLimits = useUpdateCardLimits();
+	const { user } = useAuthStore();
 	const [hiddenCards, setHiddenCards] = useState<Set<string>>(new Set());
+	const [createOpen, setCreateOpen] = useState(false);
+	const [walletId, setWalletId] = useState("");
+	const [holderName, setHolderName] = useState("");
+	const [limitsCard, setLimitsCard] = useState<BankCard | null>(null);
+	const [spendingLimit, setSpendingLimit] = useState("");
+	const [dailyLimit, setDailyLimit] = useState("");
+	const [monthlyLimit, setMonthlyLimit] = useState("");
 
 	const toggleCardVisibility = (id: string) => {
 		const newSet = new Set(hiddenCards);
@@ -107,6 +138,61 @@ function CardPage() {
 		});
 	};
 
+	const openCreate = () => {
+		const name = `${user?.firstName ?? ""} ${user?.lastName ?? ""}`.trim();
+		setHolderName(name);
+		setWalletId((wallets ?? [])[0]?.id ?? "");
+		setCreateOpen(true);
+	};
+
+	const openLimits = (card: BankCard) => {
+		setLimitsCard(card);
+		setSpendingLimit(String(card.spendingLimit ?? 0));
+		setDailyLimit(String(card.dailyLimit ?? 0));
+		setMonthlyLimit(String(card.monthlyLimit ?? 0));
+	};
+
+	const handleCreate = async () => {
+		if (!walletId || holderName.trim().length < 2) return;
+		try {
+			await createCard.mutateAsync({
+				walletId,
+				cardHolderName: holderName.trim(),
+			});
+			toast.success("Virtual card created");
+			setCreateOpen(false);
+		} catch (err) {
+			toast.error(err instanceof Error ? err.message : "Failed to create card");
+		}
+	};
+
+	const handleUpdateLimits = async () => {
+		if (!limitsCard) return;
+		const spending = Number(spendingLimit);
+		const daily = Number(dailyLimit);
+		const monthly = Number(monthlyLimit);
+		if ([spending, daily, monthly].some((n) => Number.isNaN(n) || n < 0)) {
+			toast.error("Limits must be 0 or greater");
+			return;
+		}
+		try {
+			await updateLimits.mutateAsync({
+				id: limitsCard.id,
+				limits: {
+					spendingLimit: spending,
+					dailyLimit: daily,
+					monthlyLimit: monthly,
+				},
+			});
+			toast.success("Limits updated");
+			setLimitsCard(null);
+		} catch (err) {
+			toast.error(
+				err instanceof Error ? err.message : "Failed to update limits",
+			);
+		}
+	};
+
 	return (
 		<DashboardLayout>
 			<div className="min-h-screen bg-background">
@@ -123,7 +209,7 @@ function CardPage() {
 								Manage your physical and virtual cards
 							</p>
 						</div>
-						<Button className="bg-primary-gradient" disabled>
+						<Button className="bg-primary-gradient" onClick={openCreate}>
 							<PlusCircle data-icon />
 							Order New Card
 						</Button>
@@ -316,7 +402,12 @@ function CardPage() {
 															</>
 														)}
 													</Button>
-													<Button size="sm" variant="outline" disabled>
+													<Button
+														disabled={updateLimits.isPending}
+														onClick={() => openLimits(card)}
+														size="sm"
+														variant="outline"
+													>
 														<Settings2 data-icon />
 													</Button>
 													<Button
@@ -345,8 +436,8 @@ function CardPage() {
 									<CardContent className="flex h-full flex-col items-center justify-center p-6">
 										<Button
 											className="flex h-auto flex-col gap-3 py-8"
+											onClick={openCreate}
 											variant="ghost"
-											disabled
 										>
 											<div className="rounded-full bg-muted p-4">
 												<PlusCircle className="size-6 text-muted-foreground" />
@@ -361,6 +452,113 @@ function CardPage() {
 							</motion.div>
 						</div>
 					)}
+
+					<Dialog onOpenChange={setCreateOpen} open={createOpen}>
+						<DialogContent className="sm:max-w-md">
+							<DialogHeader>
+								<DialogTitle>Create a virtual card</DialogTitle>
+								<DialogDescription>
+									Issued instantly to your selected wallet.
+								</DialogDescription>
+							</DialogHeader>
+							<div className="space-y-4">
+								<div className="space-y-2">
+									<Label>Wallet</Label>
+									<Select
+										onValueChange={setWalletId}
+										value={walletId || undefined}
+									>
+										<SelectTrigger className="bg-muted/50">
+											<SelectValue placeholder="Select a wallet" />
+										</SelectTrigger>
+										<SelectContent>
+											{(wallets ?? []).map((w) => (
+												<SelectItem key={w.id} value={w.id}>
+													{w.currencyCode} wallet
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+								</div>
+								<div className="space-y-2">
+									<Label htmlFor="card-holder">Cardholder name</Label>
+									<Input
+										className="bg-muted/50"
+										id="card-holder"
+										onChange={(e) => setHolderName(e.target.value)}
+										placeholder="Name on card"
+										value={holderName}
+									/>
+								</div>
+								<Button
+									className="w-full bg-primary-gradient"
+									disabled={
+										!walletId ||
+										holderName.trim().length < 2 ||
+										createCard.isPending
+									}
+									onClick={handleCreate}
+								>
+									{createCard.isPending ? "Creating…" : "Create card"}
+								</Button>
+							</div>
+						</DialogContent>
+					</Dialog>
+
+					<Dialog
+						onOpenChange={(open) => {
+							if (!open) setLimitsCard(null);
+						}}
+						open={!!limitsCard}
+					>
+						<DialogContent className="sm:max-w-md">
+							<DialogHeader>
+								<DialogTitle>Card limits</DialogTitle>
+								<DialogDescription>
+									Card •••• {limitsCard?.lastFourDigits}
+								</DialogDescription>
+							</DialogHeader>
+							<div className="space-y-4">
+								<div className="space-y-2">
+									<Label htmlFor="spending-limit">Spending limit</Label>
+									<Input
+										className="bg-muted/50"
+										id="spending-limit"
+										inputMode="decimal"
+										onChange={(e) => setSpendingLimit(e.target.value)}
+										value={spendingLimit}
+									/>
+								</div>
+								<div className="space-y-2">
+									<Label htmlFor="daily-limit">Daily limit</Label>
+									<Input
+										className="bg-muted/50"
+										id="daily-limit"
+										inputMode="decimal"
+										onChange={(e) => setDailyLimit(e.target.value)}
+										value={dailyLimit}
+									/>
+								</div>
+								<div className="space-y-2">
+									<Label htmlFor="monthly-limit">Monthly limit</Label>
+									<Input
+										className="bg-muted/50"
+										id="monthly-limit"
+										inputMode="decimal"
+										onChange={(e) => setMonthlyLimit(e.target.value)}
+										value={monthlyLimit}
+									/>
+								</div>
+								<Button
+									className="w-full bg-primary-gradient"
+									disabled={updateLimits.isPending}
+									onClick={handleUpdateLimits}
+								>
+									{updateLimits.isPending ? "Saving…" : "Save limits"}
+								</Button>
+							</div>
+						</DialogContent>
+					</Dialog>
 				</main>
 			</div>
 		</DashboardLayout>

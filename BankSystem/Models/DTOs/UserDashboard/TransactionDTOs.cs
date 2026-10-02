@@ -71,6 +71,25 @@ namespace FinTech.Models.DTOs.UserDashboard
         public string? Search { get; set; }
     }
 
+    public class StatementQueryParams
+    {
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public string? Direction { get; set; } // "all" (default) | "incoming" | "outgoing"
+    }
+
+    public class StatementRowDto
+    {
+        public DateTime CreatedAt { get; set; }
+        public string Type { get; set; } = string.Empty;
+        public string Direction { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public string? ReferenceId { get; set; }
+        public decimal Amount { get; set; }
+        public string Currency { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+    }
+
     public class PaginatedResult<T>
     {
         public List<T> Items { get; set; } = new();

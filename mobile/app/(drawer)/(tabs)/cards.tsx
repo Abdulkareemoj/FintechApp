@@ -1,14 +1,29 @@
+import { useState } from "react";
 import { ActivityIndicator, Alert, ScrollView, View } from "react-native";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Text } from "@/components/ui/text";
 import {
   useCards,
+  useCreateCard,
   useDeleteCard,
   useFreezeCard,
   useUnfreezeCard,
+  useUpdateCardLimits,
 } from "@/hooks/useCards";
+import { useWallets } from "@/hooks/useWallets";
+import { useAuthStore } from "@/lib/authStore";
 import type { Card as BankCard } from "@/lib/api/cards";
 
 function humanize(value: string) {
@@ -27,9 +42,79 @@ function expiryLabel(card: BankCard) {
 
 export default function Cards() {
   const { data: cards, isLoading, isError, refetch } = useCards();
+  const { data: wallets } = useWallets();
   const freezeMutation = useFreezeCard();
   const unfreezeMutation = useUnfreezeCard();
   const deleteMutation = useDeleteCard();
+  const createMutation = useCreateCard();
+  const limitsMutation = useUpdateCardLimits();
+  const user = useAuthStore((state) => state.user);
+
+  const [createOpen, setCreateOpen] = useState(false);
+  const [walletOption, setWalletOption] = useState<
+    { value: string; label: string } | undefined
+  >(undefined);
+  const [holderName, setHolderName] = useState("");
+  const [limitsCard, setLimitsCard] = useState<BankCard | null>(null);
+  const [spendingLimit, setSpendingLimit] = useState("");
+  const [dailyLimit, setDailyLimit] = useState("");
+  const [monthlyLimit, setMonthlyLimit] = useState("");
+
+  const openCreate = () => {
+    const name = user ? `${user.firstName} ${user.lastName}`.trim() : "";
+    setHolderName(name);
+    const first = (wallets ?? [])[0];
+    setWalletOption(
+      first ? { value: first.id, label: `${first.currencyCode} wallet` } : undefined,
+    );
+    setCreateOpen(true);
+  };
+
+  const openLimits = (card: BankCard) => {
+    setLimitsCard(card);
+    setSpendingLimit(String(card.spendingLimit ?? 0));
+    setDailyLimit(String(card.dailyLimit ?? 0));
+    setMonthlyLimit(String(card.monthlyLimit ?? 0));
+  };
+
+  const handleCreate = async () => {
+    if (!walletOption?.value || holderName.trim().length < 2) return;
+    try {
+      await createMutation.mutateAsync({
+        walletId: walletOption.value,
+        cardHolderName: holderName.trim(),
+      });
+      Alert.alert("Card created", "Your virtual card is ready to use.");
+      setCreateOpen(false);
+    } catch (err) {
+      Alert.alert("Failed", err instanceof Error ? err.message : "Try again");
+    }
+  };
+
+  const handleUpdateLimits = async () => {
+    if (!limitsCard) return;
+    const spending = Number(spendingLimit);
+    const daily = Number(dailyLimit);
+    const monthly = Number(monthlyLimit);
+    if ([spending, daily, monthly].some((n) => Number.isNaN(n) || n < 0)) {
+      Alert.alert("Invalid limits", "Limits must be 0 or greater.");
+      return;
+    }
+    try {
+      await limitsMutation.mutateAsync({
+        id: limitsCard.id,
+        limits: {
+          spendingLimit: spending,
+          dailyLimit: daily,
+          monthlyLimit: monthly,
+        },
+      });
+      Alert.alert("Saved", "Card limits updated.");
+      setLimitsCard(null);
+    } catch (err) {
+      Alert.alert("Failed", err instanceof Error ? err.message : "Try again");
+    }
+  };
 
   const handleFreezeToggle = (card: BankCard) => {
     const isFrozen = card.status?.toLowerCase().includes("frozen");
@@ -130,7 +215,12 @@ export default function Cards() {
                   </View>
 
                   <View className="mt-3 flex-row gap-2">
-                    <Button className="flex-1" variant="outline" disabled>
+                    <Button
+                      className="flex-1"
+                      disabled={limitsMutation.isPending}
+                      onPress={() => openLimits(card)}
+                      variant="outline"
+                    >
                       <Text>Limits</Text>
                     </Button>
                     <Button
@@ -147,11 +237,107 @@ export default function Cards() {
             })
           )}
 
-          <Button disabled>
+          <Button onPress={openCreate}>
             <Text>Add new card</Text>
           </Button>
         </CardContent>
       </Card>
+
+      <Dialog onOpenChange={setCreateOpen} open={createOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Create a virtual card</DialogTitle>
+          </DialogHeader>
+          <View className="gap-4">
+            <View className="gap-2">
+              <Label>Wallet</Label>
+              <Select onValueChange={setWalletOption} value={walletOption}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a wallet" />
+                </SelectTrigger>
+                <SelectContent>
+                  {(wallets ?? []).map((w) => (
+                    <SelectItem
+                      key={w.id}
+                      label={`${w.currencyCode} wallet`}
+                      value={w.id}
+                    >
+                      {`${w.currencyCode} wallet`}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </View>
+            <View className="gap-2">
+              <Label htmlFor="card-holder">Cardholder name</Label>
+              <Input
+                id="card-holder"
+                onChangeText={setHolderName}
+                placeholder="Name on card"
+                value={holderName}
+              />
+            </View>
+            <Button
+              disabled={
+                !walletOption?.value ||
+                holderName.trim().length < 2 ||
+                createMutation.isPending
+              }
+              onPress={handleCreate}
+            >
+              <Text>{createMutation.isPending ? "Creating…" : "Create card"}</Text>
+            </Button>
+          </View>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        onOpenChange={(open) => {
+          if (!open) setLimitsCard(null);
+        }}
+        open={!!limitsCard}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Card limits</DialogTitle>
+          </DialogHeader>
+          <View className="gap-4">
+            <View className="gap-2">
+              <Label htmlFor="spending-limit">Spending limit</Label>
+              <Input
+                id="spending-limit"
+                keyboardType="decimal-pad"
+                onChangeText={setSpendingLimit}
+                value={spendingLimit}
+              />
+            </View>
+            <View className="gap-2">
+              <Label htmlFor="daily-limit">Daily limit</Label>
+              <Input
+                id="daily-limit"
+                keyboardType="decimal-pad"
+                onChangeText={setDailyLimit}
+                value={dailyLimit}
+              />
+            </View>
+            <View className="gap-2">
+              <Label htmlFor="monthly-limit">Monthly limit</Label>
+              <Input
+                id="monthly-limit"
+                keyboardType="decimal-pad"
+                onChangeText={setMonthlyLimit}
+                value={monthlyLimit}
+              />
+            </View>
+            <Button
+              disabled={limitsMutation.isPending}
+              onPress={handleUpdateLimits}
+            >
+              <Text>{limitsMutation.isPending ? "Saving…" : "Save limits"}</Text>
+            </Button>
+          </View>
+        </DialogContent>
+      </Dialog>
     </ScrollView>
   );
 }
