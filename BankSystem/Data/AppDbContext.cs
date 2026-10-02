@@ -24,6 +24,9 @@ namespace FinTech.Data
         public DbSet<HelpArticle> HelpArticles { get; set; } = null!;
         public DbSet<InboxMessage> InboxMessages { get; set; } = null!;
         public DbSet<Notification> Notifications { get; set; } = null!;
+        public DbSet<UserSettings> UserSettings { get; set; } = null!;
+        public DbSet<UserTwoFactor> UserTwoFactors { get; set; } = null!;
+        public DbSet<Bill> Bills { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -205,6 +208,70 @@ namespace FinTech.Data
 
                 entity.HasIndex(e => e.UserId).HasDatabaseName("idx_notifications_user");
                 entity.HasIndex(e => e.IsRead).HasDatabaseName("idx_notifications_read");
+            });
+
+            modelBuilder.Entity<UserSettings>(entity =>
+            {
+                entity.ToTable("user_settings");
+                entity.HasKey(e => e.UserId);
+                entity.Property(e => e.UserId).HasColumnName("user_id");
+                entity.Property(e => e.EmailNotifications).HasColumnName("email_notifications").HasDefaultValue(true);
+                entity.Property(e => e.PushNotifications).HasColumnName("push_notifications").HasDefaultValue(true);
+                entity.Property(e => e.SmsAlerts).HasColumnName("sms_alerts").HasDefaultValue(false);
+                entity.Property(e => e.TransactionAlerts).HasColumnName("transaction_alerts").HasDefaultValue(true);
+                entity.Property(e => e.LoginAlerts).HasColumnName("login_alerts").HasDefaultValue(true);
+                entity.Property(e => e.MarketingEmails).HasColumnName("marketing_emails").HasDefaultValue(false);
+                entity.Property(e => e.Language).HasColumnName("language").HasMaxLength(10).IsRequired().HasDefaultValue("en");
+                entity.Property(e => e.Currency).HasColumnName("currency").HasMaxLength(3).IsRequired().HasDefaultValue("USD");
+                entity.Property(e => e.CompactView).HasColumnName("compact_view").HasDefaultValue(false);
+                entity.Property(e => e.ShowBalance).HasColumnName("show_balance").HasDefaultValue(true);
+                entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("SYSUTCDATETIME()");
+
+                entity.HasOne(e => e.User)
+                    .WithOne(u => u.Settings)
+                    .HasForeignKey<UserSettings>(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<UserTwoFactor>(entity =>
+            {
+                entity.ToTable("user_two_factor");
+                entity.HasKey(t => t.UserId).HasName("pk_user_two_factor");
+                entity.Property(t => t.UserId).HasColumnName("user_id");
+                entity.Property(t => t.Secret).HasColumnName("secret").HasMaxLength(64).IsRequired();
+                entity.Property(t => t.Enabled).HasColumnName("enabled").HasDefaultValue(false);
+                entity.Property(t => t.ConfirmedAt).HasColumnName("confirmed_at");
+                entity.Property(t => t.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("SYSUTCDATETIME()");
+                entity.Property(t => t.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("SYSUTCDATETIME()");
+
+                entity.HasOne(t => t.User)
+                    .WithOne()
+                    .HasForeignKey<UserTwoFactor>(t => t.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<Bill>(entity =>
+            {
+                entity.ToTable("bills");
+                entity.HasKey(b => b.Id).HasName("pk_bills");
+                entity.Property(b => b.Id).HasColumnName("id");
+                entity.Property(b => b.UserId).HasColumnName("user_id");
+                entity.Property(b => b.Name).HasColumnName("name").HasMaxLength(100).IsRequired();
+                entity.Property(b => b.Category).HasColumnName("category").HasMaxLength(40).IsRequired();
+                entity.Property(b => b.Amount).HasColumnName("amount").HasColumnType("decimal(18,2)");
+                entity.Property(b => b.Reference).HasColumnName("reference").HasMaxLength(60);
+                entity.Property(b => b.DueDate).HasColumnName("due_date");
+                entity.Property(b => b.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("SYSUTCDATETIME()");
+                entity.Property(b => b.PaidAt).HasColumnName("paid_at");
+                entity.Property(b => b.PaidWalletId).HasColumnName("paid_wallet_id");
+                entity.Property(b => b.TransactionId).HasColumnName("transaction_id");
+
+                entity.HasIndex(b => b.UserId).HasDatabaseName("idx_bills_user");
+
+                entity.HasOne(b => b.User)
+                    .WithMany(u => u.Bills)
+                    .HasForeignKey(b => b.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
         }

@@ -12,6 +12,8 @@ namespace FinTech.Models
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Phone { get; set; }
+        public string? Address { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public UserRole Role { get; set; } = UserRole.User;
         public UserStatus Status { get; set; } = UserStatus.Active;
         public bool EmailVerified { get; set; } = false;
@@ -20,5 +22,7 @@ namespace FinTech.Models
 
         // Navigation properties
         public virtual ICollection<Wallet> Wallets { get; set; } = new List<Wallet>();
+        public virtual ICollection<Bill> Bills { get; set; } = new List<Bill>();
+        public virtual UserSettings? Settings { get; set; }
     }
 }
