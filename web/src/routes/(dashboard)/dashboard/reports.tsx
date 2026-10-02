@@ -9,6 +9,8 @@ import {
 	TrendingUp,
 } from "lucide-react";
 import { motion } from "motion/react";
+import { type FormEvent, useState } from "react";
+import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,19 +24,44 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import DashboardLayout from "@/layout/DashboardLayout";
+import {
+	downloadStatementCsv,
+	fmtDateLocal,
+	monthRange,
+	type StatementDirection,
+	type StatementParams,
+	ytdRange,
+} from "@/lib/api/statements";
 
-const reportTypes = [
+export const Route = createFileRoute("/(dashboard)/dashboard/reports")({
+	component: ReportsPage,
+});
+
+const lastFullMonth = monthRange(1);
+const ytd = ytdRange();
+
+type ReportCard = {
+	title: string;
+	icon: typeof BarChart3;
+	description: string;
+	color: string;
+	params?: StatementParams;
+};
+
+const reportTypes: ReportCard[] = [
 	{
 		title: "Monthly Spending",
 		icon: BarChart3,
-		description: "Detailed breakdown of expenses by category.",
+		description: `Outgoing transactions for ${lastFullMonth.label}.`,
 		color: "bg-primary/10 text-primary",
+		params: { ...lastFullMonth, direction: "outgoing" },
 	},
 	{
 		title: "Income vs. Expense",
 		icon: LineChart,
-		description: "Track your financial health over time.",
+		description: `All transactions for ${lastFullMonth.label}.`,
 		color: "bg-success/10 text-success",
+		params: lastFullMonth,
 	},
 	{
 		title: "Savings Progress",
@@ -45,8 +72,9 @@ const reportTypes = [
 	{
 		title: "Tax Summary",
 		icon: FileText,
-		description: "Annual tax-related income and deductions.",
+		description: `Incoming transactions for ${ytd.label}.`,
 		color: "bg-primary/10 text-primary",
+		params: { ...ytd, direction: "incoming" },
 	},
 	{
 		title: "Investment Returns",
@@ -57,26 +85,57 @@ const reportTypes = [
 	{
 		title: "Annual Overview",
 		icon: Calendar,
-		description: "Comprehensive yearly financial summary.",
+		description: `All transactions for ${ytd.label}.`,
 		color: "bg-pink-500/10 text-pink-500",
+		params: ytd,
 	},
 ];
 
-const recentReports = [
-	{ name: "July 2024 Spending Report", date: "2024-07-20", type: "PDF" },
-	{ name: "Q2 2024 Summary", date: "2024-07-01", type: "PDF" },
-	{ name: "June 2024 Spending Report", date: "2024-06-30", type: "PDF" },
-	{ name: "Investment Report Q2", date: "2024-06-15", type: "PDF" },
-];
-export const Route = createFileRoute("/(dashboard)/dashboard/reports")({
-	component: ReportsPage,
-});
+const REPORT_TYPE_DIRECTIONS: Record<string, StatementDirection> = {
+	spending: "outgoing",
+	income: "incoming",
+	summary: "all",
+	tax: "incoming",
+};
 
 function ReportsPage() {
+	const [pendingId, setPendingId] = useState<string | null>(null);
+	const [customStart, setCustomStart] = useState("");
+	const [customEnd, setCustomEnd] = useState("");
+	const [customType, setCustomType] = useState("spending");
+
+	const handleDownload = async (id: string, params: StatementParams) => {
+		setPendingId(id);
+		try {
+			await downloadStatementCsv(params);
+			toast.success("Report downloaded as CSV");
+		} catch (err) {
+			toast.error(err instanceof Error ? err.message : "Download failed");
+		} finally {
+			setPendingId(null);
+		}
+	};
+
+	const handleCustom = (e: FormEvent) => {
+		e.preventDefault();
+		if (!customStart || !customEnd) {
+			toast.error("Pick both a start and an end date");
+			return;
+		}
+		if (customStart > customEnd) {
+			toast.error("Start date must be on or before end date");
+			return;
+		}
+		void handleDownload("custom", {
+			startDate: customStart,
+			endDate: customEnd,
+			direction: REPORT_TYPE_DIRECTIONS[customType] ?? "all",
+		});
+	};
+
 	return (
 		<DashboardLayout>
 			<div className="min-h-screen bg-background">
-				{/* Main Content */}
 				<main className="mx-auto space-y-6 px-6 py-8">
 					<motion.div
 						animate={{ opacity: 1, y: 0 }}
@@ -84,181 +143,172 @@ function ReportsPage() {
 						initial={{ opacity: 0, y: 10 }}
 					>
 						<div>
-							<div className="flex items-center gap-3"><h1 className="font-bold text-3xl tracking-tight">Financial Reports</h1><Badge variant="outline">Preview</Badge></div>
+							<h1 className="font-bold text-3xl tracking-tight">
+								Financial Reports
+							</h1>
 							<p className="mt-1 text-muted-foreground">
-								Generate and download detailed financial reports
+								Generate and download detailed financial reports (CSV)
 							</p>
-							<p className="mt-1 text-amber-600 text-sm">Reports use sample data and cannot be generated yet.</p>
 						</div>
-						<Button variant="outline">
+						<Button
+							disabled={pendingId === "all"}
+							onClick={() => void handleDownload("all", {})}
+							variant="outline"
+						>
 							<Download className="mr-2 h-4 w-4" />
-							Export All
+							{pendingId === "all" ? "Preparing…" : "Export All"}
 						</Button>
 					</motion.div>
 
 					{/* Report Types Grid */}
 					<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-						{reportTypes.map((report, index) => (
-							<motion.div
-								animate={{ opacity: 1, y: 0 }}
-								initial={{ opacity: 0, y: 20 }}
-								key={report.title}
-								transition={{ delay: 0.1 + index * 0.05 }}
-							>
-								<Card className="group h-full cursor-pointer border-border/50 bg-card-gradient shadow-card transition-all duration-300 hover:shadow-elevated">
-									<CardHeader className="flex flex-row items-start justify-between pb-2">
-										<div className="space-y-1">
-											<CardTitle className="text-base">
-												{report.title}
-											</CardTitle>
-											<p className="text-muted-foreground text-sm">
-												{report.description}
-											</p>
-										</div>
-										<div
-											className={`rounded-xl p-3 ${report.color} transition-transform group-hover:scale-110`}
-										>
-											<report.icon className="h-5 w-5" />
-										</div>
-									</CardHeader>
-									<CardContent className="pt-4">
-										<Button className="w-full" size="sm" variant="secondary">
-											Generate Report
-										</Button>
-									</CardContent>
-								</Card>
-							</motion.div>
-						))}
+						{reportTypes.map((report, index) => {
+							const isPreview = !report.params;
+							return (
+								<motion.div
+									animate={{ opacity: 1, y: 0 }}
+									initial={{ opacity: 0, y: 20 }}
+									key={report.title}
+									transition={{ delay: 0.1 + index * 0.05 }}
+								>
+									<Card className="group h-full cursor-pointer border-border/50 bg-card-gradient shadow-card transition-all duration-300 hover:shadow-elevated">
+										<CardHeader className="flex flex-row items-start justify-between pb-2">
+											<div className="space-y-1">
+												<div className="flex items-center gap-2">
+													<CardTitle className="text-base">
+														{report.title}
+													</CardTitle>
+													{isPreview ? (
+														<Badge variant="outline">Preview</Badge>
+													) : null}
+												</div>
+												<p className="text-muted-foreground text-sm">
+													{report.description}
+												</p>
+											</div>
+											<div
+												className={`rounded-xl p-3 ${report.color} transition-transform group-hover:scale-110`}
+											>
+												<report.icon className="h-5 w-5" />
+											</div>
+										</CardHeader>
+										<CardContent className="pt-4">
+											<Button
+												className="w-full"
+												disabled={
+													isPreview || pendingId === `report-${report.title}`
+												}
+												onClick={() =>
+													report.params
+														? void handleDownload(
+																`report-${report.title}`,
+																report.params,
+															)
+														: undefined
+												}
+												size="sm"
+												variant="secondary"
+											>
+												{pendingId === `report-${report.title}`
+													? "Preparing…"
+													: isPreview
+														? "Not available yet"
+														: "Download CSV"}
+											</Button>
+										</CardContent>
+									</Card>
+								</motion.div>
+							);
+						})}
 					</div>
 
-					<div className="grid gap-6 lg:grid-cols-2">
-						{/* Custom Report Generator */}
-						<motion.div
-							animate={{ opacity: 1, y: 0 }}
-							initial={{ opacity: 0, y: 20 }}
-							transition={{ delay: 0.4 }}
-						>
-							<Card className="border-border/50 bg-card-gradient shadow-card">
-								<CardHeader>
-									<CardTitle>Custom Report Generator</CardTitle>
-								</CardHeader>
-								<CardContent className="space-y-4">
+					{/* Custom Report Generator */}
+					<motion.div
+						animate={{ opacity: 1, y: 0 }}
+						initial={{ opacity: 0, y: 20 }}
+						transition={{ delay: 0.4 }}
+					>
+						<Card className="border-border/50 bg-card-gradient shadow-card">
+							<CardHeader>
+								<CardTitle>Custom Report Generator</CardTitle>
+							</CardHeader>
+							<CardContent>
+								<form className="space-y-4" onSubmit={handleCustom}>
 									<div className="grid gap-4 md:grid-cols-2">
 										<div className="space-y-2">
-											<Label>Start Date</Label>
-											<Input className="bg-muted/50" type="date" />
+											<Label htmlFor="report-start">Start Date</Label>
+											<Input
+												className="bg-muted/50"
+												id="report-start"
+												max={fmtDateLocal(new Date())}
+												onChange={(e) => setCustomStart(e.target.value)}
+												required
+												type="date"
+												value={customStart}
+											/>
 										</div>
 										<div className="space-y-2">
-											<Label>End Date</Label>
-											<Input className="bg-muted/50" type="date" />
+											<Label htmlFor="report-end">End Date</Label>
+											<Input
+												className="bg-muted/50"
+												id="report-end"
+												max={fmtDateLocal(new Date())}
+												onChange={(e) => setCustomEnd(e.target.value)}
+												required
+												type="date"
+												value={customEnd}
+											/>
 										</div>
 									</div>
 
-									<div className="space-y-2">
-										<Label>Report Type</Label>
-										<Select>
-											<SelectTrigger className="bg-muted/50">
-												<SelectValue placeholder="Select report type" />
-											</SelectTrigger>
-											<SelectContent>
-												<SelectItem value="spending">
-													Spending Report
-												</SelectItem>
-												<SelectItem value="income">Income Report</SelectItem>
-												<SelectItem value="summary">Summary Report</SelectItem>
-												<SelectItem value="tax">Tax Report</SelectItem>
-											</SelectContent>
-										</Select>
-									</div>
-
-									<div className="space-y-2">
-										<Label>Accounts</Label>
-										<Select>
-											<SelectTrigger className="bg-muted/50">
-												<SelectValue placeholder="Select accounts" />
-											</SelectTrigger>
-											<SelectContent>
-												<SelectItem value="all">All Accounts</SelectItem>
-												<SelectItem value="checking">
-													Checking Account
-												</SelectItem>
-												<SelectItem value="savings">Savings Account</SelectItem>
-												<SelectItem value="business">
-													Business Account
-												</SelectItem>
-											</SelectContent>
-										</Select>
-									</div>
-
-									<div className="space-y-2">
-										<Label>Format</Label>
-										<Select defaultValue="pdf">
-											<SelectTrigger className="bg-muted/50">
-												<SelectValue />
-											</SelectTrigger>
-											<SelectContent>
-												<SelectItem value="pdf">PDF Document</SelectItem>
-												<SelectItem value="csv">CSV Spreadsheet</SelectItem>
-												<SelectItem value="excel">Excel Workbook</SelectItem>
-											</SelectContent>
-										</Select>
-									</div>
-
-									<Button className="w-full bg-primary-gradient">
-										<FileText className="mr-2 h-4 w-4" />
-										Generate Custom Report
-									</Button>
-								</CardContent>
-							</Card>
-						</motion.div>
-
-						{/* Recent Reports */}
-						<motion.div
-							animate={{ opacity: 1, y: 0 }}
-							initial={{ opacity: 0, y: 20 }}
-							transition={{ delay: 0.45 }}
-						>
-							<Card className="border-border/50 bg-card-gradient shadow-card">
-								<CardHeader>
-									<CardTitle>Recent Reports</CardTitle>
-								</CardHeader>
-								<CardContent className="space-y-4">
-									{recentReports.map((report, index) => (
-										<motion.div
-											animate={{ opacity: 1, x: 0 }}
-											className="group flex items-center justify-between rounded-xl bg-accent/30 p-4 transition-colors hover:bg-accent/50"
-											initial={{ opacity: 0, x: 10 }}
-											key={index}
-											transition={{ delay: 0.45 + index * 0.05 }}
-										>
-											<div className="flex items-center gap-3">
-												<div className="rounded-lg bg-destructive/10 p-2">
-													<FileText className="h-4 w-4 text-destructive" />
-												</div>
-												<div>
-													<p className="font-medium text-sm">{report.name}</p>
-													<p className="text-muted-foreground text-xs">
-														Generated{" "}
-														{new Date(report.date).toLocaleDateString()}
-													</p>
-												</div>
-											</div>
-											<Button
-												className="opacity-0 transition-opacity group-hover:opacity-100"
-												size="sm"
-												variant="ghost"
+									<div className="grid gap-4 md:grid-cols-2">
+										<div className="space-y-2">
+											<Label>Report Type</Label>
+											<Select
+												onValueChange={(value) => {
+													if (value) setCustomType(value);
+												}}
+												value={customType}
 											>
-												<Download className="h-4 w-4" />
-											</Button>
-										</motion.div>
-									))}
-									<Button className="w-full text-primary" variant="ghost">
-										View All Reports
+												<SelectTrigger className="bg-muted/50">
+													<SelectValue />
+												</SelectTrigger>
+												<SelectContent>
+													<SelectItem value="spending">
+														Spending Report
+													</SelectItem>
+													<SelectItem value="income">Income Report</SelectItem>
+													<SelectItem value="summary">
+														Summary Report
+													</SelectItem>
+													<SelectItem value="tax">
+														Income (tax) Report
+													</SelectItem>
+												</SelectContent>
+											</Select>
+										</div>
+										<div className="space-y-2">
+											<Label>Format</Label>
+											<p className="flex h-8 items-center rounded-lg border border-border bg-muted/30 px-3 text-muted-foreground text-sm">
+												CSV spreadsheet
+											</p>
+										</div>
+									</div>
+
+									<Button
+										className="w-full bg-primary-gradient"
+										disabled={pendingId === "custom"}
+										type="submit"
+									>
+										<FileText className="mr-2 h-4 w-4" />
+										{pendingId === "custom"
+											? "Preparing…"
+											: "Generate Custom Report"}
 									</Button>
-								</CardContent>
-							</Card>
-						</motion.div>
-					</div>
+								</form>
+							</CardContent>
+						</Card>
+					</motion.div>
 				</main>
 			</div>
 		</DashboardLayout>
