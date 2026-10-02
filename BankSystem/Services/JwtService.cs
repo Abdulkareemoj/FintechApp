@@ -13,6 +13,7 @@ namespace FinTech.Services
     {
         string GenerateAccessToken(User user);
         string GenerateRefreshToken();
+        string GenerateTwoFactorToken(Guid userId);
         ClaimsPrincipal? ValidateToken(string token);
     }
 
@@ -57,6 +58,33 @@ namespace FinTech.Services
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(randomNumber);
             return Convert.ToBase64String(randomNumber);
+        }
+
+        /// <summary>
+        /// Short-lived (5 min) token issued after password verification when the
+        /// account has 2FA enabled; exchanged for real tokens via 2fa/login.
+        /// </summary>
+        public string GenerateTwoFactorToken(Guid userId)
+        {
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+                new Claim("purpose", "2fa"),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(5),
+                signingCredentials: credentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         public ClaimsPrincipal? ValidateToken(string token)

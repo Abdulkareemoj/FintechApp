@@ -25,6 +25,21 @@ type AuthResponse = {
 	};
 };
 
+type LoginResponse = AuthResponse & {
+	requiresTwoFactor?: boolean;
+	twoFactorToken?: string;
+};
+
+export class TwoFactorRequiredError extends Error {
+	twoFactorToken: string;
+
+	constructor(twoFactorToken: string) {
+		super("Two-factor code required");
+		this.name = "TwoFactorRequiredError";
+		this.twoFactorToken = twoFactorToken;
+	}
+}
+
 const ACCESS_TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
 
@@ -54,6 +69,10 @@ type AuthState = {
 	isInitializing: boolean;
 	initializeAuth: () => Promise<void>;
 	login: (params: { email: string; password: string }) => Promise<AuthUser>;
+	loginWithTwoFactor: (params: {
+		twoFactorToken: string;
+		code: string;
+	}) => Promise<AuthUser>;
 	register: (params: {
 		email: string;
 		password: string;
@@ -65,6 +84,7 @@ type AuthState = {
 	clearAuth: () => void;
 	setAccessToken: (token: string) => void;
 	setRefreshToken: (token: string) => void;
+	updateUser: (patch: Partial<AuthUser>) => void;
 };
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -82,6 +102,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 	setRefreshToken: (token) => {
 		set({ refreshToken: token });
 		setStoredToken(REFRESH_TOKEN_KEY, token);
+	},
+
+	updateUser: (patch) => {
+		set((state) => (state.user ? { user: { ...state.user, ...patch } } : {}));
 	},
 
 	clearAuth: () => {
@@ -119,9 +143,40 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 	},
 
 	login: async ({ email, password }) => {
-		const res = await apiClient.post<AuthResponse>("/api/auth/login", {
+		const res = await apiClient.post<LoginResponse>("/api/auth/login", {
 			email,
 			password,
+		});
+
+		if (res.data.requiresTwoFactor) {
+			throw new TwoFactorRequiredError(res.data.twoFactorToken ?? "");
+		}
+
+		const user: AuthUser = {
+			id: res.data.user.id,
+			email: res.data.user.email,
+			firstName: res.data.user.firstName,
+			lastName: res.data.user.lastName,
+			role: res.data.user.role,
+		};
+
+		set({
+			user,
+			accessToken: res.data.accessToken,
+			refreshToken: res.data.refreshToken,
+			isAuthenticated: true,
+		});
+
+		setStoredToken(ACCESS_TOKEN_KEY, res.data.accessToken);
+		setStoredToken(REFRESH_TOKEN_KEY, res.data.refreshToken);
+
+		return user;
+	},
+
+	loginWithTwoFactor: async ({ twoFactorToken, code }) => {
+		const res = await apiClient.post<AuthResponse>("/api/auth/2fa/login", {
+			twoFactorToken,
+			code,
 		});
 
 		const user: AuthUser = {

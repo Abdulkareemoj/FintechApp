@@ -26,6 +26,7 @@ interface AuthState {
 	initializeAuth: () => Promise<void>;
 	setAccessToken: (token: string) => void;
 	setTokensFromRefresh: (accessToken: string, refreshToken: string) => void;
+	updateUser: (patch: Partial<User>) => void;
 }
 
 // initializeAuth runs once per app launch
@@ -61,6 +62,10 @@ export const useAuthStore = create<AuthState>((set) => ({
 	setTokensFromRefresh: (accessToken: string, refreshToken: string) => {
 		set({ accessToken, refreshToken, isAuthenticated: true });
 		void setTokens({ accessToken, refreshToken });
+	},
+
+	updateUser: (patch) => {
+		set((state) => (state.user ? { user: { ...state.user, ...patch } } : {}));
 	},
 
 	initializeAuth: () => {

@@ -21,6 +21,11 @@ namespace FinTech.Services
         Task SendPasswordResetEmailAsync(string email, string? ipAddress);
         Task<bool> ResetPasswordAsync(string token, string newPassword);
         Task ChangePasswordAsync(Guid userId, string currentPassword, string newPassword);
+        Task<AuthResponse> LoginWithTwoFactorAsync(TwoFactorLoginRequest request, string? ipAddress);
+        Task<TwoFactorSetupResponse> BeginTwoFactorSetupAsync(Guid userId);
+        Task<bool> EnableTwoFactorAsync(Guid userId, string code);
+        Task<bool> DisableTwoFactorAsync(Guid userId, TwoFactorDisableRequest request);
+        Task<bool> IsTwoFactorEnabledAsync(Guid userId);
 
     }
     public partial class AuthService : IAuthService
@@ -93,6 +98,28 @@ namespace FinTech.Services
             if (user.Status != UserStatus.Active)
             {
                 throw new UnauthorizedAccessException("Account is not active");
+            }
+
+            // 2FA enabled -> password alone is not enough; issue a short-lived
+            // pending token instead of real credentials.
+            var twoFactor = await _context.UserTwoFactors
+                .FirstOrDefaultAsync(t => t.UserId == user.Id);
+
+            if (twoFactor is { Enabled: true })
+            {
+                return new AuthResponse
+                {
+                    RequiresTwoFactor = true,
+                    TwoFactorToken = _jwtService.GenerateTwoFactorToken(user.Id),
+                    User = new UserDto
+                    {
+                        Id = user.Id,
+                        Email = user.Email,
+                        FirstName = user.FirstName ?? "",
+                        LastName = user.LastName ?? "",
+                        Role = user.Role.ToString()
+                    }
+                };
             }
 
             return await GenerateAuthResponse(user, ipAddress);
@@ -292,6 +319,145 @@ namespace FinTech.Services
                 $"{user.FirstName} {user.LastName}");
 
             _logger.LogInformation("Password changed for user {UserId}", userId);
+        }
+
+        // ============================================
+        // Two-factor authentication (TOTP)
+        // ============================================
+
+        public async Task<AuthResponse> LoginWithTwoFactorAsync(TwoFactorLoginRequest request, string? ipAddress)
+        {
+            var principal = _jwtService.ValidateToken(request.TwoFactorToken);
+            if (principal == null)
+                throw new UnauthorizedAccessException("Invalid or expired two-factor session");
+
+            var purpose = principal.FindFirst("purpose")?.Value;
+            if (purpose != "2fa")
+                throw new UnauthorizedAccessException("Invalid two-factor session");
+
+            var userIdClaim = principal.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (!Guid.TryParse(userIdClaim, out var userId))
+                throw new UnauthorizedAccessException("Invalid two-factor session");
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null || user.Status != UserStatus.Active)
+                throw new UnauthorizedAccessException("Account is not active");
+
+            var twoFactor = await _context.UserTwoFactors
+                .FirstOrDefaultAsync(t => t.UserId == userId);
+
+            if (twoFactor is not { Enabled: true })
+                throw new UnauthorizedAccessException("Two-factor authentication is not enabled");
+
+            if (!TotpService.VerifyCode(twoFactor.Secret, request.Code))
+            {
+                _logger.LogWarning("Failed 2FA login attempt for user {UserId}", userId);
+                throw new UnauthorizedAccessException("Invalid authentication code");
+            }
+
+            _logger.LogInformation("2FA login successful for user {UserId}", userId);
+            return await GenerateAuthResponse(user, ipAddress);
+        }
+
+        public async Task<TwoFactorSetupResponse> BeginTwoFactorSetupAsync(Guid userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                throw new InvalidOperationException("User not found");
+
+            var twoFactor = await _context.UserTwoFactors
+                .FirstOrDefaultAsync(t => t.UserId == userId);
+
+            if (twoFactor is { Enabled: true })
+                throw new InvalidOperationException(
+                    "Two-factor authentication is already enabled. Disable it first.");
+
+            var secret = TotpService.GenerateSecret();
+
+            if (twoFactor == null)
+            {
+                twoFactor = new UserTwoFactor { UserId = userId };
+                _context.UserTwoFactors.Add(twoFactor);
+            }
+
+            twoFactor.Secret = secret;
+            twoFactor.Enabled = false;
+            twoFactor.ConfirmedAt = null;
+            twoFactor.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+            return new TwoFactorSetupResponse
+            {
+                Secret = secret,
+                OtpauthUri = TotpService.BuildOtpauthUri(secret, user.Email),
+                Enabled = false
+            };
+        }
+
+        public async Task<bool> EnableTwoFactorAsync(Guid userId, string code)
+        {
+            var twoFactor = await _context.UserTwoFactors
+                .FirstOrDefaultAsync(t => t.UserId == userId);
+
+            if (twoFactor == null)
+                throw new InvalidOperationException("Start the setup flow first");
+
+            if (twoFactor.Enabled)
+                throw new InvalidOperationException("Two-factor authentication is already enabled");
+
+            if (!TotpService.VerifyCode(twoFactor.Secret, code))
+                throw new InvalidOperationException("Invalid authentication code");
+
+            twoFactor.Enabled = true;
+            twoFactor.ConfirmedAt = DateTime.UtcNow;
+            twoFactor.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("2FA enabled for user {UserId}", userId);
+            return true;
+        }
+
+        public async Task<bool> DisableTwoFactorAsync(Guid userId, TwoFactorDisableRequest request)
+        {
+            var twoFactor = await _context.UserTwoFactors
+                .FirstOrDefaultAsync(t => t.UserId == userId);
+
+            if (twoFactor is not { Enabled: true })
+                throw new InvalidOperationException("Two-factor authentication is not enabled");
+
+            var verified = false;
+
+            if (!string.IsNullOrWhiteSpace(request.Code))
+            {
+                verified = TotpService.VerifyCode(twoFactor.Secret, request.Code);
+            }
+
+            if (!verified && !string.IsNullOrWhiteSpace(request.Password))
+            {
+                var user = await _context.Users.FindAsync(userId);
+                if (user != null)
+                {
+                    verified = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
+                }
+            }
+
+            if (!verified)
+            {
+                _logger.LogWarning("Failed 2FA disable attempt for user {UserId}", userId);
+                throw new UnauthorizedAccessException("Invalid code or password");
+            }
+
+            _context.UserTwoFactors.Remove(twoFactor);
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("2FA disabled for user {UserId}", userId);
+            return true;
+        }
+
+        public async Task<bool> IsTwoFactorEnabledAsync(Guid userId)
+        {
+            return await _context.UserTwoFactors
+                .AnyAsync(t => t.UserId == userId && t.Enabled);
         }
 
         private string GenerateSecureToken()

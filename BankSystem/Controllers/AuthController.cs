@@ -66,6 +66,29 @@ namespace FinTech.Controllers
             }
         }
 
+        /// <summary>
+        /// Exchange a valid two-factor pending token + TOTP code for real tokens
+        /// </summary>
+        [HttpPost("2fa/login")]
+        public async Task<IActionResult> TwoFactorLogin([FromBody] TwoFactorLoginRequest request)
+        {
+            try
+            {
+                var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+                var response = await _authService.LoginWithTwoFactorAsync(request, ipAddress);
+                return Ok(response);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "2FA login failed");
+                return StatusCode(500, new { error = "Two-factor login failed" });
+            }
+        }
+
         [HttpPost("refresh")]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
         {

@@ -43,6 +43,36 @@ namespace FinTech.Models.DTOs
         public string RefreshToken { get; set; } = string.Empty;
         public DateTime ExpiresAt { get; set; }
         public UserDto User { get; set; } = null!;
+        public bool RequiresTwoFactor { get; set; }
+        public string? TwoFactorToken { get; set; }
+    }
+
+    public class TwoFactorLoginRequest
+    {
+        [Required]
+        public string TwoFactorToken { get; set; } = string.Empty;
+
+        [Required]
+        public string Code { get; set; } = string.Empty;
+    }
+
+    public class TwoFactorEnableRequest
+    {
+        [Required]
+        public string Code { get; set; } = string.Empty;
+    }
+
+    public class TwoFactorDisableRequest
+    {
+        public string? Code { get; set; }
+        public string? Password { get; set; }
+    }
+
+    public class TwoFactorSetupResponse
+    {
+        public string Secret { get; set; } = string.Empty;
+        public string OtpauthUri { get; set; } = string.Empty;
+        public bool Enabled { get; set; }
     }
 
     public class UserDto
@@ -73,7 +103,7 @@ namespace FinTech.Models.DTOs
 
         [Required]
         [MinLength(8)]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]", 
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$",
             ErrorMessage = "Password must contain uppercase, lowercase, number and special character")]
         public string NewPassword { get; set; } = string.Empty;
 
@@ -89,7 +119,7 @@ namespace FinTech.Models.DTOs
 
         [Required]
         [MinLength(8)]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]", 
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$",
             ErrorMessage = "Password must contain uppercase, lowercase, number and special character")]
         public string NewPassword { get; set; } = string.Empty;
 

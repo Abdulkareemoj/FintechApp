@@ -23,9 +23,11 @@ import { type SignInFormValues, signInSchema } from "@/lib/schemas";
 import { showToast } from "@/lib/toast";
 
 type LoginResponse = {
-  accessToken: string;
-  refreshToken: string;
-  user: {
+  accessToken?: string;
+  refreshToken?: string;
+  requiresTwoFactor?: boolean;
+  twoFactorToken?: string;
+  user?: {
     id: string;
     email: string;
     firstName: string;
@@ -39,6 +41,8 @@ export default function SignInScreen() {
   const passwordInputRef = React.useRef<TextInput>(null);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [twoFactorToken, setTwoFactorToken] = React.useState<string | null>(null);
+  const [twoFactorCode, setTwoFactorCode] = React.useState("");
 
   const form = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
@@ -72,7 +76,58 @@ export default function SignInScreen() {
         return;
       }
 
-      setAuth(res.data.user, res.data.accessToken, res.data.refreshToken);
+      if (res.data.requiresTwoFactor) {
+        setTwoFactorToken(res.data.twoFactorToken ?? "");
+        setTwoFactorCode("");
+        return;
+      }
+
+      setAuth(
+        res.data.user as NonNullable<LoginResponse["user"]>,
+        res.data.accessToken as string,
+        res.data.refreshToken as string
+      );
+      showToast({
+        title: "Signed in",
+        message: "Welcome back!",
+        type: "success",
+      });
+      router.replace("/(drawer)" as any);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  async function onSubmitTwoFactor() {
+    if (!twoFactorToken) return;
+    const code = twoFactorCode.trim();
+    if (code.length !== 6) {
+      setError("Enter the 6-digit code from your authenticator app");
+      return;
+    }
+    setIsSubmitting(true);
+    setError(null);
+    try {
+      const res = await api.post<LoginResponse>("/auth/2fa/login", {
+        twoFactorToken,
+        code,
+      });
+
+      if (!res.ok) {
+        setError(res.error);
+        showToast({
+          title: "Verification failed",
+          message: res.error,
+          type: "error",
+        });
+        return;
+      }
+
+      setAuth(
+        res.data.user as NonNullable<LoginResponse["user"]>,
+        res.data.accessToken as string,
+        res.data.refreshToken as string
+      );
       showToast({
         title: "Signed in",
         message: "Welcome back!",
@@ -94,16 +149,22 @@ export default function SignInScreen() {
           <Card className="border-border/0 shadow-none sm:border-border sm:shadow-black/5 sm:shadow-sm">
             <CardHeader>
               <CardTitle className="text-center text-2xl sm:text-left">
-                Sign in to your app
+                {twoFactorToken
+                  ? "Two-factor authentication"
+                  : "Sign in to your app"}
               </CardTitle>
               <CardDescription className="text-center sm:text-left">
-                Welcome back! Please sign in to continue
+                {twoFactorToken
+                  ? "Enter the 6-digit code from your authenticator app"
+                  : "Welcome back! Please sign in to continue"}
               </CardDescription>
             </CardHeader>
             <CardContent className="gap-6">
               {error && (
                 <Alert icon={AlertCircle} variant="destructive">
-                  <AlertTitle>Sign-in Failed</AlertTitle>
+                  <AlertTitle>
+                    {twoFactorToken ? "Verification Failed" : "Sign-in Failed"}
+                  </AlertTitle>
                   <AlertDescription>
                     {error.includes("Invalid login credentials")
                       ? "Incorrect email or password."
@@ -111,8 +172,48 @@ export default function SignInScreen() {
                   </AlertDescription>
                 </Alert>
               )}
-              <View className="gap-6">
-                <View className="gap-1.5">
+              {twoFactorToken ? (
+                <View className="gap-6">
+                  <View className="gap-1.5">
+                    <Label htmlFor="twoFactorCode">Authentication Code</Label>
+                    <Input
+                      autoCapitalize="none"
+                      editable={!isSubmitting}
+                      id="twoFactorCode"
+                      keyboardType="number-pad"
+                      maxLength={6}
+                      onChangeText={(text) =>
+                        setTwoFactorCode(text.replace(/\D/g, "").slice(0, 6))
+                      }
+                      onSubmitEditing={onSubmitTwoFactor}
+                      placeholder="123456"
+                      returnKeyType="done"
+                      value={twoFactorCode}
+                    />
+                  </View>
+                  <Button
+                    className="w-full"
+                    disabled={isSubmitting || twoFactorCode.length !== 6}
+                    onPress={onSubmitTwoFactor}
+                  >
+                    <Text>{isSubmitting ? "Verifying..." : "Verify"}</Text>
+                  </Button>
+                  <Button
+                    className="w-full"
+                    disabled={isSubmitting}
+                    onPress={() => {
+                      setTwoFactorToken(null);
+                      setTwoFactorCode("");
+                      setError(null);
+                    }}
+                    variant="ghost"
+                  >
+                    <Text>Back to sign in</Text>
+                  </Button>
+                </View>
+              ) : (
+                <View className="gap-6">
+                  <View className="gap-1.5">
                   <Controller
                     control={form.control}
                     name="email"
@@ -189,7 +290,10 @@ export default function SignInScreen() {
                 >
                   <Text>{isSubmitting ? "Signing In..." : "Continue"}</Text>
                 </Button>
-              </View>
+                </View>
+              )}
+              {!twoFactorToken && (
+                <>
               <View className="flex flex-row items-center justify-center gap-2 text-sm">
                 <Text>Don&apos;t have an account?</Text>
                 <Pressable
@@ -228,6 +332,8 @@ export default function SignInScreen() {
                   </View>
                 </Button>
               </View>
+                </>
+              )}
             </CardContent>
           </Card>
         </View>
