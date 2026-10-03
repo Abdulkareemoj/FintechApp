@@ -140,6 +140,9 @@ builder.Services.AddScoped<ISupportService, SupportService>();
 builder.Services.AddScoped<IHelpService, HelpService>();
 builder.Services.AddScoped<IInboxService, InboxService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IBillService, BillService>();
 builder.Services.AddMemoryCache(); // For caching
 
 // ============================================

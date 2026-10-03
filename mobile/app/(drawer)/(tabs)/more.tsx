@@ -56,6 +56,12 @@ export default function More() {
             <Text>Statements</Text>
           </Button>
           <Button
+            onPress={() => router.push("/(drawer)/reports" as any)}
+            variant="outline"
+          >
+            <Text>Reports</Text>
+          </Button>
+          <Button
             onPress={() => router.push("/(drawer)/support" as any)}
             variant="outline"
           >

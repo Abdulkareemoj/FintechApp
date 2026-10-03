@@ -21,7 +21,7 @@ import { useRecipientLookup } from "@/hooks/useRecipientLookup";
 import { generateIdempotencyKey } from "@/lib/idempotency";
 
 const sendMoneySchema = z.object({
-  recipientEmail: z.string().email("Enter a valid email"),
+  recipientEmail: z.email("Enter a valid email"),
   amount: z.coerce.number().positive("Amount must be greater than 0"),
   note: z.string().max(500).optional(),
 });
@@ -144,7 +144,7 @@ export default function Transfers() {
             keyboardType="decimal-pad"
           />
           <Text className="text-muted-foreground text-xs">
-            Available: {primaryWallet ? `${primaryWallet.currencyCode} ${primaryWallet.balance.toFixed(2)}` : "—"}
+            Available: {primaryWallet ? `${primaryWallet.currencyCode} ${primaryWallet.balance.toFixed(2)}` : "-"}
           </Text>
 
           <FormInput control={control} name="note" label="Note (optional)" placeholder="What's this for?" />

@@ -15,7 +15,7 @@ namespace FinTech.Services.UserDashboard
     // Aggregates a user's completed transactions into an analytics
     // summary: all-time totals, a monthly trend grid, spending
     // grouped by transaction type, and rolling 7-day spending.
-    // Single-currency (query param, default USD) — currencies are
+    // Single-currencies (query param, default USD) are
     // never mixed.
     // ============================================
     public class AnalyticsService : IAnalyticsService

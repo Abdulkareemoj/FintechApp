@@ -69,7 +69,7 @@ namespace FinTech.Services.UserDashboard
                 }
                 catch (DbUpdateException)
                 {
-                    // Another request created the row concurrently — reload it.
+                    // Another request created the row concurrently, reload it.
                     _context.Entry(settings).State = EntityState.Detached;
                     settings = await _context.UserSettings
                         .AsNoTracking()

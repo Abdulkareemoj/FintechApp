@@ -2,8 +2,10 @@
 // FILE: src/lib/api/recipients.ts
 // NOTE: backend currently only supports email lookup. The Phone/
 // Username tabs on send-money.tsx and top-up.tsx have no
-// backend yet — leave them disabled or hide them until that's built.
+// backend yet, leave them disabled or hide them until that's built.
 // ================================================================
+
+import { api } from ".";
 
 export interface RecipientLookup {
 	userId: string;

@@ -152,7 +152,7 @@ function SupportPage() {
 	const onSubmit = async (values: TicketForm) => {
 		try {
 			const ticket = await createTicket.mutateAsync(values);
-			toast.success("Ticket submitted — we'll get back to you soon");
+			toast.success("Ticket submitted, we'll get back to you soon");
 			reset();
 			setDialogOpen(false);
 			setActiveId(ticket.id);

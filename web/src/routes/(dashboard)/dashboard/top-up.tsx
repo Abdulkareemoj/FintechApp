@@ -1,7 +1,3 @@
-// ================================================================
-// FILE: src/routes/(dashboard)/dashboard/top-up.tsx
-// ================================================================
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute } from "@tanstack/react-router";
 import {
@@ -93,8 +89,8 @@ const topUpSchema = z.object({
 	source: z.enum(["BankTransfer", "DebitCard", "USSD", "Other"]),
 });
 type TopUpForm = z.infer<typeof topUpSchema>;
-type FormInput = z.input<typeof topUpSchema>; // amount: unknown — what the fields are typed as
-type FormOutput = z.output<typeof topUpSchema>; // amount: number — what onSubmit receives
+type FormInput = z.input<typeof topUpSchema>; //  what the amount fields are typed as
+type FormOutput = z.output<typeof topUpSchema>; //  what amount onSubmit receives
 
 function RouteComponent() {
 	const { data: wallets } = useWallets();
@@ -138,7 +134,7 @@ function RouteComponent() {
 				source: values.source,
 			});
 			setActiveDepositId(deposit.id);
-			toast.success(`Deposit initiated — reference ${deposit.referenceId}`);
+			toast.success(`Deposit initiated, reference: ${deposit.referenceId}`);
 		} catch (err) {
 			toast.error(
 				err instanceof Error ? err.message : "Failed to start deposit",
@@ -255,7 +251,7 @@ function RouteComponent() {
 														<SelectContent>
 															{wallets?.map((w) => (
 																<SelectItem key={w.id} value={w.id}>
-																	{w.currencyCode} Wallet — {w.currencyCode}{" "}
+																	{w.currencyCode} Wallet: {w.currencyCode}{" "}
 																	{w.balance.toLocaleString(undefined, {
 																		minimumFractionDigits: 2,
 																	})}

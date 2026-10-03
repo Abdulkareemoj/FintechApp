@@ -22,6 +22,7 @@ import {
 } from "@/hooks/useMoneyRequests";
 import { generateIdempotencyKey } from "@/lib/idempotency";
 import type { MoneyRequest } from "@/lib/api/money-requests";
+import React from "react";
 
 const currencySymbols: Record<string, string> = {
   USD: "$",
@@ -40,7 +41,7 @@ function formatAmount(amount: number, currency: string) {
 }
 
 function formatDate(iso: string) {
-  if (!iso) return "—";
+  if (!iso) return "_";
   return new Date(iso).toLocaleDateString(undefined, {
     month: "short",
     day: "numeric",

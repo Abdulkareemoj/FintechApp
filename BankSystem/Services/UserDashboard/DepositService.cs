@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Caching.Memory;
 using Hangfire;
 using FinTech.Data;
@@ -159,35 +160,43 @@ namespace FinTech.Services.UserDashboard
             if (transaction.Status != Models.Enums.TransactionStatus.Pending)
                 throw new InvalidOperationException($"Deposit is already {transaction.Status}, cannot update");
 
-            using var dbTransaction = await _context.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
-
-            try
+            // Wrapped in the execution strategy, the DbContext has
+            // EnableRetryOnFailure, so a raw user-initiated transaction
+            // would be rejected ("does not support user-initiated
+            // transactions").
+            var strategy = _context.Database.CreateExecutionStrategy();
+            return await strategy.ExecuteAsync(async () =>
             {
-                transaction.Status = success ? Models.Enums.TransactionStatus.Completed : Models.Enums.TransactionStatus.Failed;
-                transaction.CompletedAt = DateTime.UtcNow;
+                using var dbTransaction = await _context.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
 
-                if (!success && !string.IsNullOrEmpty(failureReason))
+                try
                 {
-                    transaction.Description = $"{transaction.Description} (Failed: {failureReason})";
+                    transaction.Status = success ? Models.Enums.TransactionStatus.Completed : Models.Enums.TransactionStatus.Failed;
+                    transaction.CompletedAt = DateTime.UtcNow;
+
+                    if (!success && !string.IsNullOrEmpty(failureReason))
+                    {
+                        transaction.Description = $"{transaction.Description} (Failed: {failureReason})";
+                    }
+
+                    await _context.SaveChangesAsync();
+                    await dbTransaction.CommitAsync();
+
+                    if (transaction.ToWalletId.HasValue)
+                        _cache.Remove($"balance_{transaction.ToWalletId}");
+
+                    _logger.LogInformation(
+                        "Deposit {TransactionId} resolved as {Status}",
+                        transaction.Id, transaction.Status);
+
+                    return MapToDepositDto(transaction);
                 }
-
-                await _context.SaveChangesAsync();
-                await dbTransaction.CommitAsync();
-
-                if (transaction.ToWalletId.HasValue)
-                    _cache.Remove($"balance_{transaction.ToWalletId}");
-
-                _logger.LogInformation(
-                    "Deposit {TransactionId} resolved as {Status}",
-                    transaction.Id, transaction.Status);
-
-                return MapToDepositDto(transaction);
-            }
-            catch
-            {
-                await dbTransaction.RollbackAsync();
-                throw;
-            }
+                catch
+                {
+                    await dbTransaction.RollbackAsync();
+                    throw;
+                }
+            });
         }
 
         public async Task ExpirePendingDepositAsync(Guid depositId)

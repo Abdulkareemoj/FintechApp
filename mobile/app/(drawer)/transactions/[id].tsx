@@ -15,7 +15,7 @@ function humanize(value: string) {
 }
 
 function formatDate(iso: string) {
-  if (!iso) return "—";
+  if (!iso) return "_";
   return new Date(iso).toLocaleString(undefined, {
     month: "short",
     day: "numeric",
@@ -92,7 +92,6 @@ export default function TransactionDetailScreen() {
           <Row label="Direction" value={humanize(tx.direction)} />
           <Row label="Created" value={formatDate(tx.createdAt)} />
           <Row label="Completed" value={formatDate(tx.completedAt)} />
-          <Row label="Fee" value={`${tx.currency} 0.00`} />
         </CardContent>
       </Card>
 
@@ -108,7 +107,7 @@ export default function TransactionDetailScreen() {
                 ? fromWallet.isCurrentUser
                   ? "You"
                   : fromWallet.ownerName || "User"
-                : "—"
+                : "_"
             }
           />
           <Row
@@ -118,7 +117,7 @@ export default function TransactionDetailScreen() {
                 ? toWallet.isCurrentUser
                   ? "You"
                   : toWallet.ownerName || "User"
-                : "—"
+                : "_"
             }
           />
         </CardContent>

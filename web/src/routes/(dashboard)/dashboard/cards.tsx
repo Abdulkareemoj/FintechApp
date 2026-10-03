@@ -54,7 +54,7 @@ import { useAuthStore } from "@/lib/authStore";
 import { cn } from "@/lib/utils";
 
 function humanize(value: string) {
-	if (!value) return "—";
+	if (!value) return "_";
 	return value
 		.toLowerCase()
 		.split(/[\s_-]+/)
@@ -71,7 +71,7 @@ function cardColor(card: BankCard) {
 
 function expiryLabel(card: BankCard) {
 	const year = (card.expiryYear ?? "").padStart(2, "0");
-	return `${card.expiryMonth ?? "—"}/${year.length > 2 ? year.slice(-2) : year}`;
+	return `${card.expiryMonth ?? "-"}/${year.length > 2 ? year.slice(-2) : year}`;
 }
 
 export const Route = createFileRoute("/(dashboard)/dashboard/cards")({

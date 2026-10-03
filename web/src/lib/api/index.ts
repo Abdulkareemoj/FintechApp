@@ -1,14 +1,8 @@
 // ================================================================
-// FILE: src/lib/api/index.ts   (MISSING FILE — creates it)
+// FILE: src/lib/api/index.ts  
 // PURPOSE: Base wrapper around apiClient (axios). Unwraps the
 // backend's { success, data, error } envelope and throws on failure
 // so TanStack Query treats failures as errors automatically.
-//
-// FIX: apiClient.ts baseURL is just the host (no /api). All the
-// existing modules (wallets.ts, transactions.ts, cards.ts) call
-// paths like "/user/cards" with no /api prefix. This wrapper adds
-// the /api prefix here, in ONE place, instead of touching apiClient.ts
-// or every call site.
 // ================================================================
 
 import type { AxiosRequestConfig } from "axios";

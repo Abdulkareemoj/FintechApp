@@ -448,7 +448,7 @@ function BillsPage() {
 										<p className="py-8 text-center text-muted-foreground">
 											{query
 												? "No bills match your search."
-												: "No bills yet — add one or pay from a category above."}
+												: "No bills yet, add one or pay from a category above."}
 										</p>
 									) : (
 										listRows(visibleUnpaid, "upcoming")

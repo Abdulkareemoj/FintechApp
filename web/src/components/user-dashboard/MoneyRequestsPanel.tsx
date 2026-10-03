@@ -379,7 +379,7 @@ export function MoneyRequestsPanel() {
 										</div>
 										<div className="flex items-center justify-between mt-1">
 											<p className="text-sm text-muted-foreground">
-												{req.description ?? "—"} ·{" "}
+												{req.description ?? ":"} ·{" "}
 												{new Date(req.createdAt).toLocaleDateString()}
 											</p>
 											<div className="flex items-center gap-2">

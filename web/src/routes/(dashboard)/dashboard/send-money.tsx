@@ -1,7 +1,3 @@
-// ================================================================
-// FILE: src/routes/(dashboard)/dashboard/send-money.tsx
-// ================================================================
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute } from "@tanstack/react-router";
 import {
@@ -242,7 +238,7 @@ function SendMoneyPage() {
 															<SelectContent>
 																{wallets?.map((w) => (
 																	<SelectItem key={w.id} value={w.id}>
-																		{w.currencyCode} Wallet — {w.currencyCode}{" "}
+																		{w.currencyCode} Wallet: {w.currencyCode}{" "}
 																		{w.balance.toLocaleString(undefined, {
 																			minimumFractionDigits: 2,
 																		})}
@@ -357,7 +353,7 @@ function SendMoneyPage() {
 																undefined,
 																{ minimumFractionDigits: 2 },
 															)}`
-														: "—"}
+														: "_"}
 												</p>
 												<FieldError
 													errors={errors.amount ? [errors.amount] : []}
@@ -465,7 +461,7 @@ function SendMoneyPage() {
 							>
 								<Card className="border-border/50 bg-card-gradient shadow-card">
 									{/* Duplicates the Pending Incoming Requests card on /dashboard/top-up
-									    (MoneyRequestsPanel) — kept here intentionally; shared cache keeps both in sync. */}
+									    (MoneyRequestsPanel) kept here intentionally; shared cache keeps both in sync. */}
 									<CardHeader className="pb-4">
 										<CardTitle className="flex items-center gap-2 text-base">
 											<Clock className="size-4 text-warning" />

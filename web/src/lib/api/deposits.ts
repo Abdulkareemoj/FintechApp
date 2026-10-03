@@ -47,7 +47,7 @@ export const depositsApi = {
   getStatus: (depositId: string) =>
     api.get<DepositStatus>(`/user/deposits/${depositId}/status`),
 
-  // DEV ONLY — stands in for a real payment webhook. 404s outside Development.
+  // DEV ONLY, stands in for a real payment webhook. 404s outside Development.
   simulateCallback: (
     depositId: string,
     success: boolean,

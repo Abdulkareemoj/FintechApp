@@ -138,7 +138,7 @@ namespace FinTech.Services.UserDashboard
                 wallet,
                 bill.Amount,
                 idempotencyKey,
-                $"Bill payment — {bill.Name}",
+                $"Bill payment: {bill.Name}",
                 bill.Category,
                 bill.Reference,
                 bill);
@@ -169,7 +169,7 @@ namespace FinTech.Services.UserDashboard
                 wallet,
                 request.Amount,
                 idempotencyKey,
-                $"Bill payment — {name}",
+                $"Bill payment: {name}",
                 NormalizeCategory(request.Category),
                 string.IsNullOrWhiteSpace(request.Reference) ? null : request.Reference.Trim(),
                 bill: null,
@@ -196,7 +196,7 @@ namespace FinTech.Services.UserDashboard
             });
 
             // The DbContext has EnableRetryOnFailure, so an explicit
-            // transaction must be wrapped in the execution strategy —
+            // transaction must be wrapped in the execution strategy
             // otherwise SQL Server throws "does not support
             // user-initiated transactions".
             var strategy = _context.Database.CreateExecutionStrategy();

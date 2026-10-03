@@ -62,7 +62,7 @@ export default function StatementsScreen() {
   ) => {
     setBusyId(id);
     try {
-      await shareStatementCsv(params, `Statement — ${title}`);
+      await shareStatementCsv(params, `Statement: ${title}`);
     } catch (err) {
       Alert.alert(
         "Failed",

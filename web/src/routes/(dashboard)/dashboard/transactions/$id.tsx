@@ -43,7 +43,7 @@ const statusVariants: Record<string, string> = {
 };
 
 function humanize(value: string | null | undefined) {
-	if (!value) return "—";
+	if (!value) return "_";
 	return value
 		.toLowerCase()
 		.split(/[\s_-]+/)
@@ -215,7 +215,7 @@ function TransactionDetailPage() {
 												{
 													icon: FileText,
 													label: "Reference",
-													value: tx.referenceId || "—",
+													value: tx.referenceId || "_",
 													copyable: !!tx.referenceId,
 												},
 												{
@@ -235,7 +235,7 @@ function TransactionDetailPage() {
 														? formatDateTime(tx.completedAt).date +
 															" · " +
 															formatDateTime(tx.completedAt).time
-														: "—",
+														: "_",
 												},
 												{
 													icon: CreditCard,
@@ -249,7 +249,7 @@ function TransactionDetailPage() {
 														? tx.fromWallet.isCurrentUser
 															? "You"
 															: tx.fromWallet.ownerName || "User"
-														: "—",
+														: "_",
 												},
 												{
 													icon: User,
@@ -258,7 +258,7 @@ function TransactionDetailPage() {
 														? tx.toWallet.isCurrentUser
 															? "You"
 															: tx.toWallet.ownerName || "User"
-														: "—",
+														: "_",
 												},
 											].map((item) => (
 												<div

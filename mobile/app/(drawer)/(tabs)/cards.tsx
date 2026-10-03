@@ -25,9 +25,10 @@ import {
 import { useWallets } from "@/hooks/useWallets";
 import { useAuthStore } from "@/lib/authStore";
 import type { Card as BankCard } from "@/lib/api/cards";
+import React from "react";
 
 function humanize(value: string) {
-  if (!value) return "—";
+  if (!value) return "-";
   return value
     .toLowerCase()
     .split(/[\s_-]+/)
@@ -37,7 +38,7 @@ function humanize(value: string) {
 
 function expiryLabel(card: BankCard) {
   const year = (card.expiryYear ?? "").padStart(2, "0");
-  return `${card.expiryMonth ?? "—"}/${year.length > 2 ? year.slice(-2) : year}`;
+  return `${card.expiryMonth ?? "-"}/${year.length > 2 ? year.slice(-2) : year}`;
 }
 
 export default function Cards() {

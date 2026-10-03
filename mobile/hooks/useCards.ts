@@ -89,6 +89,30 @@ export function useUnfreezeCard() {
   });
 }
 
+export function useUpdateCardLimits() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      limits,
+    }: {
+      id: string;
+      limits: import("@/lib/api/cards").UpdateCardLimitsRequest;
+    }) => {
+      const result = await cardsApi.updateLimits(id, limits);
+      if (!result.ok) {
+        throw new Error(result.error);
+      }
+      const response = result.data as any;
+      return response.data || response;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cards"] });
+    },
+  });
+}
+
 export function useDeleteCard() {
   const queryClient = useQueryClient();
 

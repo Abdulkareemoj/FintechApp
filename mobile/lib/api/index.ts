@@ -90,8 +90,16 @@ async function request<T>(input: {
       }
 
       const data = e.response?.data as any;
+      const validation = data?.errors
+        ? (Object.values(data.errors).flat()[0] as string | undefined)
+        : undefined;
       const error =
-        data?.error ?? data?.message ?? e.message ?? "Request failed";
+        data?.error ??
+        data?.detail ??
+        validation ??
+        data?.message ??
+        e.message ??
+        "Request failed";
       return { ok: false, error, status };
     }
     return { ok: false, error: "Network error" };

@@ -38,7 +38,7 @@ function DashboardPage() {
 		page: 1,
 		pageSize: 100, // fetched client-side so we can derive "this month" stats below
 	});
-	// pageSize: 1 here — we only need totalCount, not the actual items
+	// pageSize: 1 here we only need totalCount, not the actual items
 	const { data: incomingRequests } = useIncomingMoneyRequests(1, 1);
 
 	const isLoading = walletsLoading || txLoading;
@@ -55,7 +55,7 @@ function DashboardPage() {
 
 	// Wallets are ordered by CreatedAt on the backend, so [0] is the
 	// default wallet created at registration. Currencies aren't summed
-	// together (USD + NGN can't be added meaningfully) — the hero
+	// together (USD + NGN can't be added meaningfully), the hero
 	// balance and "this month" stats are scoped to this one currency.
 	const primaryWallet = wallets?.[0];
 	const currency = primaryWallet?.currencyCode ?? "USD";
@@ -183,7 +183,7 @@ function DashboardPage() {
 
 						<div className="space-y-6 lg:col-span-3">
 							<AccountsList accounts={accounts} />
-							{/* Still mock data — no analytics/spending-breakdown backend yet */}
+							{/* Financial Overview shows real income vs spending from /user/analytics/summary */}
 							<SpendingChart />
 						</div>
 					</div>

@@ -15,7 +15,7 @@ export function useDeposit(depositId: string | undefined) {
   });
 }
 
-// Poll status while a deposit is pending — stop once it resolves.
+// Poll status while a deposit is pending, stop once it resolves.
 export function useDepositStatus(depositId: string ) {
   return useQuery({
     queryKey: ["deposit-status", depositId],
@@ -36,7 +36,7 @@ export function useInitiateDeposit() {
   });
 }
 
-// DEV ONLY helper — lets you finish testing a deposit locally
+// DEV ONLY, helper lets you finish testing a deposit locally
 // without a real payment provider wired in yet.
 export function useSimulateDepositCallback() {
   const queryClient = useQueryClient();

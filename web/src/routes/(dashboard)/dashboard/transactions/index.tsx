@@ -56,7 +56,7 @@ const statusVariants: Record<string, string> = {
 };
 
 function humanize(value: string) {
-	if (!value) return "—";
+	if (!value) return "_";
 	return value
 		.toLowerCase()
 		.split(/[\s_-]+/)

@@ -44,7 +44,7 @@ namespace FinTech.Services.UserDashboard
 
         public async Task<TransactionDto> CreateTransferAsync(Guid userId, CreateTransferRequest request)
         {
-            // STEP 1: Check idempotency
+            // Check idempotency
             var existingTransaction = await _context.Transactions
                 .FirstOrDefaultAsync(t => t.IdempotencyKey == request.IdempotencyKey);
 
@@ -54,7 +54,7 @@ namespace FinTech.Services.UserDashboard
                 return MapToTransactionDto(existingTransaction);
             }
 
-            // STEP 2: Validate sender's wallet
+            // Validate sender's wallet
             var fromWallet = await _context.Wallets
                 .Include(w => w.User)
                 .FirstOrDefaultAsync(w => w.Id == request.FromWalletId && w.UserId == userId);
@@ -65,7 +65,7 @@ namespace FinTech.Services.UserDashboard
             if (fromWallet.Status != WalletStatus.Active)
                 throw new InvalidOperationException("Wallet is not active");
 
-            // STEP 3: Validate recipient's wallet
+            // Validate recipient's wallet
             var toWallet = await _context.Wallets
                 .Include(w => w.User)
                 .FirstOrDefaultAsync(w => w.Id == request.ToWalletId);
@@ -84,14 +84,14 @@ namespace FinTech.Services.UserDashboard
             if (fromWallet.CurrencyCode != toWallet.CurrencyCode)
                 throw new InvalidOperationException($"Currency mismatch: {fromWallet.CurrencyCode} vs {toWallet.CurrencyCode}");
 
-            // STEP 4: Check balance
+            // Check balance
             var currentBalance = await GetWalletBalance(fromWallet.Id);
             if (currentBalance < request.Amount)
                 throw new InsufficientFundsException($"Insufficient funds. Available: {currentBalance}, Required: {request.Amount}");
 
-            // STEP 5: Process transfer atomically.
+            // Process transfer atomically.
             // The DbContext has EnableRetryOnFailure, so an explicit
-            // transaction must be wrapped in the execution strategy —
+            // transaction must be wrapped in the execution strategy
             // otherwise SQL Server throws "does not support
             // user-initiated transactions".
             var strategy = _context.Database.CreateExecutionStrategy();
@@ -147,7 +147,7 @@ namespace FinTech.Services.UserDashboard
         }
 
         public async Task<PaginatedResult<TransactionDto>> GetUserTransactionsAsync(
-            Guid userId, 
+            Guid userId,
             TransactionQueryParams queryParams)
         {
             // Get user's wallet IDs
@@ -161,7 +161,7 @@ namespace FinTech.Services.UserDashboard
 
             // Build query
             var query = _context.Transactions
-                .Where(t => walletIds.Contains(t.FromWalletId.Value) || 
+                .Where(t => walletIds.Contains(t.FromWalletId.Value) ||
                            walletIds.Contains(t.ToWalletId.Value));
 
             // Apply filters
@@ -331,7 +331,7 @@ namespace FinTech.Services.UserDashboard
 
             // Get recent recipients (unique users user has sent money to)
             var recentRecipients = await _context.Transactions
-                .Where(t => userWalletIds.Contains(t.FromWalletId.Value) && 
+                .Where(t => userWalletIds.Contains(t.FromWalletId.Value) &&
                            t.Status == TransactionStatus.Completed)
                 .Include(t => t.ToWallet)
                     .ThenInclude(w => w!.User)
@@ -383,8 +383,8 @@ namespace FinTech.Services.UserDashboard
 
         private TransactionDto MapToTransactionDto(Transaction transaction, List<Guid>? userWalletIds = null)
         {
-            var isOutgoing = userWalletIds != null && 
-                            transaction.FromWalletId.HasValue && 
+            var isOutgoing = userWalletIds != null &&
+                            transaction.FromWalletId.HasValue &&
                             userWalletIds.Contains(transaction.FromWalletId.Value);
 
             return new TransactionDto

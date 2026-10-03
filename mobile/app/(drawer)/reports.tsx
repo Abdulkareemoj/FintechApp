@@ -42,7 +42,7 @@ export default function ReportsScreen() {
   const handleShare = async (id: string, title: string, params: StatementParams) => {
     setBusyId(id);
     try {
-      await shareStatementCsv(params, `Report — ${title}`);
+      await shareStatementCsv(params, `Report: ${title}`);
     } catch (err) {
       Alert.alert(
         "Failed",

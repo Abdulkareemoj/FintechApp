@@ -48,7 +48,7 @@ namespace FinTech.Controllers.UserDashboard
         }
 
         /// <summary>
-        /// Partially update settings — send only the fields that changed
+        /// Partially update settings, send only the fields that changed
         /// </summary>
         [HttpPut]
         public async Task<IActionResult> UpdateSettings([FromBody] UpdateSettingsRequest request)

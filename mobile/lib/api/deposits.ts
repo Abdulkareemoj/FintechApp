@@ -49,7 +49,7 @@ export const depositsApi = {
       auth: true,
     }),
 
-  // DEV ONLY — stands in for a real payment webhook. 404s outside Development.
+  // DEV ONLY, stands in for a real payment webhook. 404s outside Development.
   simulateCallback: (
     depositId: string,
     success: boolean,

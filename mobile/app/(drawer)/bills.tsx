@@ -106,7 +106,7 @@ export default function BillsScreen() {
     }
     Alert.alert(
       "Pay bill",
-      `${bill.name} — $${bill.amount.toFixed(2)} from your ${wallet.currencyCode} wallet?`,
+      `${bill.name} : $${bill.amount.toFixed(2)} from your ${wallet.currencyCode} wallet?`,
       [
         { text: "Cancel", style: "cancel" },
         {
@@ -279,7 +279,7 @@ export default function BillsScreen() {
             </View>
           ) : unpaid.length === 0 ? (
             <Text className="py-2 text-muted-foreground">
-              No unpaid bills — pay a biller above or add one below.
+              No unpaid bills, pay a biller above or add one below.
             </Text>
           ) : (
             unpaid.map((bill) => (

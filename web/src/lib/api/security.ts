@@ -1,6 +1,6 @@
 // ============================================
 // FILE: src/lib/api/security.ts
-// PURPOSE: 2FA (TOTP) security API — status, setup, enable, disable
+// PURPOSE: 2FA (TOTP) security API, status, setup, enable, disable
 // ============================================
 
 import { api } from "@/lib/api";
