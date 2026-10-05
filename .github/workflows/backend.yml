@@ -14,9 +14,10 @@ on:
 env:
   PROJECT_PATH: BankSystem/fintech-backend.csproj
   DOTNET_VERSION: "10.0.x"
-  # Oracle Ampere A1 (ARM) instances → linux-arm64.
-  # For the x86 micro instances switch to linux-x64.
-  BUNDLE_RID: linux-arm64
+  # x86_64 AMD micro instances → linux-x64 (this repo's Oracle box, confirmed
+  # by "Exec format error" on an arm64 bundle). For Ampere A1 use linux-arm64.
+  # Check with `uname -m`.
+  BUNDLE_RID: linux-x64
 
 jobs:
   build:
