@@ -12,7 +12,7 @@ using Hangfire.Dashboard;
 using Hangfire.MemoryStorage;
 using Hangfire.SqlServer;
 using Scalar.AspNetCore;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using FinTech.Services.UserDashboard;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -237,18 +237,11 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "Bearer"
     });
 
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
     {
         {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
+            new OpenApiSecuritySchemeReference("Bearer", document),
+            new List<string>()
         }
     });
 });
