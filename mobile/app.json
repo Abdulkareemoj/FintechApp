@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "minimal",
-    "slug": "minimal",
+    "name": "FinTech",
+    "slug": "FinTech",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "minimal",
+    "scheme": "FinTech",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
@@ -36,6 +36,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "f8b1acf4-1593-4760-8d51-a8324b17094d"
+      }
+    },
+    "owner": "abdulkareemoj"
   }
 }

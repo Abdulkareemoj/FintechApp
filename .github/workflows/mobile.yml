@@ -1,0 +1,102 @@
+name: Mobile App Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "mobile/**"
+      - "biome.json"
+      - ".github/workflows/mobile.yml"
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - "mobile/**"
+      - "biome.json"
+
+concurrency:
+  group: mobile-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  lint:
+    name: Lint (Biome)
+    runs-on: ubuntu-latest
+    # Non-blocking until the ~136 pre-existing violations are fixed:
+    # run `pnpm exec biome check --write mobile` once clean, then remove this line.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "pnpm"
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec biome check mobile
+
+  build-and-deploy:
+    name: EAS Build + Deploy APKs
+    needs: lint
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "pnpm"
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm --filter "./mobile..." install --frozen-lockfile
+
+      - name: Install EAS CLI
+        run: npm install -g eas-cli
+
+      - name: Init EAS project
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: eas init --account abdulkareemoj --non-interactive
+        working-directory: mobile
+
+      - name: Build Preview APK (EAS)
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          eas build --platform android --profile preview \
+            --non-interactive --wait --json > eas-preview-result.json
+        working-directory: mobile
+
+      - name: Build Development APK (EAS)
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          eas build --platform android --profile development \
+            --non-interactive --wait --json > eas-dev-result.json
+        working-directory: mobile
+
+      - name: Download APKs
+        run: |
+          PREVIEW_URL=$(node -e "console.log(require('./mobile/eas-preview-result.json')[0].artifacts.buildUrl)")
+          DEV_URL=$(node -e "console.log(require('./mobile/eas-dev-result.json')[0].artifacts.buildUrl)")
+          curl -L "$PREVIEW_URL" -o app-preview.apk
+          curl -L "$DEV_URL" -o app-dev.apk
+
+      - name: Deploy APKs
+        env:
+          ORACLE_SSH_KEY: ${{ secrets.ORACLE_SSH_KEY }}
+          ORACLE_CLOUD_IP: ${{ secrets.ORACLE_CLOUD_IP }}
+          ORACLE_CLOUD_USER: ${{ secrets.ORACLE_CLOUD_USER }}
+        run: |
+          eval "$(ssh-agent -s)"
+          echo "$ORACLE_SSH_KEY" | ssh-add -
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "$ORACLE_CLOUD_IP" >> ~/.ssh/known_hosts 2>/dev/null
+
+          REMOTE_DIR=/home/$ORACLE_CLOUD_USER/mobile/android-output
+          SHORT_SHA="${GITHUB_SHA::7}"
+          ssh $ORACLE_CLOUD_USER@$ORACLE_CLOUD_IP "mkdir -p $REMOTE_DIR"
+          scp app-preview.apk $ORACLE_CLOUD_USER@$ORACLE_CLOUD_IP:$REMOTE_DIR/preview-${SHORT_SHA}.apk
+          scp app-dev.apk $ORACLE_CLOUD_USER@$ORACLE_CLOUD_IP:$REMOTE_DIR/dev-${SHORT_SHA}.apk
+          ssh $ORACLE_CLOUD_USER@$ORACLE_CLOUD_IP "ln -sf preview-${SHORT_SHA}.apk $REMOTE_DIR/latest-preview.apk && ln -sf dev-${SHORT_SHA}.apk $REMOTE_DIR/latest-dev.apk"
