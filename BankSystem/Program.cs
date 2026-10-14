@@ -34,7 +34,7 @@ static Serilog.ILogger CreateSerilogLogger(WebApplicationBuilder builder)
             rollingInterval: RollingInterval.Day,
             retainedFileCountLimit: 30,
             outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}")
-        .CreateLogger(); 
+        .CreateLogger();
 }
 
 // ============================================
@@ -148,16 +148,28 @@ builder.Services.AddMemoryCache(); // For caching
 // ============================================
 // CORS
 // ============================================
+// Allowed origins = App:FrontendUrl (set via App__FrontendUrl in the server's
+// app.env ) + local dev origins. No origin is hardcoded
+// for production; if FrontendUrl is unset only localhost is allowed.
+var corsOrigins = new List<string>
+{
+    "http://localhost:3000",
+    "https://localhost:3000",
+    "http://localhost:5173",
+    "https://localhost:5173",
+};
+var configuredFrontendUrl = builder.Configuration["App:FrontendUrl"]?.Trim().TrimEnd('/');
+if (!string.IsNullOrWhiteSpace(configuredFrontendUrl))
+{
+    corsOrigins.Add(configuredFrontendUrl);
+}
+var allowedOrigins = corsOrigins.Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins(
-                "http://localhost:5173",
-                "https://localhost:5173",
-                "http://localhost:3000",  // Add other frontend URLs as needed
-                "https://localhost:3000"
-            )
+        policy.WithOrigins(allowedOrigins)
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
