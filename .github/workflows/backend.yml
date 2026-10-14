@@ -108,7 +108,10 @@ jobs:
             tar xzf ${RELEASE_DIR}.tar.gz -C ${RELEASE_DIR} &&
             rm ${RELEASE_DIR}.tar.gz &&
             chmod +x ${RELEASE_DIR}/efbundle &&
+            cd ${RELEASE_DIR} &&
+            set -a &&
             . ${BASE_DIR}/shared/app.env &&
+            set +a &&
             ${RELEASE_DIR}/efbundle --connection \"\${ConnectionStrings__DefaultConnection}\" &&
             ln -sfn ${RELEASE_DIR} ${BASE_DIR}/live &&
             sudo systemctl restart fintech-backend
