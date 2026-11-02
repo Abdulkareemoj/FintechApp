@@ -424,12 +424,8 @@ web/.output/
 .idea/
 
 # Local SSH private keys (never commit)
-keys/
-BankSystem/deploy/app.env.example
-BankSystem/deploy/fintech-backend.service
-BankSystem/deploy/README.md
 skills-lock.json
-AGENTS.md
+keys/
 web/.env.local
 24820686-Finpay-Fintech-Landing-Page.mp4
 24820686-Finpay-Fintech-Landing-Page.png

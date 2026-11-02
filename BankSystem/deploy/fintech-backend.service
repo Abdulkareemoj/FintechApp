@@ -1,0 +1,17 @@
+[Unit]
+Description=FinTech ASP.NET Core API
+After=network.target
+
+[Service]
+WorkingDirectory=/home/ubuntu/fintech-backend/live
+EnvironmentFile=/home/ubuntu/fintech-backend/shared/app.env
+ExecStart=/usr/bin/dotnet /home/ubuntu/fintech-backend/live/fintech-backend.dll
+Restart=always
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=fintech-backend
+User=ubuntu
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target
