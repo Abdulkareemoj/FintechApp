@@ -420,3 +420,29 @@ sketch
 .od-skills/
 web/.tanstack/tmp/
 mobile/.expo/
+web/.output/
+.idea/
+
+# Local SSH private keys (never commit)
+keys/
+BankSystem/deploy/app.env.example
+BankSystem/deploy/fintech-backend.service
+BankSystem/deploy/README.md
+skills-lock.json
+AGENTS.md
+web/.env.local
+24820686-Finpay-Fintech-Landing-Page.mp4
+24820686-Finpay-Fintech-Landing-Page.png
+25988462-Finova-Finance-Landing-Page.mp4
+25988462-Finova-Finance-Landing-Page.png
+
+# Local env files — only *.env.example templates are tracked
+.env
+.env.*
+!.env.example
+web/.env
+web/.env.*
+!web/.env.example
+mobile/.env
+mobile/.env.*
+!mobile/.env.example
