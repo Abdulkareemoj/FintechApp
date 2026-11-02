@@ -10,14 +10,15 @@ on:
     branches: [main, develop]
     paths:
       - "BankSystem/**"
+  workflow_dispatch:
 
 env:
   PROJECT_PATH: BankSystem/fintech-backend.csproj
   DOTNET_VERSION: "10.0.x"
-  # x86_64 AMD micro instances → linux-x64 (this repo's Oracle box, confirmed
-  # by "Exec format error" on an arm64 bundle). For Ampere A1 use linux-arm64.
-  # Check with `uname -m`.
   BUNDLE_RID: linux-x64
+  AZURE_RESOURCE_GROUP: workstuff
+  AZURE_WEBAPP_NAME: fintech-app
+  AZURE_SQL_SERVER: fintechapp
 
 jobs:
   build:
@@ -36,8 +37,8 @@ jobs:
       - name: Build
         run: dotnet build ${{ env.PROJECT_PATH }} -c Release --no-restore
 
-      - name: Publish (framework-dependent)
-        run: dotnet publish ${{ env.PROJECT_PATH }} -c Release -o publish --no-build
+      - name: Publish API
+        run: dotnet publish ${{ env.PROJECT_PATH }} -c Release -o publish/app --no-build
 
       - name: Install EF tools (10.0.12, keep in sync with the EF Core package versions)
         run: |
@@ -46,8 +47,6 @@ jobs:
 
       - name: Build self-contained migration bundle
         env:
-          # Production env keeps the dev-only auto-migrate/seed block out of the
-          # design-time host; bundle creation needs no reachable database.
           ASPNETCORE_ENVIRONMENT: Production
         run: >
           dotnet ef migrations bundle
@@ -64,68 +63,80 @@ jobs:
           retention-days: 7
 
   deploy:
-    name: Deploy to Oracle Cloud
+    name: Deploy to Azure App Service
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    timeout-minutes: 20
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/download-artifact@v4
         with:
           name: backend-release
           path: publish
 
-      - name: Package release
-        run: |
-          chmod +x publish/efbundle
-          tar czf release-${GITHUB_SHA::7}.tar.gz -C publish .
-
-      - name: Configure SSH
-        uses: webfactory/ssh-agent@v0.9.0
+      - name: Sign in to Azure with GitHub OIDC
+        uses: azure/login@v2
         with:
-          ssh-private-key: ${{ secrets.ORACLE_SSH_KEY }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Add host to known_hosts
+      - name: Temporarily allow runner to reach Azure SQL
+        id: sql-firewall
+        shell: bash
         run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.ORACLE_CLOUD_IP }} >> ~/.ssh/known_hosts
+          runner_ip="$(curl -fsS https://api.ipify.org)"
+          rule_name="github-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          echo "runner_ip=${runner_ip}" >> "$GITHUB_OUTPUT"
+          echo "rule_name=${rule_name}" >> "$GITHUB_OUTPUT"
+          az sql server firewall-rule create \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --server "$AZURE_SQL_SERVER" \
+            --name "$rule_name" \
+            --start-ip-address "$runner_ip" \
+            --end-ip-address "$runner_ip" \
+            --output none
 
-      - name: Upload release
+      - name: Apply database migrations
+        env:
+          AZURE_SQL_CONNECTION_STRING: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
         run: |
-          SHORT_SHA="${GITHUB_SHA::7}"
-          BASE_DIR=/home/${{ secrets.ORACLE_CLOUD_USER }}/fintech-backend
-          ssh ${{ secrets.ORACLE_CLOUD_USER }}@${{ secrets.ORACLE_CLOUD_IP }} "mkdir -p ${BASE_DIR}/releases"
-          scp release-${SHORT_SHA}.tar.gz ${{ secrets.ORACLE_CLOUD_USER }}@${{ secrets.ORACLE_CLOUD_IP }}:${BASE_DIR}/releases/${SHORT_SHA}.tar.gz
+          if [ -z "$AZURE_SQL_CONNECTION_STRING" ]; then
+            echo "::error::Set the AZURE_SQL_CONNECTION_STRING GitHub Actions secret."
+            exit 1
+          fi
+          chmod +x publish/efbundle
+          publish/efbundle --connection "$AZURE_SQL_CONNECTION_STRING"
 
-      - name: Apply migrations, symlink swap, restart
+      - name: Remove temporary Azure SQL firewall rule
+        if: always() && steps.sql-firewall.outcome == 'success'
         run: |
-          SHORT_SHA="${GITHUB_SHA::7}"
-          BASE_DIR=/home/${{ secrets.ORACLE_CLOUD_USER }}/fintech-backend
-          RELEASE_DIR="${BASE_DIR}/releases/${SHORT_SHA}"
-          ssh ${{ secrets.ORACLE_CLOUD_USER }}@${{ secrets.ORACLE_CLOUD_IP }} "
-            set -e
-            mkdir -p ${RELEASE_DIR} &&
-            tar xzf ${RELEASE_DIR}.tar.gz -C ${RELEASE_DIR} &&
-            rm ${RELEASE_DIR}.tar.gz &&
-            chmod +x ${RELEASE_DIR}/efbundle &&
-            cd ${RELEASE_DIR} &&
-            set -a &&
-            . ${BASE_DIR}/shared/app.env &&
-            set +a &&
-            ${RELEASE_DIR}/efbundle --connection \"\${ConnectionStrings__DefaultConnection}\" &&
-            ln -sfn ${RELEASE_DIR} ${BASE_DIR}/live &&
-            sudo systemctl restart fintech-backend
-          "
+          az sql server firewall-rule delete \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --server "$AZURE_SQL_SERVER" \
+            --name "${{ steps.sql-firewall.outputs.rule_name }}" \
+            --output none
 
-      - name: Health check
+      - name: Deploy API to App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          package: publish/app
+
+      - name: Verify API health
+        shell: bash
         run: |
-          for i in $(seq 1 12); do
-            if curl -fsS --max-time 5 http://${{ secrets.ORACLE_CLOUD_IP }}:5182/health > /dev/null 2>&1; then
-              echo "API is healthy after deploy"
+          health_url="https://${AZURE_WEBAPP_NAME}.azurewebsites.net/health"
+          for attempt in $(seq 1 24); do
+            if curl -fsS --max-time 10 "$health_url"; then
+              echo "API is healthy."
               exit 0
             fi
-            echo "Waiting for API ($i/12)..."
-            sleep 5
+            echo "Waiting for API health check (${attempt}/24)..."
+            sleep 10
           done
-          echo "API did not become healthy after deploy — check server logs (journalctl -u fintech-backend)"
+          echo "::error::API did not become healthy at ${health_url}."
           exit 1
