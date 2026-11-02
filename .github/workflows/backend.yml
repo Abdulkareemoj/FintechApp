@@ -102,7 +102,13 @@ jobs:
 
       - name: Apply database migrations
         env:
+          ASPNETCORE_ENVIRONMENT: Production
           AZURE_SQL_CONNECTION_STRING: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
+          # EF's bundle starts the API host to resolve AppDbContext. These
+          # migration-only values satisfy startup; they are never deployed.
+          Jwt__Key: migration-only-key-not-used-by-the-running-api
+          Jwt__Issuer: migration
+          Jwt__Audience: migration
         run: |
           if [ -z "$AZURE_SQL_CONNECTION_STRING" ]; then
             echo "::error::Set the AZURE_SQL_CONNECTION_STRING GitHub Actions secret."
