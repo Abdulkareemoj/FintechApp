@@ -135,7 +135,7 @@ jobs:
       - name: Verify API health
         shell: bash
         run: |
-          health_url="https://${AZURE_WEBAPP_NAME}.azurewebsites.net/health"
+          health_url="https://fintech-app-d3a2g4bmckc2eycv.westus3-01.azurewebsites.net/health"
           for attempt in $(seq 1 24); do
             if curl -fsS --max-time 10 "$health_url"; then
               echo "API is healthy."
